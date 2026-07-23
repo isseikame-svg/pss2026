@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ガス機器プレミアムサマーセール2026 ／ 結果分析ダッシュボード</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:      #1A5FA8;
+  --blue-lt:   #2E7DD1;
+  --blue-pale: #E8F1FB;
+  --orange:    #D95F2B;
+  --orange-lt: #F5C9B3;
+  --green:     #1A8C5B;
+  --green-pale:#D4F0E4;
+  --red:       #C0392B;
+  --red-pale:  #FDECEA;
+  --amber:     #C07A00;
+  --amber-pale:#FEF3DC;
+  --ink:       #1A1917;
+  --ink-2:     #4A4844;
+  --ink-3:     #898581;
+  --rule:      #DDD9D2;
+  --surface:   #F7F5F1;
+  --surface-2: #EDEBE5;
+  --white:     #FFFFFF;
+  --radius:    10px;
+  --shadow:    0 1px 4px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Helvetica Neue', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: var(--blue);
+  color: #fff;
+  padding: 20px 32px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,.2);
+}
+.header-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.header-title { font-size: 18px; font-weight: 700; letter-spacing: .02em; }
+.header-sub   { font-size: 12px; opacity: .7; margin-top: 2px; }
+.header-meta  { font-size: 11px; opacity: .6; text-align: right; }
+
+/* ===== TABS ===== */
+.tabs { display: flex; gap: 2px; }
+.tab {
+  padding: 9px 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,.65);
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  border: none;
+  background: transparent;
+  transition: background .15s, color .15s;
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
+.tab:hover { background: rgba(255,255,255,.12); color: #fff; }
+.tab.active { background: var(--surface); color: var(--blue); }
+
+/* ===== MAIN ===== */
+.main { padding: 28px 32px; max-width: 1280px; margin: 0 auto; }
+
+/* ===== PANELS ===== */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ===== KPI ROW ===== */
+.kpi-row { display: grid; gap: 12px; margin-bottom: 24px; }
+.kpi-row-5 { grid-template-columns: repeat(5, 1fr); }
+.kpi-row-4 { grid-template-columns: repeat(4, 1fr); }
+.kpi {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  border-top: 3px solid var(--blue);
+}
+.kpi.orange { border-color: var(--orange); }
+.kpi.green  { border-color: var(--green); }
+.kpi.red    { border-color: var(--red); }
+.kpi.amber  { border-color: var(--amber); }
+.kpi-label  { font-size: 11px; color: var(--ink-3); font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 4px; }
+.kpi-value  { font-size: 30px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.kpi-value.blue   { color: var(--blue); }
+.kpi-value.orange { color: var(--orange); }
+.kpi-value.green  { color: var(--green); }
+.kpi-value.red    { color: var(--red); }
+.kpi-value.amber  { color: var(--amber); }
+.kpi-sub { font-size: 11px; color: var(--ink-3); }
+
+/* ===== GRID ===== */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid-1 { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px; }
+.grid-6040 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+/* ===== CARD ===== */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  box-shadow: var(--shadow);
+}
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+  letter-spacing: .02em;
+}
+.card-title .badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.badge-blue   { background: var(--blue-pale); color: var(--blue); }
+.badge-orange { background: var(--orange-lt); color: var(--orange); }
+.badge-red    { background: var(--red-pale);  color: var(--red); }
+.badge-green  { background: var(--green-pale);color: var(--green); }
+.badge-amber  { background: var(--amber-pale);color: var(--amber); }
+
+/* ===== CHART WRAPPER ===== */
+.chart-wrap { position: relative; width: 100%; }
+.h160 { height: 160px; }
+.h180 { height: 180px; }
+.h200 { height: 200px; }
+.h220 { height: 220px; }
+.h260 { height: 260px; }
+
+/* ===== BAR CHART (CSS) ===== */
+.bar-list { margin-top: 4px; }
+.bar-row  { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 12px; }
+.bar-lbl  { flex-shrink: 0; text-align: right; color: var(--ink-2); }
+.bar-w90  { width: 90px; }
+.bar-w120 { width: 120px; }
+.bar-w140 { width: 140px; }
+.bar-bg   { flex: 1; height: 10px; background: var(--surface-2); border-radius: 5px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 5px; transition: width .6s ease; }
+.bar-val  { width: 40px; text-align: right; font-weight: 600; color: var(--ink); font-size: 12px; }
+
+/* ===== FUNNEL ===== */
+.funnel { padding: 4px 0; }
+.funnel-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+.fn { font-size: 22px; font-weight: 700; width: 58px; flex-shrink: 0; }
+.fl { font-size: 12px; color: var(--ink-2); flex: 1; }
+.fr { font-size: 11px; color: var(--ink-3); width: 44px; text-align: right; }
+.fb { height: 3px; border-radius: 2px; margin-top: 3px; }
+.f-arrow { text-align: center; color: var(--ink-3); font-size: 13px; margin: 2px 0 2px 70px; }
+
+/* ===== TABLE ===== */
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+thead th {
+  text-align: left;
+  padding: 7px 10px;
+  background: var(--surface);
+  color: var(--ink-3);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule);
+}
+tbody td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-2);
+  vertical-align: middle;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface); }
+
+/* ===== INSIGHT BOX ===== */
+.insight {
+  background: var(--blue-pale);
+  border-left: 3px solid var(--blue-lt);
+  border-radius: 0 6px 6px 0;
+  padding: 9px 12px;
+  font-size: 12px;
+  color: var(--ink-2);
+  margin-top: 12px;
+  line-height: 1.65;
+}
+.alert {
+  background: var(--red-pale);
+  border-left: 3px solid var(--red);
+  border-radius: 0 6px 6px 0;
+  padding: 9px 12px;
+  font-size: 12px;
+  color: #7a1f18;
+  margin-top: 12px;
+  line-height: 1.65;
+}
+.warn {
+  background: var(--amber-pale);
+  border-left: 3px solid var(--amber);
+  border-radius: 0 6px 6px 0;
+  padding: 9px 12px;
+  font-size: 12px;
+  color: #7a4800;
+  margin-top: 12px;
+  line-height: 1.65;
+}
+
+/* ===== NPS BAR ===== */
+.nps-stack {
+  display: flex;
+  height: 28px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 12px 0 8px;
+  gap: 2px;
+}
+.nps-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  transition: flex .6s ease;
+}
+
+/* ===== ISSUE / IMPROVE ROWS ===== */
+.issue-row, .improve-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+  align-items: flex-start;
+}
+.num-badge {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #fff;
+  flex-shrink: 0; margin-top: 1px;
+}
+.nb-red   { background: var(--red); }
+.nb-blue  { background: var(--blue); }
+.nb-amber { background: var(--amber); }
+.issue-body, .improve-body { flex: 1; }
+.issue-title, .improve-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+.issue-desc, .improve-desc  { font-size: 12px; color: var(--ink-2); line-height: 1.65; }
+
+.priority-tag {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+.pt-red   { background: var(--red-pale);   color: var(--red); }
+.pt-blue  { background: var(--blue-pale);  color: var(--blue); }
+.pt-green { background: var(--green-pale); color: var(--green); }
+
+/* ===== QUOTE ===== */
+.quote-list { margin-top: 4px; }
+.quote {
+  font-size: 12px;
+  color: var(--ink-2);
+  border-left: 2px solid var(--rule);
+  padding: 3px 0 3px 10px;
+  margin: 5px 0;
+  line-height: 1.5;
+}
+.quote.q-green  { border-color: var(--green); }
+.quote.q-amber  { border-color: var(--amber); }
+.quote.q-red    { border-color: var(--red); }
+
+/* ===== SECTION LABEL ===== */
+.sec-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-3);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin: 20px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+/* ===== TARGET PRIORITY ===== */
+.priority-card {
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+}
+.pc-a { background: #fff; border-top: 4px solid var(--red); }
+.pc-b { background: #fff; border-top: 4px solid var(--amber); }
+.pc-c { background: #fff; border-top: 4px solid var(--blue); }
+.pc-label { font-size: 10px; font-weight: 700; letter-spacing: .08em; margin-bottom: 6px; }
+.pc-label.la { color: var(--red); }
+.pc-label.lb { color: var(--amber); }
+.pc-label.lc { color: var(--blue); }
+.pc-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.pc-body  { font-size: 12px; color: var(--ink-2); line-height: 1.7; }
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center;
+  padding: 28px;
+  font-size: 11px;
+  color: var(--ink-3);
+  border-top: 1px solid var(--rule);
+  margin-top: 32px;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-title">ガス機器プレミアムサマーセール2026　結果分析ダッシュボード</div>
+      <div class="header-sub">2026年7月2日〜8月4日　／　クアルトリクスアンケート集計結果</div>
+    </div>
+    <div class="header-meta">
+      回答数：300件<br>
+      分析日：2026年7月22日
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" onclick="switchTab(this,'overview')">① 全体サマリー</button>
+    <button class="tab" onclick="switchTab(this,'funnel')">② 認知・行動ファネル</button>
+    <button class="tab" onclick="switchTab(this,'nps')">③ NPS分析</button>
+    <button class="tab" onclick="switchTab(this,'segment')">④ セグメント分析</button>
+    <button class="tab" onclick="switchTab(this,'text')">⑤ テキスト分析</button>
+    <button class="tab" onclick="switchTab(this,'improve')">⑥ 課題と改善案</button>
+  </nav>
+</header>
+
+<main class="main">
+
+<!-- ========== ① 全体サマリー ========== -->
+<section id="panel-overview" class="panel active">
+
+  <div class="kpi-row kpi-row-5">
+    <div class="kpi orange">
+      <div class="kpi-label">セール認知率</div>
+      <div class="kpi-value orange">41%</div>
+      <div class="kpi-sub">123 ／ 300件</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">WEBサイト閲覧率</div>
+      <div class="kpi-value blue">37%</div>
+      <div class="kpi-sub">110 ／ 300件</div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-label">購入成約</div>
+      <div class="kpi-value green">6件</div>
+      <div class="kpi-sub">全体の 2.0%</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">来場・相談</div>
+      <div class="kpi-value blue">6件</div>
+      <div class="kpi-sub">検討中 31件</div>
+    </div>
+    <div class="kpi red">
+      <div class="kpi-label">NPS値</div>
+      <div class="kpi-value red">−41.9</div>
+      <div class="kpi-sub">推奨4件 ／ 批判22件</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">認知経路（知っていた：123件）</div>
+      <div class="chart-wrap h180"><canvas id="c_media"></canvas></div>
+      <div class="insight">ガポタメール（62件）と投函チラシ（57件）の2媒体で認知者全体の96%をカバー。SNS・WEB広告は3件と低効果。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">行動結果（300件）</div>
+      <div class="chart-wrap h180"><canvas id="c_action"></canvas></div>
+      <div class="insight">何もしなかったが257件（86%）。検討中31件は次回セールへの継続フォロー対象として管理できる潜在層。</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">今後の購入検討商品（複数回答）</div>
+      <div class="chart-wrap h180"><canvas id="c_future"></canvas></div>
+      <div class="insight">ガスコンロ（55件）・給湯器（30件）が二大需要。エアコンは今回新規追加で22件と手応えあり。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">回答者属性</div>
+      <div class="grid-2" style="margin-bottom:0;gap:10px;margin-top:4px">
+        <div>
+          <div style="font-size:11px;color:var(--ink-3);font-weight:600;margin-bottom:6px">年代</div>
+          <div class="chart-wrap h160"><canvas id="c_age"></canvas></div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--ink-3);font-weight:600;margin-bottom:6px">地域</div>
+          <div class="chart-wrap h160"><canvas id="c_region"></canvas></div>
+        </div>
+      </div>
+      <div class="insight">50〜70代以上が83%のシニア主体。持ち家比率78%で購買ポテンシャルは高い。</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ========== ② 認知・行動ファネル ========== -->
+<section id="panel-funnel" class="panel">
+
+  <div class="grid-6040">
+    <div class="card">
+      <div class="card-title">認知 → 購入 転換ファネル</div>
+      <div class="funnel">
+        <div class="funnel-step" style="background:#E8F1FB">
+          <div class="fn" style="color:var(--blue)">300</div>
+          <div class="fl"><strong>配信対象（全回答者）</strong><div class="fb" style="width:100%;background:var(--blue)"></div></div>
+          <div class="fr">100%</div>
+        </div>
+        <div class="f-arrow">↓ 59%が未到達</div>
+        <div class="funnel-step" style="background:#FEF3DC">
+          <div class="fn" style="color:var(--amber)">123</div>
+          <div class="fl"><strong>セール認知</strong><div class="fb" style="width:41%;background:var(--amber)"></div></div>
+          <div class="fr">41%</div>
+        </div>
+        <div class="f-arrow">↓ 認知者の50%が落脱</div>
+        <div class="funnel-step" style="background:#FEF3DC">
+          <div class="fn" style="color:var(--amber)">61</div>
+          <div class="fl">認知者内WEB閲覧<div class="fb" style="width:20%;background:var(--amber)"></div></div>
+          <div class="fr">20%</div>
+        </div>
+        <div class="f-arrow">↓ WEB閲覧者の97%が落脱</div>
+        <div class="funnel-step" style="background:var(--red-pale)">
+          <div class="fn" style="color:var(--red)">4</div>
+          <div class="fl">WEB閲覧後 来場・購入<div class="fb" style="width:1.3%;background:var(--red)"></div></div>
+          <div class="fr">1.3%</div>
+        </div>
+        <div class="f-arrow">合計</div>
+        <div class="funnel-step" style="background:var(--green-pale)">
+          <div class="fn" style="color:var(--green)">12</div>
+          <div class="fl"><strong>来場＋購入 合計</strong><div class="fb" style="width:4%;background:var(--green)"></div></div>
+          <div class="fr">4%</div>
+        </div>
+      </div>
+      <div class="alert">WEB閲覧から来場への転換率 1.3% が最大のボトルネック。WEBサイトが来場動機を作れていない構造。</div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-title">非行動理由（257件・複数回答）</div>
+        <div class="chart-wrap h200"><canvas id="c_inaction"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">非認知者の希望通知方法（複数回答）</div>
+        <div class="bar-list">
+          <div class="bar-row"><span class="bar-lbl bar-w120">ガポタメール</span><div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--blue)"></div></div><span class="bar-val">148件</span></div>
+          <div class="bar-row"><span class="bar-lbl bar-w120">四国ガスHP</span><div class="bar-bg"><div class="bar-fill" style="width:21%;background:var(--ink-3)"></div></div><span class="bar-val">31件</span></div>
+          <div class="bar-row"><span class="bar-lbl bar-w120">検針チラシ</span><div class="bar-bg"><div class="bar-fill" style="width:16%;background:var(--ink-3)"></div></div><span class="bar-val">23件</span></div>
+          <div class="bar-row"><span class="bar-lbl bar-w120">新聞・フリペ</span><div class="bar-bg"><div class="bar-fill" style="width:11%;background:var(--ink-3)"></div></div><span class="bar-val">17件</span></div>
+          <div class="bar-row"><span class="bar-lbl bar-w120">SNS</span><div class="bar-bg"><div class="bar-fill" style="width:4%;background:var(--ink-3)"></div></div><span class="bar-val">6件</span></div>
+        </div>
+        <div class="insight">非認知者もガポタメール希望が圧倒的1位（148件）。ガポタ加入促進が認知拡大の最短経路。</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ========== ③ NPS分析 ========== -->
+<section id="panel-nps" class="panel">
+
+  <div class="kpi-row kpi-row-4">
+    <div class="kpi red">
+      <div class="kpi-label">NPS値</div>
+      <div class="kpi-value red">−41.9</div>
+      <div class="kpi-sub">回答43件</div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-label">推奨者（9〜10点）</div>
+      <div class="kpi-value green">4件</div>
+      <div class="kpi-sub">9.3%</div>
+    </div>
+    <div class="kpi amber">
+      <div class="kpi-label">中立者（7〜8点）</div>
+      <div class="kpi-value amber">17件</div>
+      <div class="kpi-sub">39.5%</div>
+    </div>
+    <div class="kpi red">
+      <div class="kpi-label">批判者（0〜6点）</div>
+      <div class="kpi-value red">22件</div>
+      <div class="kpi-sub">51.2%</div>
+    </div>
+  </div>
+
+  <div class="nps-stack">
+    <div class="nps-seg" style="flex:9.3;background:var(--green)">推奨 9%</div>
+    <div class="nps-seg" style="flex:39.5;background:var(--amber)">中立者 40%</div>
+    <div class="nps-seg" style="flex:51.2;background:var(--red)">批判者 51%</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">スコア分布（0〜10点）<span class="badge badge-red">5点に集中</span></div>
+      <div class="chart-wrap h200"><canvas id="c_nps_dist"></canvas></div>
+      <div class="warn">スコア「5点」に16件（37%）が集中。批判者に分類されるが「悪くはない・でも推奨するほどでもない」という中間的な意識。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">行動別 NPS値<span class="badge badge-red">重大発見</span></div>
+      <div style="margin-top:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:8px;background:var(--amber-pale);margin-bottom:8px">
+          <div><div style="font-size:11px;color:var(--amber)">検討中（n=31）</div><div style="font-size:26px;font-weight:700;color:var(--amber)">−35</div></div>
+          <div style="text-align:right;font-size:11px;color:var(--ink-3)">平均 6.6点</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:8px;background:var(--red-pale);margin-bottom:8px">
+          <div><div style="font-size:11px;color:var(--red)">購入成約（n=6）</div><div style="font-size:26px;font-weight:700;color:var(--red)">−50</div></div>
+          <div style="text-align:right;font-size:11px;color:var(--ink-3)">平均 5.7点</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:8px;background:var(--red-pale);margin-bottom:0">
+          <div><div style="font-size:11px;color:var(--red)">来場・相談（n=6）</div><div style="font-size:26px;font-weight:700;color:var(--red)">−67</div></div>
+          <div style="text-align:right;font-size:11px;color:var(--ink-3)">平均 4.5点</div>
+        </div>
+      </div>
+      <div class="alert">実際に来場・購入した人ほどNPSが低い。期待値と体験のギャップが存在。来場体験の品質改善が最優先課題。</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">年代・性別・住居形態別 NPS値</div>
+      <div class="chart-wrap h220"><canvas id="c_nps_seg"></canvas></div>
+      <div class="insight">60代（−60）と女性（−55）が特に低水準。持ち家マンション層（0）が唯一のプラス圏。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">満足度 × NPSグループ（5段階平均）</div>
+      <div class="chart-wrap h220"><canvas id="c_sat_nps"></canvas></div>
+      <div class="insight">推奨者と批判者の差が最大なのは「ラインナップ（1.39差）」と「価格（1.34差）」。この2点がNPS改善の主レバー。担当者対応は批判者でも3.50と健闘。</div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title" style="color:var(--green)">推奨者のコメント</div>
+      <div class="quote-list">
+        <div class="quote q-green">「接客も商品も申し分ありません」</div>
+        <div class="quote q-green">「お得だと思うから」</div>
+      </div>
+      <div style="font-size:11px;color:var(--ink-3);margin-top:8px">共通点：接客満足＋価格納得</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--amber)">中立者のコメント</div>
+      <div class="quote-list">
+        <div class="quote q-amber">「相談しやすい」</div>
+        <div class="quote q-amber">「ガス器具を買うならセール時に」</div>
+        <div class="quote q-amber">「以前のガス展のようなイベントがあれば」</div>
+        <div class="quote q-amber">「価格が高くなったと思う」</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--red)">批判者のコメント</div>
+      <div class="quote-list">
+        <div class="quote q-red">「故障しないと買い替えはしない」</div>
+        <div class="quote q-red">「本当にお得か分からない」</div>
+        <div class="quote q-red">「紹介する人がいない（周囲にガス使用者なし）」</div>
+        <div class="quote q-red">「個人的な生活まで入り込んだ話はしない」</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ========== ④ セグメント分析 ========== -->
+<section id="panel-segment" class="panel">
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">年代別 認知率 ／ 購入意欲率</div>
+      <div class="chart-wrap h220"><canvas id="c_age_kpi"></canvas></div>
+      <div class="insight">70代以上が認知率48%と最高。購入意欲率は20代を除くと70代以上（41%）が最高で、老朽化層が厚い。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">住居形態別 購入意欲率</div>
+      <div class="bar-list" style="margin-top:16px">
+        <div class="bar-row"><span class="bar-lbl bar-w140">持ち家（戸建て）</span><div class="bar-bg"><div class="bar-fill" style="width:79.8%;background:var(--blue)"></div></div><span class="bar-val">40%</span></div>
+        <div class="bar-row"><span class="bar-lbl bar-w140">持ち家（集合住宅）</span><div class="bar-bg"><div class="bar-fill" style="width:67.4%;background:var(--blue)"></div></div><span class="bar-val">34%</span></div>
+        <div class="bar-row"><span class="bar-lbl bar-w140">賃貸（戸建て）</span><div class="bar-bg"><div class="bar-fill" style="width:66.6%;background:var(--amber)"></div></div><span class="bar-val">33%</span></div>
+        <div class="bar-row"><span class="bar-lbl bar-w140">賃貸（集合住宅）</span><div class="bar-bg"><div class="bar-fill" style="width:34.6%;background:var(--red)"></div></div><span class="bar-val">17%</span></div>
+      </div>
+      <div class="insight">賃貸集合住宅の購入意欲（17%）は持ち家戸建て（40%）の半分以下。機器選択権がない賃貸層より持ち家層へリソースを集中すべき。</div>
+
+      <div style="margin-top:16px">
+        <div class="card-title" style="border-top:1px solid var(--rule);padding-top:12px;margin-top:0;border-bottom:none;padding-bottom:0;margin-bottom:10px">地域別 認知率</div>
+        <div class="bar-list">
+          <div class="bar-row"><span class="bar-lbl bar-w90">愛媛県</span><div class="bar-bg"><div class="bar-fill" style="width:100.8%;background:var(--green)"></div></div><span class="bar-val">50%</span></div>
+          <div class="bar-row"><span class="bar-lbl bar-w90">徳島県</span><div class="bar-bg"><div class="bar-fill" style="width:77.4%;background:var(--amber)"></div></div><span class="bar-val">39%</span></div>
+          <div class="bar-row"><span class="bar-lbl bar-w90">香川県</span><div class="bar-bg"><div class="bar-fill" style="width:74.4%;background:var(--amber)"></div></div><span class="bar-val">37%</span></div>
+          <div class="bar-row"><span class="bar-lbl bar-w90">高知県</span><div class="bar-bg"><div class="bar-fill" style="width:54%;background:var(--red)"></div></div><span class="bar-val">27%</span></div>
+        </div>
+        <div class="insight">愛媛と高知の認知差が23pt。高知は配信・接触機会そのものの強化が必要。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-label">エアコン（新規追加項目）特化分析</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">エアコン vs 乾太くん　年代別検討者数</div>
+      <div class="chart-wrap h200"><canvas id="c_ac_kanta"></canvas></div>
+      <div class="insight">エアコンは50〜70代の老朽化層中心、乾太くんは30〜40代の子育て世代中心と、ターゲットがほぼ対称。訴求メッセージ・媒体を分離すべき。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">エアコン検討者プロフィール <span class="badge badge-orange">n=22 ／ 全体7.3%</span></div>
+      <table style="margin-top:4px">
+        <tbody>
+          <tr><td style="color:var(--ink-3);font-size:11px">中心年代</td><td>50代（36%）→ 60代・70代以上（各23%）</td></tr>
+          <tr><td style="color:var(--ink-3);font-size:11px">性別</td><td>女性 59%・男性 41%</td></tr>
+          <tr><td style="color:var(--ink-3);font-size:11px">地域</td><td>香川 50%・愛媛 27%・徳島 18%</td></tr>
+          <tr><td style="color:var(--ink-3);font-size:11px">住居</td><td>持ち家（戸建て・集合）各41%</td></tr>
+          <tr><td style="color:var(--ink-3);font-size:11px">セール認知</td><td>非認知が64%（14件）</td></tr>
+          <tr><td style="color:var(--ink-3);font-size:11px">購入動機</td><td>老朽化（12年経過）・省エネ・電気代高騰</td></tr>
+          <tr><td style="color:var(--ink-3);font-size:11px">同時検討</td><td>コンロ7・給湯器5・レンジフード4</td></tr>
+          <tr><td style="color:var(--ink-3);font-size:11px">来場・購入</td><td style="color:var(--red);font-weight:600">0件（転換ゼロ）</td></tr>
+        </tbody>
+      </table>
+      <div class="warn">エアコン検討者22件のうち来場・購入は0件。関心はあるが量販店へ流れている可能性。セール内での価格・省エネ訴求の強化が必要。</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ========== ⑤ テキスト分析 ========== -->
+<section id="panel-text" class="panel">
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">自由記述キーワードクラスター（全コメント対象）</div>
+    <div class="chart-wrap h220"><canvas id="c_text"></canvas></div>
+    <div class="insight">最多テーマは「機器老朽化・故障（48件）」で潜在需要の核心。「まだ使える（23件）」との対立が行動障壁の本質。「タイミング・需要なし（36件）」は啓発より「買い替えタイミングとセールを合わせる仕組み」で解決すべき課題。</div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title" style="color:var(--green)">ショールーム好評コメント</div>
+      <div class="quote-list">
+        <div class="quote q-green">「丁寧に優しく対応してくれた」</div>
+        <div class="quote q-green">「予約なしでも大変親切にご対応いただいた」</div>
+        <div class="quote q-green">「ショールームが明るく広くなって良い」</div>
+        <div class="quote q-green">「とても親切に詳しく説明してもらい感じが良かった」</div>
+      </div>
+      <div class="insight">接客品質は一貫して高評価。課題は「来場してもらう」入口の設計。</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--red)">価格・内容への不満</div>
+      <div class="quote-list">
+        <div class="quote q-red">「ECサイトと比較して価格設定が厳しい」</div>
+        <div class="quote q-red">「セール価格とは思えない」</div>
+        <div class="quote q-red">「商品数が物足りない（もっと比較したい）」</div>
+        <div class="quote q-red">「ネーミングだけのプレミアムでなく驚くようなセールに」</div>
+      </div>
+      <div class="insight">「お得感の見えにくさ」がNPS批判者の主因。総コスト比較訴求が必要。</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--blue)">将来需要・要望コメント</div>
+      <div class="quote-list">
+        <div class="quote q-amber">「10年を迎えようとしているため買い替え検討」</div>
+        <div class="quote q-amber">「いつ壊れるかわからないのでちょくちょく開催してほしい」</div>
+        <div class="quote q-amber">「乾太くん：SNSで評判がよく気になっている」</div>
+        <div class="quote q-amber">「以前のガス展のようなイベントがあれば」</div>
+        <div class="quote q-amber">「子供連れが来やすいイベントや食べ物があれば」</div>
+      </div>
+      <div class="insight">「いずれ買う」という層は確実に存在。継続的な接触機会と定期セールが有効。</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ========== ⑥ 課題と改善案 ========== -->
+<section id="panel-improve" class="panel">
+
+  <div class="sec-label">課題の整理</div>
+
+  <div class="grid-3" style="margin-bottom:20px">
+    <div style="border-radius:var(--radius);padding:16px 18px;background:var(--white);box-shadow:var(--shadow);border-top:4px solid var(--red)">
+      <div style="font-size:10px;font-weight:700;color:var(--red);letter-spacing:.08em;margin-bottom:10px">🔴 認知・リーチ層の課題</div>
+      <div class="issue-row"><div class="num-badge nb-red">1</div><div class="issue-body"><div class="issue-title">認知率59%が未到達</div><div class="issue-desc">特に高知県（73%未認知）・40代（67%未認知）への到達が薄い</div></div></div>
+      <div class="issue-row"><div class="num-badge nb-amber">2</div><div class="issue-body"><div class="issue-title">ガポタ非加入者の取り込み不足</div><div class="issue-desc">非認知者の希望通知方法1位がガポタメール（148件）。加入促進が鍵</div></div></div>
+    </div>
+    <div style="border-radius:var(--radius);padding:16px 18px;background:var(--white);box-shadow:var(--shadow);border-top:4px solid var(--amber)">
+      <div style="font-size:10px;font-weight:700;color:var(--amber);letter-spacing:.08em;margin-bottom:10px">🟡 来場促進層の課題</div>
+      <div class="issue-row"><div class="num-badge nb-red">3</div><div class="issue-body"><div class="issue-title">知っていても動かない</div><div class="issue-desc">「必要性なし」「遠い」「営業が怖い」が三大ブレーキ</div></div></div>
+      <div class="issue-row"><div class="num-badge nb-amber">4</div><div class="issue-body"><div class="issue-title">WEB→来場の転換率が極低</div><div class="issue-desc">WEB閲覧者110件のうち来場・購入はわずか4件（3.6%）</div></div></div>
+    </div>
+    <div style="border-radius:var(--radius);padding:16px 18px;background:var(--white);box-shadow:var(--shadow);border-top:4px solid var(--blue)">
+      <div style="font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.08em;margin-bottom:10px">🔵 体験・満足度層の課題</div>
+      <div class="issue-row"><div class="num-badge nb-red">5</div><div class="issue-body"><div class="issue-title">来場者のNPSが最も低い（−67）</div><div class="issue-desc">実際に体験した人ほど評価が厳しい「期待値ギャップ」</div></div></div>
+      <div class="issue-row"><div class="num-badge nb-amber">6</div><div class="issue-body"><div class="issue-title">価格・ラインナップ不満</div><div class="issue-desc">「ECより高い」「商品数が少ない」批判が複数。お得感訴求不足</div></div></div>
+    </div>
+  </div>
+
+  <div class="alert" style="margin-bottom:20px">【構造的課題】「今は必要ない」が非行動理由の57%（146件）。単発の啓発より「買い替えタイミングとセールを合わせる継続接触の仕組み」が本質的解決策。</div>
+
+  <div class="sec-label">次回改善案</div>
+
+  <div style="display:flex;gap:8px;font-size:11px;margin-bottom:14px;flex-wrap:wrap">
+    <span><span class="priority-tag pt-red">即対応</span>次回セールまでに実施</span>
+    <span><span class="priority-tag pt-blue">次回設計</span>企画段階で組み込む</span>
+    <span><span class="priority-tag pt-green">中期</span>来年以降の仕組みづくり</span>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:28px">#</th>
+          <th style="width:220px">施策</th>
+          <th style="width:100px">優先度</th>
+          <th>内容</th>
+          <th style="width:120px">期待効果 / KPI</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700;color:var(--blue)">1</td>
+          <td><strong>検討中31件へのフォロー</strong></td>
+          <td><span class="priority-tag pt-red">即対応</span></td>
+          <td>セール期間中または終了直後にガポタメールで個別接触。「お見積りだけでも」など低ハードル訴求。</td>
+          <td>成約件数↑</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--blue)">2</td>
+          <td><strong>来場体験品質の向上</strong></td>
+          <td><span class="priority-tag pt-red">即対応</span></td>
+          <td>来場前の期待値設定（価格帯・展示品目をWEBで明示）。「予約なしOK」明示と押し売り感をなくす接客設計。</td>
+          <td>NPS値改善</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--blue)">3</td>
+          <td><strong>ガポタ加入促進の仕組み化</strong></td>
+          <td><span class="priority-tag pt-blue">次回設計</span></td>
+          <td>セール案内と同時に「ガポタ加入でもっとお得」への誘導を設計。検針チラシとHP誘導も強化。</td>
+          <td>認知率↑</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--blue)">4</td>
+          <td><strong>「10年目」老朽化アプローチ</strong></td>
+          <td><span class="priority-tag pt-blue">次回設計</span></td>
+          <td>コンロ・給湯器の設置年を把握し「10年目点検のご案内」としてセールへ誘引。「故障してから動く」を「予防交換」にシフト。</td>
+          <td>来場件数↑</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--blue)">5</td>
+          <td><strong>価格・省エネ訴求の強化</strong></td>
+          <td><span class="priority-tag pt-blue">次回設計</span></td>
+          <td>ECサイト・量販店との比較表示、または「10年間の光熱費シミュレーション」での総コスト訴求。エアコン層は電気代削減額の明示が有効。</td>
+          <td>NPS・来場率↑</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--blue)">6</td>
+          <td><strong>商品別ターゲットの訴求分離</strong></td>
+          <td><span class="priority-tag pt-blue">次回設計</span></td>
+          <td>エアコン（50代・老朽化）と乾太くん（30〜40代・SNS評判）でメッセージ・媒体を分離。ガポタメールのセグメント配信・年代別LP設計。</td>
+          <td>訴求効率↑</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--blue)">7</td>
+          <td><strong>WEBサイトの来場動機設計見直し</strong></td>
+          <td><span class="priority-tag pt-blue">次回設計</span></td>
+          <td>来場予約ボタンの前面化・特典明示・「予約なしでも来れる」安心感の設計。簡易診断の活用促進とフォロー動線の整備。</td>
+          <td>WEB→来場率↑</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--blue)">8</td>
+          <td><strong>イベント性の復活（ガス展参考）</strong></td>
+          <td><span class="priority-tag pt-green">中期</span></td>
+          <td>料理体験・キッチン実演など非購買目的の来場理由を創出。子供連れが来やすい設計で来場ハードルを下げる。</td>
+          <td>NPS・来場数↑</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+</main>
+
+<footer class="footer">
+  ガス機器プレミアムサマーセール2026　結果分析ダッシュボード　／　分析日：2026年7月22日　／　回答数：300件
+</footer>
+
+<script>
+/* ===== タブ切り替え ===== */
+function switchTab(el, id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+
+/* ===== Chart.js 共通設定 ===== */
+const BLUE   = '#1A5FA8';
+const BLUE2  = '#2E7DD1';
+const ORANGE = '#D95F2B';
+const GREEN  = '#1A8C5B';
+const RED    = '#C0392B';
+const AMBER  = '#C07A00';
+const GRAY   = '#898581';
+const GRAY2  = '#EDEBE5';
+const INK2   = '#4A4844';
+const INK3   = '#898581';
+
+const GRID_COLOR = '#DDD9D2';
+const defFont = { family: "'Helvetica Neue','Hiragino Sans',Meiryo,sans-serif" };
+
+Chart.defaults.font.family = defFont.family;
+Chart.defaults.font.size   = 11;
+Chart.defaults.color       = INK3;
+
+function baseOpts(extra = {}) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    ...extra
+  };
+}
+
+/* ===== ① 全体サマリー ===== */
+// 認知経路
+new Chart(document.getElementById('c_media'), {
+  type: 'bar',
+  data: {
+    labels: ['ガポタメール','投函チラシ','四国ガスHP','DM','SSショップ','社員紹介','SNS/WEB'],
+    datasets: [{ data:[62,57,11,6,4,3,3], backgroundColor: BLUE, borderRadius:4, barThickness:20 }]
+  },
+  options: baseOpts({ indexAxis:'y', scales:{
+    x:{ grid:{color:GRID_COLOR}, ticks:{color:INK3} },
+    y:{ grid:{display:false}, ticks:{color:INK2} }
+  }})
+});
+
+// 行動結果
+new Chart(document.getElementById('c_action'), {
+  type: 'doughnut',
+  data: {
+    labels: ['何もしなかった','検討中','来場・相談','購入成約'],
+    datasets: [{ data:[257,31,6,6], backgroundColor:[GRAY2,AMBER,BLUE,GREEN], hoverOffset:4 }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:true, position:'bottom', labels:{ font:{size:11}, boxWidth:10, padding:8 } } }
+  }
+});
+
+// 今後購入商品
+new Chart(document.getElementById('c_future'), {
+  type: 'bar',
+  data: {
+    labels: ['ガスコンロ','ガス給湯器','エアコン','レンジフード','乾太くん','エネファーム'],
+    datasets: [{ data:[55,30,22,21,12,4], backgroundColor:[BLUE,BLUE,ORANGE,GRAY,GREEN,GRAY], borderRadius:4, barThickness:26 }]
+  },
+  options: baseOpts({ scales:{
+    x:{ grid:{display:false}, ticks:{color:INK2} },
+    y:{ grid:{color:GRID_COLOR} }
+  }})
+});
+
+// 年代
+new Chart(document.getElementById('c_age'), {
+  type: 'bar',
+  data: {
+    labels: ['50代','60代','70代+','40代','30代','20代'],
+    datasets: [{ data:[96,90,64,40,7,3], backgroundColor:BLUE, borderRadius:4, barThickness:16 }]
+  },
+  options: baseOpts({ scales:{
+    x:{ grid:{display:false}, ticks:{color:INK2,font:{size:10}} },
+    y:{ grid:{color:GRID_COLOR}, ticks:{color:INK3,font:{size:10}} }
+  }})
+});
+
+// 地域
+new Chart(document.getElementById('c_region'), {
+  type: 'doughnut',
+  data: {
+    labels: ['愛媛','香川','高知','徳島'],
+    datasets: [{ data:[117,113,37,31], backgroundColor:[BLUE,ORANGE,GREEN,AMBER], hoverOffset:4 }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:true, position:'bottom', labels:{ font:{size:10}, boxWidth:9, padding:6 } } }
+  }
+});
+
+/* ===== ② ファネル ===== */
+new Chart(document.getElementById('c_inaction'), {
+  type: 'bar',
+  data: {
+    labels: ['購入必要性なし','営業が怖い','遠い/時間ない','価格が高い','特典に魅力なし','欲しい機種なし','その他'],
+    datasets: [{ data:[146,38,36,21,14,14,22], backgroundColor:'#4A3AA7', borderRadius:4, barThickness:14 }]
+  },
+  options: baseOpts({ indexAxis:'y', scales:{
+    x:{ grid:{color:GRID_COLOR} },
+    y:{ grid:{display:false}, ticks:{color:INK2} }
+  }})
+});
+
+/* ===== ③ NPS ===== */
+// スコア分布
+new Chart(document.getElementById('c_nps_dist'), {
+  type: 'bar',
+  data: {
+    labels: ['0','1','2','3','4','5','6','7','8','9','10'],
+    datasets: [{ 
+      data: [1,1,1,1,0,16,2,8,9,1,3],
+      backgroundColor: [RED,RED,RED,RED,RED,RED,RED,AMBER,AMBER,GREEN,GREEN],
+      borderRadius:4, barThickness:22
+    }]
+  },
+  options: baseOpts({ scales:{
+    x:{ grid:{display:false}, ticks:{color:INK2} },
+    y:{ grid:{color:GRID_COLOR} }
+  }})
+});
+
+// セグメント別NPS
+new Chart(document.getElementById('c_nps_seg'), {
+  type: 'bar',
+  data: {
+    labels: ['50代','60代','70代+','40代','男性','女性','持ち家\n集合','持ち家\n戸建て'],
+    datasets: [{ 
+      data: [-29,-60,-33,-40,-35,-55,0,-54],
+      backgroundColor: [-29,-60,-33,-40,-35,-55,0,-54].map(v => v >= 0 ? GREEN : (v > -40 ? AMBER : RED)),
+      borderRadius:4, barThickness:22
+    }]
+  },
+  options: baseOpts({ scales:{
+    x:{ grid:{display:false}, ticks:{color:INK2,font:{size:10}} },
+    y:{ min:-70, max:10, grid:{color:GRID_COLOR}, ticks:{color:INK3} }
+  }})
+});
+
+// 満足度×NPSグループ
+new Chart(document.getElementById('c_sat_nps'), {
+  type: 'bar',
+  data: {
+    labels: ['価格','ラインナップ','ショールーム\n対応','来場特典','診断','成約特典','担当者\n対応'],
+    datasets: [
+      { label:'推奨者', data:[4.75,4.75,4.50,4.50,4.25,4.50,4.50], backgroundColor:GREEN, borderRadius:4, barThickness:14 },
+      { label:'中立者', data:[3.94,4.12,3.88,3.88,3.76,3.76,3.71], backgroundColor:AMBER, borderRadius:4, barThickness:14 },
+      { label:'批判者', data:[3.41,3.36,3.23,3.32,3.14,3.32,3.50], backgroundColor:RED,   borderRadius:4, barThickness:14 }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    scales:{
+      x:{ grid:{display:false}, ticks:{color:INK2,font:{size:10}} },
+      y:{ min:1, max:5, grid:{color:GRID_COLOR}, ticks:{color:INK3} }
+    },
+    plugins: {
+      legend:{ display:true, position:'bottom', labels:{ font:{size:11}, boxWidth:10, padding:8 } }
+    }
+  }
+});
+
+/* ===== ④ セグメント ===== */
+new Chart(document.getElementById('c_age_kpi'), {
+  type: 'bar',
+  data: {
+    labels: ['30代','40代','50代','60代','70代+'],
+    datasets: [
+      { label:'認知率(%)', data:[42.9,32.5,40.6,40.0,48.4], backgroundColor:BLUE,   borderRadius:4, barThickness:18 },
+      { label:'購入意欲率(%)', data:[28.6,35.0,28.1,34.4,40.6], backgroundColor:ORANGE, borderRadius:4, barThickness:18 }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    scales:{
+      x:{ grid:{display:false}, ticks:{color:INK2} },
+      y:{ max:65, grid:{color:GRID_COLOR}, ticks:{color:INK3, callback:v=>v+'%'} }
+    },
+    plugins:{
+      legend:{ display:true, position:'bottom', labels:{ font:{size:11}, boxWidth:10, padding:8 } }
+    }
+  }
+});
+
+// エアコン vs 乾太くん
+new Chart(document.getElementById('c_ac_kanta'), {
+  type: 'bar',
+  data: {
+    labels: ['20代','30代','40代','50代','60代','70代以上'],
+    datasets: [
+      { label:'エアコン',   data:[0,1,3,8,5,5], backgroundColor:ORANGE, borderRadius:4, barThickness:20 },
+      { label:'乾太くん',   data:[1,2,4,4,1,0], backgroundColor:BLUE,   borderRadius:4, barThickness:20 }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    scales:{
+      x:{ grid:{display:false}, ticks:{color:INK2} },
+      y:{ grid:{color:GRID_COLOR}, ticks:{color:INK3} }
+    },
+    plugins:{
+      legend:{ display:true, position:'bottom', labels:{ font:{size:11}, boxWidth:10, padding:8 } }
+    }
+  }
+});
+
+/* ===== ⑤ テキスト ===== */
+new Chart(document.getElementById('c_text'), {
+  type: 'bar',
+  data: {
+    labels: ['機器老朽化・故障','タイミング・需要なし','まだ使える','価格・コスト','情報発信希望','ショールーム好評','イベント希望','賃貸制約'],
+    datasets: [{ 
+      data: [48,36,23,19,13,12,10,6],
+      backgroundColor: [RED,'#4A3AA7',GRAY,ORANGE,BLUE,GREEN,BLUE,GRAY],
+      borderRadius:4, barThickness:18
+    }]
+  },
+  options: baseOpts({ indexAxis:'y', scales:{
+    x:{ grid:{color:GRID_COLOR} },
+    y:{ grid:{display:false}, ticks:{color:INK2} }
+  }})
+});
+</script>
+</body>
+</html>
