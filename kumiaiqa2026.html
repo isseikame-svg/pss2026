@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2025年度 制度・手当に関する重点要求アンケート｜設計説明資料</title>
+<style>
+  :root{
+    --navy:#1F3864;
+    --navy-deep:#132347;
+    --slate:#4B6584;
+    --teal:#2E7D6B;
+    --paper:#FAF9F6;
+    --panel:#FFFFFF;
+    --line:#DDE3EC;
+    --note-bg:#EFF3F8;
+    --note-border:#B9C6DB;
+    --ink:#22282F;
+    --ink-soft:#5B6472;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif;
+    line-height:1.85;
+    font-size:15.5px;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px 120px;}
+
+  /* Header */
+  header{
+    background:linear-gradient(160deg,var(--navy-deep) 0%,var(--navy) 65%,var(--slate) 100%);
+    color:#fff;
+    padding:64px 28px 56px;
+  }
+  header .wrap{padding:0;}
+  .eyebrow{
+    font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:#B9CCE8;font-weight:600;margin-bottom:14px;
+  }
+  h1{
+    font-size:clamp(26px,4vw,36px);
+    line-height:1.4;
+    margin:0 0 10px;
+    font-weight:800;
+    letter-spacing:.01em;
+  }
+  .subtitle{color:#CBD9EE;font-size:15px;margin:0;}
+  .meta-row{
+    margin-top:32px;display:flex;gap:28px;flex-wrap:wrap;
+    border-top:1px solid rgba(255,255,255,.18);padding-top:22px;
+  }
+  .meta-item .k{font-size:11.5px;color:#9FB6D8;letter-spacing:.06em;}
+  .meta-item .v{font-size:14.5px;font-weight:600;margin-top:2px;}
+
+  /* Sticky TOC */
+  nav.toc{
+    position:sticky;top:0;z-index:20;
+    background:rgba(250,249,246,.94);backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.toc .inner{
+    max-width:920px;margin:0 auto;padding:12px 28px;
+    display:flex;gap:4px;overflow-x:auto;font-size:13px;
+  }
+  nav.toc a{
+    white-space:nowrap;color:var(--slate);text-decoration:none;
+    padding:8px 12px;border-radius:20px;font-weight:600;
+  }
+  nav.toc a:hover{background:var(--note-bg);color:var(--navy);}
+
+  section{padding-top:56px;}
+  section:first-of-type{padding-top:44px;}
+  .section-num{
+    font-size:12px;font-weight:700;color:var(--teal);letter-spacing:.1em;
+    margin-bottom:6px;
+  }
+  h2{
+    font-size:21px;color:var(--navy);margin:0 0 18px;
+    padding-bottom:12px;border-bottom:2px solid var(--navy);
+    font-weight:800;
+  }
+  h3{font-size:15.5px;color:var(--navy);margin:26px 0 10px;font-weight:700;}
+  p{margin:0 0 14px;color:var(--ink);}
+  .lead{font-size:16px;color:var(--ink-soft);}
+
+  /* Comparison table of 3 surveys */
+  .cmp-table{width:100%;border-collapse:collapse;margin:18px 0 8px;font-size:13.8px;}
+  .cmp-table th,.cmp-table td{border:1px solid var(--line);padding:12px 14px;text-align:left;vertical-align:top;}
+  .cmp-table thead th{background:var(--navy);color:#fff;font-weight:700;}
+  .cmp-table tbody tr:nth-child(even){background:#F3F6FA;}
+  .cmp-table td.hl{background:#FFF7ED;font-weight:700;color:#9A5B12;}
+  .cmp-table .rowlabel{font-weight:700;color:var(--navy);white-space:nowrap;}
+
+  /* Principle cards */
+  .principles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px;}
+  .p-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:20px;border-top:4px solid var(--teal);
+  }
+  .p-card .num{font-size:26px;font-weight:800;color:var(--teal);opacity:.5;line-height:1;}
+  .p-card h4{margin:10px 0 8px;font-size:14.5px;color:var(--navy);}
+  .p-card p{font-size:13.3px;color:var(--ink-soft);margin:0;}
+
+  /* Flow diagram */
+  .flow{margin:26px 0 10px;}
+  .flow-row{display:flex;align-items:stretch;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .flow-box{
+    flex:1;min-width:150px;background:var(--panel);border:1.5px solid var(--navy);
+    border-radius:8px;padding:12px 14px;font-size:13px;font-weight:700;color:var(--navy);
+    display:flex;align-items:center;justify-content:center;text-align:center;
+  }
+  .flow-box.sub{border-color:var(--teal);color:var(--teal);font-weight:600;font-size:12.4px;}
+  .flow-arrow{align-self:center;color:var(--slate);font-size:18px;padding:0 2px;}
+  .flow-group{
+    border:1.5px dashed var(--line);border-radius:10px;padding:16px;margin-bottom:14px;
+    background:#F6F8FB;
+  }
+  .flow-group .flow-label{font-size:11.5px;font-weight:700;color:var(--slate);letter-spacing:.05em;margin-bottom:10px;text-transform:uppercase;}
+  .abc-chain{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap;}
+  .abc-chain .flow-box.sub{flex:1;min-width:110px;}
+
+  /* Question rationale table */
+  .qa-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.6px;}
+  .qa-table th,.qa-table td{border:1px solid var(--line);padding:11px 13px;text-align:left;vertical-align:top;}
+  .qa-table thead th{background:#EFF3F8;color:var(--navy);font-weight:700;font-size:12.5px;}
+  .qa-table td.qcode{font-weight:800;color:var(--navy);white-space:nowrap;}
+  .qa-table tbody tr:hover{background:#FAFCFE;}
+
+  /* Note callout, matches docx style */
+  .note{
+    background:var(--note-bg);border:1px solid var(--note-border);border-radius:8px;
+    padding:16px 18px;margin:18px 0;font-size:13.4px;color:var(--ink-soft);
+  }
+  .note .note-label{font-weight:800;color:var(--navy);font-size:13px;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+
+  /* checklist */
+  .checklist{list-style:none;margin:16px 0;padding:0;}
+  .checklist li{
+    display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);
+    font-size:14px;
+  }
+  .checklist li:last-child{border-bottom:none;}
+  .checklist .box{
+    flex-shrink:0;width:20px;height:20px;border:2px solid var(--navy);border-radius:4px;margin-top:2px;
+  }
+  .checklist .txt b{color:var(--navy);}
+  .checklist .txt span{display:block;color:var(--ink-soft);font-size:12.8px;margin-top:2px;}
+
+  footer{
+    margin-top:70px;padding:26px 0;border-top:1px solid var(--line);
+    color:var(--ink-soft);font-size:12.5px;
+  }
+
+  /* QA draft (actual survey form preview) */
+  .qform{
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:8px 26px 26px;margin-top:20px;
+  }
+  .qform-part{margin-top:8px;}
+  .qform-part-title{
+    font-size:16px;font-weight:800;color:var(--navy);
+    padding:18px 0 10px;border-bottom:2px solid var(--navy);margin-bottom:16px;
+  }
+  .qblock{padding:16px 0;border-bottom:1px solid var(--line);}
+  .qblock:last-child{border-bottom:none;}
+  .qblock.sub{
+    margin-left:18px;padding-left:16px;border-left:3px solid var(--note-border);
+    background:#FBFCFE;
+  }
+  .qhead{
+    background:#F2F2F2;border-radius:6px;padding:9px 12px;
+    font-weight:700;font-size:14px;color:var(--ink);margin-bottom:10px;
+  }
+  .qhead .qtag{color:var(--navy);font-weight:800;margin-right:6px;}
+  .example{font-size:12.4px;color:var(--ink-soft);margin:0 0 8px;}
+  .opt-list{list-style:none;margin:0;padding:0;}
+  .opt-list li{
+    font-size:13.6px;padding:5px 0;display:flex;align-items:center;gap:8px;color:var(--ink);
+  }
+  .opt-list li::before{
+    content:"";width:14px;height:14px;border:1.6px solid var(--slate);border-radius:3px;flex-shrink:0;
+  }
+  .freearea{
+    border:1.4px dashed var(--line);border-radius:6px;height:38px;
+    background:repeating-linear-gradient(#fff,#fff 27px,#EEF1F5 28px);
+    margin:4px 0 4px;
+  }
+  .qfoot-note{
+    text-align:center;color:var(--ink-soft);font-size:13px;padding:22px 0 6px;
+  }
+
+  /* Execution schedule timeline */
+  .timeline{margin-top:22px;position:relative;}
+  .timeline::before{
+    content:"";position:absolute;left:23px;top:6px;bottom:6px;width:2px;
+    background:var(--line);
+  }
+  .tl-item{display:flex;gap:18px;padding-bottom:22px;position:relative;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-num{
+    flex-shrink:0;width:48px;height:48px;border-radius:50%;
+    background:var(--navy);color:#fff;font-weight:800;font-size:17px;
+    display:flex;align-items:center;justify-content:center;z-index:1;
+  }
+  .tl-card{
+    flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:14px 18px;margin-top:2px;
+  }
+  .tl-card-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px;}
+  .tl-title{font-weight:700;font-size:14.5px;color:var(--ink);}
+  .tl-owner{
+    font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;
+  }
+  .owner-chosa{background:#E4F2EE;color:var(--teal);}
+  .owner-shikko{background:#E6ECF6;color:var(--navy);}
+  .owner-shibu{background:#FCEFE0;color:#9A5B12;}
+  .tl-desc{font-size:13px;color:var(--ink-soft);margin:2px 0 0;}
+
+  @media (max-width:720px){
+    .principles{grid-template-columns:1fr;}
+    header{padding:48px 20px 40px;}
+    .wrap{padding:0 18px 100px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">四国ガス労働組合　調査企画部　内部資料</div>
+    <h1>2025年度　制度・手当に関する重点要求アンケート<br>設計説明資料</h1>
+    <p class="subtitle">秋の取組内容アンケート／秋の要求書に向けた材料集めアンケートの、構成と設計意図の説明</p>
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">対象</div><div class="v">組合員全員</div></div>
+      <div class="meta-item"><div class="k">実施方法</div><div class="v">デスクネッツ　自動ユーザー識別（記名式）</div></div>
+      <div class="meta-item"><div class="k">扱う分野</div><div class="v">賃金・諸手当／休暇・福利厚生／健康保持増進</div></div>
+      <div class="meta-item"><div class="k">ステータス</div><div class="v">骨子案 ver1</div></div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="inner">
+    <a href="#position">位置づけ</a>
+    <a href="#principles">設計方針</a>
+    <a href="#structure">全体構成</a>
+    <a href="#qa-draft">設問案（原文）</a>
+    <a href="#questions">設問の意図</a>
+    <a href="#tool">ツール選定</a>
+    <a href="#schedule">実行スケジュール</a>
+    <a href="#todo">確認事項</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <section id="position">
+    <div class="section-num">01</div>
+    <h2>他のアンケートとの位置づけ</h2>
+    <p class="lead">今年度、組合として実施を予定している3本のアンケートは、それぞれ目的も設計思想も異なります。</p>
+    <table class="cmp-table">
+      <thead>
+        <tr><th style="width:16%"></th><th>労働時間管理アンケート</th><th>生活実態・意識調査アンケート</th><th>秋の取組内容アンケート（本資料）</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="rowlabel">目的</td><td>日常の労働時間運用の実態把握・改善</td><td>組合員の生活・労働条件および意識動向を把握し、今後の活動の参考資料とする</td><td>秋の要求書に向けた重点分野の材料集め</td></tr>
+        <tr><td class="rowlabel">匿名性</td><td>匿名</td><td>匿名</td><td class="hl">記名式（デスクネッツ自動識別）</td></tr>
+        <tr><td class="rowlabel">対象範囲</td><td>時間外・休日労働・有休・フレックス</td><td>家計状況、組合全般について</td><td>賃金・諸手当／休暇・福利厚生／健康保持増進</td></tr>
+        <tr><td class="rowlabel">賞与・ベア</td><td>対象外</td><td>対象外</td><td>対象外（春闘で別途扱う）</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <div class="note-label">🔧 補足　なぜ記名式なのか</div>
+      <p style="margin:0 0 8px;"><b>① 根拠を深掘りするフォローアップができる。</b>Q4-C・Q5-C・Q6-Cで挙げてもらう具体的なエピソードや件数は、匿名だと曖昧なまま集計するしかない。記名式なら、要求として弱いと判断した回答に対して本人へ直接「もう少し詳しく教えてほしい」と確認でき、要求書の説得力を後から補強できる。これは匿名アンケートでは原理的にできない。</p>
+      <p style="margin:0 0 8px;"><b>② 内容の性質上、心理的なハードルはもともと低い。</b>Q4〜Q6で聞いているのは住宅手当や育児休業拡充といった制度・手当への要望であり、特定の上司・同僚への不満ではない。労働時間管理アンケートのQ8のような「言うと角が立つ」性質の内容とは異なるため、記名による萎縮のリスクは相対的に小さい。</p>
+      <p style="margin:0;"><b>③ その上で、閲覧範囲は限定する。</b>なお、なりすまし・重複回答の防止はデスクネッツの自動ユーザー識別の仕組み上、匿名アンケートであっても既に確保されており、記名を選ぶ理由にはならない。記名を選ぶ実質的な理由は①②のみであり、その裏返しとして残る「見られることへの不安」は、回答の閲覧を組合の集計担当者のみに限定する運用で担保する。</p>
+    </div>
+  </section>
+
+  <section id="principles">
+    <div class="section-num">02</div>
+    <h2>3つの設計方針</h2>
+    <div class="principles">
+      <div class="p-card">
+        <div class="num">01</div>
+        <h4>閲覧範囲を限定した記名式</h4>
+        <p>本人特定は可能だが、閲覧は集計担当者のみ。要求書・支部長会議には集計・要約結果のみを使用し、個人の回答がそのまま公開されることはない。</p>
+      </div>
+      <div class="p-card">
+        <div class="num">02</div>
+        <h4>選択→深掘りの段階化</h4>
+        <p>白紙の自由記述はやめ、候補項目から1つに絞った上で「背景→改善内容→根拠」の3段階で書いてもらう。要求書にそのまま使える建設的な内容にする。</p>
+      </div>
+      <div class="p-card">
+        <div class="num">03</div>
+        <h4>属性は必要最小限</h4>
+        <p>属性項目を増やすほど、記名式では小規模支部で実質的に個人特定が可能になる。目的に直結するものだけに絞る。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="structure">
+    <div class="section-num">03</div>
+    <h2>アンケートの全体構成</h2>
+    <p>基本項目 → Part1（3分野それぞれの重点項目を1つ選び深掘り）→ Part2（一覧にない新規提案）という流れ。</p>
+
+    <div class="flow">
+      <div class="flow-row">
+        <div class="flow-box">基本項目<br>Q1所属支部／Q2所属本部／Q3年齢層</div>
+      </div>
+      <div class="flow-arrow" style="text-align:center;width:100%;">↓</div>
+
+      <div class="flow-group">
+        <div class="flow-label">Part1　候補項目からの絞り込み＋深掘り</div>
+
+        <div class="flow-row">
+          <div class="flow-box">Q4　賃金・諸手当<br>（1つ選択）</div>
+        </div>
+        <div class="abc-chain">
+          <div class="flow-box sub">Q4-A 背景・現状</div><div class="flow-arrow">→</div>
+          <div class="flow-box sub">Q4-B 改善内容</div><div class="flow-arrow">→</div>
+          <div class="flow-box sub">Q4-C 根拠（任意）</div>
+        </div>
+
+        <div class="flow-row" style="margin-top:16px;">
+          <div class="flow-box">Q5　休暇・福利厚生<br>（1つ選択）</div>
+        </div>
+        <div class="abc-chain">
+          <div class="flow-box sub">Q5-A 背景・現状</div><div class="flow-arrow">→</div>
+          <div class="flow-box sub">Q5-B 改善内容</div><div class="flow-arrow">→</div>
+          <div class="flow-box sub">Q5-C 根拠（任意）</div>
+        </div>
+
+        <div class="flow-row" style="margin-top:16px;">
+          <div class="flow-box">Q6　健康保持増進<br>（1つ選択）</div>
+        </div>
+        <div class="abc-chain">
+          <div class="flow-box sub">Q6-A 背景・現状</div><div class="flow-arrow">→</div>
+          <div class="flow-box sub">Q6-B 改善内容</div><div class="flow-arrow">→</div>
+          <div class="flow-box sub">Q6-C 根拠（任意）</div>
+        </div>
+      </div>
+
+      <div class="flow-arrow" style="text-align:center;width:100%;">↓</div>
+
+      <div class="flow-group">
+        <div class="flow-label">Part2　新規提案（Q4・Q5・Q6の候補一覧にないもの）</div>
+        <div class="flow-row">
+          <div class="flow-box">Q7　分野選択</div>
+          <div class="flow-box">Q8　重要度</div>
+        </div>
+        <div class="abc-chain">
+          <div class="flow-box sub">Q9-A 背景・現状</div><div class="flow-arrow">→</div>
+          <div class="flow-box sub">Q9-B 改善内容</div><div class="flow-arrow">→</div>
+          <div class="flow-box sub">Q9-C 根拠（任意）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <div class="note-label">🔧 段階化ロジックの由来</div>
+      このA→B→C構成は、もともと労働時間管理アンケートのQ8（職場の課題点）で採用した「背景→改善内容→根拠」の型を、制度・手当アンケート全体に展開したもの。根拠（C）だけは任意項目にして、数字や他社事例を持たない人でも回答のハードルが上がりすぎないようにしている。
+    </div>
+  </section>
+
+  <section id="qa-draft">
+    <div class="section-num">04</div>
+    <h2>設問案（原文）</h2>
+    <p class="lead">Docで作成した骨子案ver1の設問を、実際の文言のまま掲載します。候補項目は仮置きです。</p>
+
+    <div class="qform">
+
+      <div class="qform-part">
+        <div class="qform-part-title">基本項目</div>
+
+        <div class="qblock">
+          <div class="qhead"><span class="qtag">Q1.</span>所属支部は？</div>
+          <ul class="opt-list">
+            <li>本店支部</li><li>今治支部</li><li>松山支部</li><li>宇和島支部</li>
+            <li>高知支部</li><li>徳島支部</li><li>高松支部</li><li>丸亀支部</li>
+          </ul>
+        </div>
+
+        <div class="qblock">
+          <div class="qhead"><span class="qtag">Q2.</span>所属本部は？</div>
+          <ul class="opt-list">
+            <li>管理本部</li><li>営業本部</li><li>導管本部</li><li>生産本部</li>
+          </ul>
+        </div>
+
+        <div class="qblock">
+          <div class="qhead"><span class="qtag">Q3.</span>年齢層は？</div>
+          <ul class="opt-list">
+            <li>29歳以下</li><li>30〜39歳</li><li>40〜49歳</li><li>50歳以上</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qform-part">
+        <div class="qform-part-title">Part1　候補項目の絞り込み</div>
+
+        <div class="qblock">
+          <div class="qhead"><span class="qtag">Q4.</span>賃金・諸手当について、今年度最も注力してほしいものを1つ選んでください。</div>
+          <ul class="opt-list">
+            <li>住宅手当の拡充</li><li>家族手当の拡充</li><li>資格手当の新設・拡充</li>
+            <li>単身赴任手当の拡充</li><li>通勤手当の見直し</li><li>食事手当・食券制度</li>
+            <li>寒冷地・地域手当</li><li>特になし／該当なし</li>
+          </ul>
+        </div>
+        <div class="qblock sub">
+          <div class="qhead"><span class="qtag">Q4-A.</span>（Q4で選んだ項目について）背景・現状として、最も近いものを選んでください。</div>
+          <ul class="opt-list">
+            <li>現行の制度・手当が実情に合っていない（金額・日数が不足等）</li>
+            <li>他社・他業種と比べて見劣りする</li>
+            <li>制度はあるが利用のハードルが高い（手続きが煩雑等）</li>
+            <li>制度自体が十分に周知されていない</li>
+            <li>対象外・利用資格を満たさない</li>
+            <li>その他（下欄にご記入ください）</li>
+          </ul>
+          <p class="example">その他の背景（自由記述・任意）</p>
+          <div class="freearea"></div>
+        </div>
+        <div class="qblock sub">
+          <div class="qhead"><span class="qtag">Q4-B.</span>具体的にどう改善してほしいですか？　最も近いものを選んでください。</div>
+          <ul class="opt-list">
+            <li>金額・日数を増やしてほしい（拡充）</li>
+            <li>対象者・対象範囲を広げてほしい</li>
+            <li>手続き・申請方法を簡素化してほしい</li>
+            <li>新しく制度を設けてほしい</li>
+            <li>周知・情報提供を強化してほしい</li>
+            <li>その他（下欄にご記入ください）</li>
+          </ul>
+          <p class="example">その他の改善内容（自由記述・任意）</p>
+          <div class="freearea"></div>
+        </div>
+        <div class="qblock sub">
+          <div class="qhead"><span class="qtag">Q4-C.</span>改善を求める根拠として、当てはまるものを選んでください（複数選択可）。あわせて、できるだけ具体的にご記入いただけると、要求書の材料として活用しやすくなります。</div>
+          <ul class="opt-list">
+            <li>自分自身の実体験</li><li>職場で見聞きした具体例</li><li>件数・データを把握している</li>
+            <li>他社・他部署の事例を知っている</li><li>特になし</li>
+          </ul>
+          <p class="example">Bで選んだ内容に応じて、以下を目安にご記入ください。<br>
+「金額・日数を増やしてほしい」→ 希望する具体的な金額・日数と、その根拠（他社水準、実際にかかる費用、不足していると感じる差額など）<br>
+「対象者・対象範囲を広げてほしい」→ 追加してほしい対象の条件<br>
+「手続き・申請方法を簡素化してほしい」→ 現状の手続きのどこが煩雑か<br>
+「新しく制度を設けてほしい」→ どのような制度が必要か、対象になりそうな人数感<br>
+「周知・情報提供を強化してほしい」→ 実際に何を知らなかったか、どこで知ればよかったか<br>
+特になければ空欄で構いません。</p>
+          <div class="freearea"></div>
+        </div>
+
+        <div class="qblock" style="margin-top:8px;">
+          <div class="qhead"><span class="qtag">Q5.</span>休暇・福利厚生について、今年度最も注力してほしいものを1つ選んでください。</div>
+          <ul class="opt-list">
+            <li>有給休暇の取得促進策</li><li>育児休業・時短勤務制度の拡充</li><li>介護休業制度の拡充</li>
+            <li>リフレッシュ休暇の新設・拡充</li><li>病気休暇・傷病休暇制度</li><li>慶弔休暇の見直し</li>
+            <li>社宅・独身寮の整備</li><li>特になし／該当なし</li>
+          </ul>
+        </div>
+        <div class="qblock sub">
+          <div class="qhead"><span class="qtag">Q5-A.</span>（Q5で選んだ項目について）背景・現状として、最も近いものを選んでください。</div>
+          <ul class="opt-list">
+            <li>現行の制度・手当が実情に合っていない（金額・日数が不足等）</li>
+            <li>他社・他業種と比べて見劣りする</li>
+            <li>制度はあるが利用のハードルが高い（手続きが煩雑等）</li>
+            <li>制度自体が十分に周知されていない</li>
+            <li>対象外・利用資格を満たさない</li>
+            <li>その他（下欄にご記入ください）</li>
+          </ul>
+          <p class="example">その他の背景（自由記述・任意）</p>
+          <div class="freearea"></div>
+        </div>
+        <div class="qblock sub">
+          <div class="qhead"><span class="qtag">Q5-B.</span>具体的にどう改善してほしいですか？　最も近いものを選んでください。</div>
+          <ul class="opt-list">
+            <li>金額・日数を増やしてほしい（拡充）</li>
+            <li>対象者・対象範囲を広げてほしい</li>
+            <li>手続き・申請方法を簡素化してほしい</li>
+            <li>新しく制度を設けてほしい</li>
+            <li>周知・情報提供を強化してほしい</li>
+            <li>その他（下欄にご記入ください）</li>
+          </ul>
+          <p class="example">その他の改善内容（自由記述・任意）</p>
+          <div class="freearea"></div>
+        </div>
+        <div class="qblock sub">
+          <div class="qhead"><span class="qtag">Q5-C.</span>改善を求める根拠として、当てはまるものを選んでください（複数選択可）。あわせて、できるだけ具体的にご記入いただけると、要求書の材料として活用しやすくなります。</div>
+          <ul class="opt-list">
+            <li>自分自身の実体験</li><li>職場で見聞きした具体例</li><li>件数・データを把握している</li>
+            <li>他社・他部署の事例を知っている</li><li>特になし</li>
+          </ul>
+          <p class="example">Bで選んだ内容に応じて、以下を目安にご記入ください。<br>
+「金額・日数を増やしてほしい」→ 希望する具体的な金額・日数と、その根拠（他社水準、実際にかかる費用、不足していると感じる差額など）<br>
+「対象者・対象範囲を広げてほしい」→ 追加してほしい対象の条件<br>
+「手続き・申請方法を簡素化してほしい」→ 現状の手続きのどこが煩雑か<br>
+「新しく制度を設けてほしい」→ どのような制度が必要か、対象になりそうな人数感<br>
+「周知・情報提供を強化してほしい」→ 実際に何を知らなかったか、どこで知ればよかったか<br>
+特になければ空欄で構いません。</p>
+          <div class="freearea"></div>
+        </div>
+
+        <div class="qblock" style="margin-top:8px;">
+          <div class="qhead"><span class="qtag">Q6.</span>健康保持増進の取り組みについて、今年度最も注力してほしいものを1つ選んでください。</div>
+          <ul class="opt-list">
+            <li>人間ドック・健康診断（オプション検査含む）の費用補助拡充</li>
+            <li>ストレスチェック後のフォロー・メンタルヘルス相談体制の充実</li>
+            <li>産業医・保健師による相談機会の増加</li>
+            <li>運動促進策（スポーツ施設利用補助、部活動支援等）</li>
+            <li>食生活・栄養面の支援（社員食堂の改善、栄養相談等）</li>
+            <li>禁煙支援・受動喫煙対策</li>
+            <li>生活習慣病予防プログラム（保健指導等）</li>
+            <li>インフルエンザ等予防接種の費用補助</li>
+            <li>特になし／該当なし</li>
+          </ul>
+        </div>
+        <div class="qblock sub">
+          <div class="qhead"><span class="qtag">Q6-A.</span>（Q6で選んだ項目について）背景・現状として、最も近いものを選んでください。</div>
+          <ul class="opt-list">
+            <li>現行の制度・手当が実情に合っていない（金額・日数が不足等）</li>
+            <li>他社・他業種と比べて見劣りする</li>
+            <li>制度はあるが利用のハードルが高い（手続きが煩雑等）</li>
+            <li>制度自体が十分に周知されていない</li>
+            <li>対象外・利用資格を満たさない</li>
+            <li>その他（下欄にご記入ください）</li>
+          </ul>
+          <p class="example">その他の背景（自由記述・任意）</p>
+          <div class="freearea"></div>
+        </div>
+        <div class="qblock sub">
+          <div class="qhead"><span class="qtag">Q6-B.</span>具体的にどう改善してほしいですか？　最も近いものを選んでください。</div>
+          <ul class="opt-list">
+            <li>金額・日数を増やしてほしい（拡充）</li>
+            <li>対象者・対象範囲を広げてほしい</li>
+            <li>手続き・申請方法を簡素化してほしい</li>
+            <li>新しく制度を設けてほしい</li>
+            <li>周知・情報提供を強化してほしい</li>
+            <li>その他（下欄にご記入ください）</li>
+          </ul>
+          <p class="example">その他の改善内容（自由記述・任意）</p>
+          <div class="freearea"></div>
+        </div>
+        <div class="qblock sub">
+          <div class="qhead"><span class="qtag">Q6-C.</span>改善を求める根拠として、当てはまるものを選んでください（複数選択可）。あわせて、できるだけ具体的にご記入いただけると、要求書の材料として活用しやすくなります。</div>
+          <ul class="opt-list">
+            <li>自分自身の実体験</li><li>職場で見聞きした具体例</li><li>件数・データを把握している</li>
+            <li>他社・他部署の事例を知っている</li><li>特になし</li>
+          </ul>
+          <p class="example">Bで選んだ内容に応じて、以下を目安にご記入ください。<br>
+「金額・日数を増やしてほしい」→ 希望する具体的な金額・日数と、その根拠（他社水準、実際にかかる費用、不足していると感じる差額など）<br>
+「対象者・対象範囲を広げてほしい」→ 追加してほしい対象の条件<br>
+「手続き・申請方法を簡素化してほしい」→ 現状の手続きのどこが煩雑か<br>
+「新しく制度を設けてほしい」→ どのような制度が必要か、対象になりそうな人数感<br>
+「周知・情報提供を強化してほしい」→ 実際に何を知らなかったか、どこで知ればよかったか<br>
+特になければ空欄で構いません。</p>
+          <div class="freearea"></div>
+        </div>
+      </div>
+
+      <div class="qform-part">
+        <div class="qform-part-title">Part2　新規提案・具体的な意見（Q4・Q5・Q6の候補一覧にないもの）</div>
+
+        <div class="qblock">
+          <div class="qhead"><span class="qtag">Q7.</span>どの分野についてのご意見ですか？</div>
+          <ul class="opt-list">
+            <li>賃金・諸手当について</li><li>休暇・福利厚生について</li><li>健康保持増進について</li><li>その他</li>
+          </ul>
+        </div>
+
+        <div class="qblock">
+          <div class="qhead"><span class="qtag">Q8.</span>どの程度重要だと感じていますか？</div>
+          <ul class="opt-list">
+            <li>早急に対応してほしい</li><li>できれば対応してほしい</li><li>時間をかけてでも検討してほしい</li>
+          </ul>
+        </div>
+
+        <p class="example" style="margin-top:8px;">該当する意見がない場合は、以下は回答不要です。</p>
+        <div class="qblock sub">
+          <div class="qhead"><span class="qtag">Q9-A.</span>背景・現状として、最も近いものを選んでください。</div>
+          <ul class="opt-list">
+            <li>現行の制度・手当が実情に合っていない（金額・日数が不足等）</li>
+            <li>他社・他業種と比べて見劣りする</li>
+            <li>制度はあるが利用のハードルが高い（手続きが煩雑等）</li>
+            <li>制度自体が十分に周知されていない</li>
+            <li>対象外・利用資格を満たさない</li>
+            <li>その他（下欄にご記入ください）</li>
+          </ul>
+          <p class="example">その他の背景（自由記述・任意）</p>
+          <div class="freearea"></div>
+        </div>
+        <div class="qblock sub">
+          <div class="qhead"><span class="qtag">Q9-B.</span>具体的にどう改善してほしいですか？　最も近いものを選んでください。</div>
+          <ul class="opt-list">
+            <li>金額・日数を増やしてほしい（拡充）</li>
+            <li>対象者・対象範囲を広げてほしい</li>
+            <li>手続き・申請方法を簡素化してほしい</li>
+            <li>新しく制度を設けてほしい</li>
+            <li>周知・情報提供を強化してほしい</li>
+            <li>その他（下欄にご記入ください）</li>
+          </ul>
+          <p class="example">その他の改善内容（自由記述・任意）</p>
+          <div class="freearea"></div>
+        </div>
+        <div class="qblock sub">
+          <div class="qhead"><span class="qtag">Q9-C.</span>改善を求める根拠として、当てはまるものを選んでください（複数選択可）。あわせて、できるだけ具体的にご記入いただけると、要求書の材料として活用しやすくなります。</div>
+          <ul class="opt-list">
+            <li>自分自身の実体験</li><li>職場で見聞きした具体例</li><li>件数・データを把握している</li>
+            <li>他社・他部署の事例を知っている</li><li>特になし</li>
+          </ul>
+          <p class="example">Bで選んだ内容に応じて、以下を目安にご記入ください。<br>
+「金額・日数を増やしてほしい」→ 希望する具体的な金額・日数と、その根拠（他社水準、実際にかかる費用、不足していると感じる差額など）<br>
+「対象者・対象範囲を広げてほしい」→ 追加してほしい対象の条件<br>
+「手続き・申請方法を簡素化してほしい」→ 現状の手続きのどこが煩雑か<br>
+「新しく制度を設けてほしい」→ どのような制度が必要か、対象になりそうな人数感<br>
+「周知・情報提供を強化してほしい」→ 実際に何を知らなかったか、どこで知ればよかったか<br>
+特になければ空欄で構いません。</p>
+          <div class="freearea"></div>
+        </div>
+      </div>
+
+      <div class="qfoot-note">アンケートは以上です。ご協力ありがとうございました。</div>
+    </div>
+  </section>
+
+  <section id="questions">
+    <div class="section-num">05</div>
+    <h2>各設問の設計意図</h2>
+    <table class="qa-table">
+      <thead><tr><th style="width:14%">設問</th><th style="width:30%">内容</th><th>ねらい</th></tr></thead>
+      <tbody>
+        <tr><td class="qcode">Q1〜Q3</td><td>所属支部／所属本部／年齢層</td><td>本部は生産・導管本部（現場系）と営業本部（外勤系）で重視する制度・手当が異なる想定、年齢層は住宅・単身赴任手当（若年層）と育児・介護支援（子育て・介護世代）で世代差が出やすい想定。いずれも裏付けに使う。</td></tr>
+        <tr><td class="qcode">Q4</td><td>賃金・諸手当　最重要1つを単一選択</td><td>複数選択→絞り込みの2段階をやめ、最初から1つに絞ることで回答負荷と集計の手間を最小化。</td></tr>
+        <tr><td class="qcode">Q4-A/B/C</td><td>背景・改善内容（選択肢＋その他自由記述）・根拠（種類選択＋詳細任意）</td><td>頻出パターンを選択肢化することで白紙記述の負担を減らしつつ、「その他」で個別性の高い内容も拾える。初年度は仮説ベースの選択肢とし、翌年度以降に実データで精緻化する想定。</td></tr>
+        <tr><td class="qcode">Q5／Q5-A/B/C</td><td>休暇・福利厚生（同構成）</td><td>Q4と同一ロジック。分野が違うだけで回答者の負担感を揃える。</td></tr>
+        <tr><td class="qcode">Q6／Q6-A/B/C</td><td>健康保持増進（同構成）</td><td>健康経営・ストレスチェック関連は労使協議のテーマとして扱われることが増えており、独立ジャンルとして新設。</td></tr>
+        <tr><td class="qcode">Q7〜Q9</td><td>新規提案（自由記述枠）</td><td>Q4〜Q6で拾いきれない項目、または2番目以降に重要な項目の受け皿。空欄のまま提出しても問題ない位置づけ。</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="tool">
+    <div class="section-num">06</div>
+    <h2>実施ツールの選定経緯</h2>
+    <p>「回答者の正確性（組合員本人による、二重回答のない回答）」と「匿名性」の両立を軸に検討した結果、デスクネッツのアンケート機能を採用する。</p>
+    <table class="cmp-table">
+      <thead><tr><th></th><th>デスクネッツ</th><th>Google Form</th><th>SmartHR従業員サーベイ</th></tr></thead>
+      <tbody>
+        <tr><td class="rowlabel">回答者の正確性</td><td class="hl">◎ 登録者のみに配信</td><td>△ Google Workspace未整備のため制限困難</td><td>◎ 従業員DBと連携</td></tr>
+        <tr><td class="rowlabel">分析効率</td><td>△ CSVエクスポートのみ</td><td>◎ Sheets自動連携</td><td>◎ 自動クロス集計</td></tr>
+        <tr><td class="rowlabel">運用上の壁</td><td>特になし（既存の組合利用ツール）</td><td>組合員の一部がアカウント未保有</td><td>会社の人事システム管理下・組合の作成権限が不透明</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:10px;">今回は記名式のため、匿名性を目的としたGoogle Formの「個人識別コード方式」は不要。デスクネッツのCSVをGoogleスプレッドシート経由でLooker Studioに接続し、これまでのダッシュボード運用と同じ流れで分析する。</p>
+  </section>
+
+  <section id="schedule">
+    <div class="section-num">07</div>
+    <h2>実行スケジュールのフロー</h2>
+    <p class="lead">アンケート原案の作成から、秋の方向性確定までの8ステップです。</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-num">①</div>
+        <div class="tl-card">
+          <div class="tl-card-top"><span class="tl-title">アンケート内容原案作成</span><span class="tl-owner owner-chosa">調査企画部</span></div>
+          <p class="tl-desc">本資料および骨子案（ver1）の作成。候補項目の差し替え・属性項目の最終判断もここで行う。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">②</div>
+        <div class="tl-card">
+          <div class="tl-card-top"><span class="tl-title">執行部にてアンケート案確定</span><span class="tl-owner owner-shikko">執行部</span></div>
+          <p class="tl-desc">原案を執行部内で確認し、設問内容・記名式である理由を含めて合意形成する。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">③</div>
+        <div class="tl-card">
+          <div class="tl-card-top"><span class="tl-title">支部へアンケート配信の依頼</span><span class="tl-owner owner-shikko">執行部（担当がフォロー）</span></div>
+          <p class="tl-desc">デスクネッツで配信。担当執行部が各支部の回答状況をフォローし、回答率を確保する。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">④</div>
+        <div class="tl-card">
+          <div class="tl-card-top"><span class="tl-title">集計・CSV回収</span><span class="tl-owner owner-chosa">調査企画部</span></div>
+          <p class="tl-desc">回答締切後、デスクネッツから回答結果CSVをダウンロードし、調査企画部で回収する。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">⑤</div>
+        <div class="tl-card">
+          <div class="tl-card-top"><span class="tl-title">分析ダッシュボード作成・配布</span><span class="tl-owner owner-chosa">調査企画部</span></div>
+          <p class="tl-desc">CSVを整形し、各支部用の分析ダッシュボードを作成。支部別・年齢層別のクロス集計を含めて各支部へ配布する。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">⑥</div>
+        <div class="tl-card">
+          <div class="tl-card-top"><span class="tl-title">支部内での結果共有・意見まとめ</span><span class="tl-owner owner-shibu">支部</span></div>
+          <p class="tl-desc">ダッシュボードをもとに支部内で結果を共有し、支部としての重点項目・意見を整理する。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">⑦</div>
+        <div class="tl-card">
+          <div class="tl-card-top"><span class="tl-title">支部長会議開催</span><span class="tl-owner owner-shibu">支部長会議</span></div>
+          <p class="tl-desc">各支部長が支部としての意見を持ち寄り、全体で共有・議論する。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">⑧</div>
+        <div class="tl-card">
+          <div class="tl-card-top"><span class="tl-title">執行部内での意見集約・秋の方向性確定</span><span class="tl-owner owner-shikko">執行部</span></div>
+          <p class="tl-desc">支部長会議での議論をもとに執行部内で最終的な意見集約を行い、秋の取組の方向性を確定する。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="todo">
+    <div class="section-num">08</div>
+    <h2>実装前に確認・調整が必要な事項</h2>
+    <ul class="checklist">
+      <li><div class="box"></div><div class="txt"><b>候補項目の差し替え</b><span>Q4・Q5・Q6の選択肢は一般的な項目の仮置き。実際の制度・手当一覧、過去の要求項目に合わせて調整する。</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>デスクネッツでの条件分岐の可否</b><span>条件分岐機能が確認できないため、A〜C設問はすべて表示した上で「対象者のみ回答」と案内文で誘導する運用になる見込み。</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>回答結果の閲覧範囲設定</b><span>組合の集計担当者のみに限定する設定を、実際の管理画面で確認する。</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>追加の属性項目の要否</b><span>本部（Q2）は追加済み。家族構成（扶養家族の有無）などのさらなる追加候補について、心理的安全性とのバランスを見て最終判断する。</span></div></li>
+    </ul>
+  </section>
+
+  <footer>
+    四国ガス労働組合　調査企画部／2025年度　制度・手当に関する重点要求アンケート　設計説明資料（骨子案 ver1）
+  </footer>
+</div>
+
+</body>
+</html>
