@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>秋の取組内容アンケート｜分析ダッシュボード モックアップ</title>
+<style>
+  :root{
+    --navy:#1F3864;
+    --navy-deep:#132347;
+    --slate:#4B6584;
+    --teal:#2E7D6B;
+    --amber:#B8792E;
+    --rose:#9A4A52;
+    --paper:#F4F6F9;
+    --panel:#FFFFFF;
+    --line:#DDE3EC;
+    --ink:#22282F;
+    --ink-soft:#5B6472;
+    --grid:#EDF1F6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif;
+    font-size:14px;line-height:1.7;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px 90px;}
+
+  header{background:linear-gradient(160deg,var(--navy-deep),var(--navy) 70%,var(--slate));color:#fff;padding:38px 24px 30px;}
+  header .inner{max-width:1080px;margin:0 auto;}
+  .eyebrow{font-size:11.5px;letter-spacing:.14em;color:#A8C0E0;font-weight:700;margin-bottom:10px;}
+  h1{margin:0 0 6px;font-size:clamp(22px,3.4vw,30px);font-weight:800;}
+  .sub{color:#C6D6EC;font-size:14px;margin:0;}
+
+  .dummy-banner{
+    background:#FFF4E0;border-bottom:1px solid #E5C48D;color:#7A5210;
+    padding:11px 24px;font-size:13px;font-weight:700;text-align:center;
+  }
+
+  /* Tabs */
+  nav.tabs{background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;}
+  nav.tabs .inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;gap:2px;overflow-x:auto;}
+  nav.tabs button{
+    background:none;border:none;border-bottom:3px solid transparent;
+    padding:15px 18px;font-size:13.5px;font-weight:700;color:var(--ink-soft);
+    cursor:pointer;white-space:nowrap;font-family:inherit;
+  }
+  nav.tabs button:hover{color:var(--navy);background:#F7F9FC;}
+  nav.tabs button[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--navy);}
+  nav.tabs button:focus-visible{outline:2px solid var(--navy);outline-offset:-2px;}
+
+  .panel-tab[hidden]{display:none;}
+  section.block{margin-top:26px;}
+  h2{font-size:16.5px;color:var(--navy);margin:0 0 4px;font-weight:800;}
+  .block-note{font-size:12.5px;color:var(--ink-soft);margin:0 0 14px;}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;}
+  .grid2{display:flex;flex-wrap:wrap;gap:16px;}
+  .grid2 > *{flex:1 1 380px;min-width:0;}
+  .grid3{display:flex;flex-wrap:wrap;gap:16px;}
+  .grid3 > *{flex:1 1 280px;min-width:0;}
+  .card h3{font-size:13.5px;color:var(--navy);margin:0 0 2px;font-weight:800;}
+  .card .cap{font-size:11.5px;color:var(--ink-soft);margin:0 0 14px;}
+
+  /* KPI */
+  .kpis{display:flex;flex-wrap:wrap;gap:16px;}
+  .kpis > *{flex:1 1 200px;min-width:0;}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;border-left:4px solid var(--navy);}
+  .kpi .k{font-size:11.5px;color:var(--ink-soft);font-weight:700;letter-spacing:.03em;}
+  .kpi .v{font-size:27px;font-weight:800;color:var(--navy);line-height:1.25;margin-top:2px;}
+  .kpi .d{font-size:11.5px;color:var(--ink-soft);}
+
+  /* Horizontal bars */
+  .bars{display:flex;flex-direction:column;gap:9px;}
+  .bar-row{display:flex;gap:10px;align-items:center;font-size:12.5px;}
+  .bar-label{color:var(--ink);line-height:1.4;flex:0 0 42%;}
+  .bar-track{background:var(--grid);border-radius:3px;height:17px;overflow:hidden;flex:1 1 auto;min-width:0;}
+  .bar-fill{height:100%;border-radius:3px;background:var(--navy);}
+  .bar-fill.teal{background:var(--teal);}
+  .bar-fill.amber{background:var(--amber);}
+  .bar-fill.slate{background:var(--slate);}
+  .bar-val{text-align:right;font-weight:700;color:var(--ink-soft);font-variant-numeric:tabular-nums;font-size:12px;flex:0 0 42px;}
+
+  /* 100% stacked */
+  .stack-row{display:flex;gap:10px;align-items:center;margin-bottom:9px;font-size:12.5px;}
+  .stack-row > *:first-child{flex:0 0 36%;}
+  .stack-track{display:flex;height:22px;border-radius:3px;overflow:hidden;flex:1 1 auto;min-width:0;}
+  .seg{display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#fff;}
+  .seg.self{background:var(--teal);}
+  .seg.other{background:#B7C3D4;color:#39424F;}
+
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-soft);margin-top:12px;}
+  .legend span{display:flex;align-items:center;gap:6px;}
+  .sw{width:12px;height:12px;border-radius:2px;display:inline-block;}
+
+  /* Heatmap */
+  table.heat{width:100%;border-collapse:collapse;font-size:11.5px;}
+  table.heat th,table.heat td{border:1px solid var(--line);padding:7px 6px;text-align:center;}
+  table.heat thead th{background:#EFF3F8;color:var(--navy);font-weight:700;font-size:11px;line-height:1.35;}
+  table.heat tbody th{background:#F7F9FC;color:var(--navy);text-align:left;font-weight:700;white-space:nowrap;}
+  .h0{background:#fff;color:#B4BDC9;}
+  .h1{background:#E6EDF6;}
+  .h2{background:#C3D3E8;}
+  .h3{background:#93AED2;color:#fff;}
+  .h4{background:#5C7FB0;color:#fff;}
+  .h5{background:#2C4E80;color:#fff;font-weight:700;}
+
+  /* Free text table */
+  table.txt{width:100%;border-collapse:collapse;font-size:12.5px;}
+  table.txt th,table.txt td{border-bottom:1px solid var(--line);padding:11px 10px;text-align:left;vertical-align:top;}
+  table.txt thead th{background:#EFF3F8;color:var(--navy);font-size:11.5px;font-weight:700;border-bottom:1px solid var(--line);}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+  .tag-self{background:#E1F0EB;color:var(--teal);}
+  .tag-other{background:#EDF0F4;color:var(--slate);}
+  .tag-field{background:#E6ECF6;color:var(--navy);}
+
+  /* filter chips (mock controls) */
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .chip{
+    background:var(--panel);border:1px solid var(--line);border-radius:6px;
+    padding:7px 13px;font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:7px;
+  }
+  .chip b{color:var(--ink);font-weight:700;}
+  .chip::after{content:"▾";font-size:9px;color:#9AA5B4;}
+
+  /* callout */
+  .note{
+    background:#EFF3F8;border:1px solid #B9C6DB;border-radius:8px;
+    padding:14px 16px;margin-top:16px;font-size:12.5px;color:var(--ink-soft);
+  }
+  .note b{color:var(--navy);}
+
+  /* Branch view */
+  .branch-bar{
+    background:var(--navy);color:#fff;border-radius:10px;
+    padding:16px 22px;display:flex;align-items:center;justify-content:space-between;
+    gap:16px;flex-wrap:wrap;margin-bottom:18px;
+  }
+  .branch-bar .bl{font-size:11.5px;color:#A8C0E0;font-weight:700;letter-spacing:.06em;}
+  .branch-bar .bn{font-size:22px;font-weight:800;line-height:1.3;}
+  .branch-bar .bstat{display:flex;gap:26px;flex-wrap:wrap;}
+  .branch-bar .bstat div span{display:block;font-size:11px;color:#A8C0E0;}
+  .branch-bar .bstat div b{font-size:17px;font-weight:800;}
+  .lockchip{
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);
+    border-radius:6px;padding:6px 12px;font-size:11.5px;font-weight:700;
+  }
+
+  .cmp-row{margin-bottom:13px;font-size:12.5px;}
+  .cmp-head{display:flex;justify-content:space-between;margin-bottom:4px;}
+  .cmp-head .nm{color:var(--ink);font-weight:700;}
+  .cmp-head .df{font-size:11.5px;font-weight:700;}
+  .df.up{color:var(--rose);}
+  .df.flat{color:var(--ink-soft);}
+  .df.down{color:var(--slate);}
+  .cmp-pair{display:flex;flex-direction:column;gap:3px;}
+  .cmp-line{display:flex;align-items:center;gap:8px;font-size:11px;}
+  .cmp-line .tag2{flex:0 0 46px;color:var(--ink-soft);}
+  .cmp-line .trk{flex:1 1 auto;min-width:0;background:var(--grid);border-radius:3px;height:13px;overflow:hidden;}
+  .cmp-line .fil{height:100%;border-radius:3px;}
+  .cmp-line .fil.own{background:var(--navy);}
+  .cmp-line .fil.all{background:#B7C3D4;}
+  .cmp-line .vv{flex:0 0 36px;text-align:right;font-weight:700;color:var(--ink-soft);font-variant-numeric:tabular-nums;}
+
+  .warn{
+    background:#FDF2F2;border:1px solid #E0B4B4;border-radius:8px;
+    padding:14px 16px;margin-top:16px;font-size:12.5px;color:#7A3B3B;
+  }
+  .warn b{color:#8B2F2F;}
+
+  footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:12px;}
+
+  @media (max-width:700px){
+    .bar-label{flex:0 0 38%;}
+    .stack-row > *:first-child{flex:0 0 40%;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="eyebrow">四国ガス労働組合　調査企画部</div>
+    <h1>秋の取組内容アンケート　分析ダッシュボード</h1>
+    <p class="sub">Looker Studio で作成する画面のイメージ（5タブ構成）</p>
+  </div>
+</header>
+
+<div class="dummy-banner">
+  数値はすべてダミーです。アンケートは未実施のため、実データではありません。画面構成の確認用としてご覧ください。
+</div>
+
+<nav class="tabs">
+  <div class="inner" role="tablist">
+    <button role="tab" aria-selected="true" aria-controls="t1" onclick="showTab('t1',this)">全体サマリー</button>
+    <button role="tab" aria-selected="false" aria-controls="t2" onclick="showTab('t2',this)">重点項目の詳細</button>
+    <button role="tab" aria-selected="false" aria-controls="t3" onclick="showTab('t3',this)">属性別クロス集計</button>
+    <button role="tab" aria-selected="false" aria-controls="t4" onclick="showTab('t4',this)">自由記述一覧</button>
+    <button role="tab" aria-selected="false" aria-controls="t5" onclick="showTab('t5',this)">支部別ビュー（配布用）</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ================= TAB 1 ================= -->
+  <div class="panel-tab" id="t1">
+
+    <section class="block">
+      <h2>回答状況</h2>
+      <p class="block-note">配信対象と回答実績。回答率は担当執行部のフォロー判断に使う。</p>
+      <div class="kpis">
+        <div class="kpi"><div class="k">回答者数</div><div class="v">287</div><div class="d">配信対象 334 名</div></div>
+        <div class="kpi"><div class="k">回答率</div><div class="v">85.9<span style="font-size:16px">%</span></div><div class="d">締切 3 日前時点</div></div>
+        <div class="kpi"><div class="k">自由記述あり</div><div class="v">142</div><div class="d">回答者の 49.5%</div></div>
+        <div class="kpi"><div class="k">当事者としての回答</div><div class="v">168</div><div class="d">いずれか1分野で該当</div></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>回答者の内訳</h2>
+      <p class="block-note">属性の偏りを確認する。特定の支部・本部の回答率が低い場合は⑤の配布前にフォローする。</p>
+      <div class="grid3">
+        <div class="card">
+          <h3>支部別</h3>
+          <p class="cap">回答者数（名）</p>
+          <div class="bars">
+            <div class="bar-row"><div class="bar-label">本店</div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><div class="bar-val">68</div></div>
+            <div class="bar-row"><div class="bar-label">松山</div><div class="bar-track"><div class="bar-fill" style="width:76%"></div></div><div class="bar-val">52</div></div>
+            <div class="bar-row"><div class="bar-label">高松</div><div class="bar-track"><div class="bar-fill" style="width:62%"></div></div><div class="bar-val">42</div></div>
+            <div class="bar-row"><div class="bar-label">今治</div><div class="bar-track"><div class="bar-fill" style="width:51%"></div></div><div class="bar-val">35</div></div>
+            <div class="bar-row"><div class="bar-label">高知</div><div class="bar-track"><div class="bar-fill" style="width:44%"></div></div><div class="bar-val">30</div></div>
+            <div class="bar-row"><div class="bar-label">徳島</div><div class="bar-track"><div class="bar-fill" style="width:41%"></div></div><div class="bar-val">28</div></div>
+            <div class="bar-row"><div class="bar-label">丸亀</div><div class="bar-track"><div class="bar-fill" style="width:29%"></div></div><div class="bar-val">20</div></div>
+            <div class="bar-row"><div class="bar-label">宇和島</div><div class="bar-track"><div class="bar-fill" style="width:18%"></div></div><div class="bar-val">12</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>本部別</h3>
+          <p class="cap">回答者数（名）</p>
+          <div class="bars">
+            <div class="bar-row"><div class="bar-label">営業本部</div><div class="bar-track"><div class="bar-fill slate" style="width:100%"></div></div><div class="bar-val">98</div></div>
+            <div class="bar-row"><div class="bar-label">導管本部</div><div class="bar-track"><div class="bar-fill slate" style="width:74%"></div></div><div class="bar-val">73</div></div>
+            <div class="bar-row"><div class="bar-label">管理本部</div><div class="bar-track"><div class="bar-fill slate" style="width:66%"></div></div><div class="bar-val">65</div></div>
+            <div class="bar-row"><div class="bar-label">生産本部</div><div class="bar-track"><div class="bar-fill slate" style="width:52%"></div></div><div class="bar-val">51</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>年齢層別</h3>
+          <p class="cap">回答者数（名）</p>
+          <div class="bars">
+            <div class="bar-row"><div class="bar-label">29歳以下</div><div class="bar-track"><div class="bar-fill slate" style="width:63%"></div></div><div class="bar-val">54</div></div>
+            <div class="bar-row"><div class="bar-label">30〜39歳</div><div class="bar-track"><div class="bar-fill slate" style="width:100%"></div></div><div class="bar-val">86</div></div>
+            <div class="bar-row"><div class="bar-label">40〜49歳</div><div class="bar-track"><div class="bar-fill slate" style="width:87%"></div></div><div class="bar-val">75</div></div>
+            <div class="bar-row"><div class="bar-label">50歳以上</div><div class="bar-track"><div class="bar-fill slate" style="width:84%"></div></div><div class="bar-val">72</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>3分野の重点項目</h2>
+      <p class="block-note">Q4・Q5・Q6の選択結果。各分野で1つだけ選ぶ設計のため、選択率がそのまま優先度になる。</p>
+      <div class="grid3">
+        <div class="card">
+          <h3>Q4　諸手当</h3>
+          <p class="cap">選択率（n=287）</p>
+          <div class="bars">
+            <div class="bar-row"><div class="bar-label">資格手当の拡充</div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><div class="bar-val">31%</div></div>
+            <div class="bar-row"><div class="bar-label">家族手当の拡充</div><div class="bar-track"><div class="bar-fill" style="width:77%"></div></div><div class="bar-val">24%</div></div>
+            <div class="bar-row"><div class="bar-label">通勤手当の見直し</div><div class="bar-track"><div class="bar-fill" style="width:58%"></div></div><div class="bar-val">18%</div></div>
+            <div class="bar-row"><div class="bar-label">当直手当の見直し</div><div class="bar-track"><div class="bar-fill" style="width:42%"></div></div><div class="bar-val">13%</div></div>
+            <div class="bar-row"><div class="bar-label">二重生活補助支給手当</div><div class="bar-track"><div class="bar-fill" style="width:26%"></div></div><div class="bar-val">8%</div></div>
+            <div class="bar-row"><div class="bar-label">特になし／該当なし</div><div class="bar-track"><div class="bar-fill" style="width:19%;background:#B7C3D4"></div></div><div class="bar-val">6%</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Q5　休暇・福利厚生</h3>
+          <p class="cap">選択率（n=287）</p>
+          <div class="bars">
+            <div class="bar-row"><div class="bar-label">有給休暇の取得促進策</div><div class="bar-track"><div class="bar-fill teal" style="width:100%"></div></div><div class="bar-val">28%</div></div>
+            <div class="bar-row"><div class="bar-label">リフレッシュ休暇</div><div class="bar-track"><div class="bar-fill teal" style="width:79%"></div></div><div class="bar-val">22%</div></div>
+            <div class="bar-row"><div class="bar-label">病気・傷病休暇制度</div><div class="bar-track"><div class="bar-fill teal" style="width:61%"></div></div><div class="bar-val">17%</div></div>
+            <div class="bar-row"><div class="bar-label">育児休業・時短勤務</div><div class="bar-track"><div class="bar-fill teal" style="width:50%"></div></div><div class="bar-val">14%</div></div>
+            <div class="bar-row"><div class="bar-label">介護休業制度</div><div class="bar-track"><div class="bar-fill teal" style="width:39%"></div></div><div class="bar-val">11%</div></div>
+            <div class="bar-row"><div class="bar-label">社宅・独身寮の整備</div><div class="bar-track"><div class="bar-fill teal" style="width:18%"></div></div><div class="bar-val">5%</div></div>
+            <div class="bar-row"><div class="bar-label">特になし</div><div class="bar-track"><div class="bar-fill" style="width:11%;background:#B7C3D4"></div></div><div class="bar-val">3%</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Q6　健康保持増進</h3>
+          <p class="cap">選択率（n=287）</p>
+          <div class="bars">
+            <div class="bar-row"><div class="bar-label">人間ドック費用補助</div><div class="bar-track"><div class="bar-fill amber" style="width:100%"></div></div><div class="bar-val">38%</div></div>
+            <div class="bar-row"><div class="bar-label">簡易社食の検討</div><div class="bar-track"><div class="bar-fill amber" style="width:66%"></div></div><div class="bar-val">25%</div></div>
+            <div class="bar-row"><div class="bar-label">運動促進策</div><div class="bar-track"><div class="bar-fill amber" style="width:45%"></div></div><div class="bar-val">17%</div></div>
+            <div class="bar-row"><div class="bar-label">生活習慣病予防</div><div class="bar-track"><div class="bar-fill amber" style="width:32%"></div></div><div class="bar-val">12%</div></div>
+            <div class="bar-row"><div class="bar-label">特になし／該当なし</div><div class="bar-track"><div class="bar-fill" style="width:21%;background:#B7C3D4"></div></div><div class="bar-val">8%</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        <b>「特になし／該当なし」の選択率</b>は、その分野への関心の濃淡を示す指標として使える。Q6で8%と他分野より高い場合、健康保持増進は「関心のある人とない人が分かれる分野」と読める。
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= TAB 2 ================= -->
+  <div class="panel-tab" id="t2" hidden>
+
+    <section class="block">
+      <h2>項目別　当事者性の内訳</h2>
+      <p class="block-note">Q4-B・Q5-B・Q6-Bの結果。同じ選択率でも、当事者比率が高い項目は要求の切実さが違う。</p>
+      <div class="card">
+        <h3>重点項目 × 当事者性</h3>
+        <p class="cap">各項目を選んだ人のうち、自分自身が該当している人の割合</p>
+
+        <div class="stack-row">
+          <div>二重生活補助支給手当 <span style="color:var(--ink-soft);font-size:11px">(n=23)</span></div>
+          <div class="stack-track"><div class="seg self" style="width:87%">87%</div><div class="seg other" style="width:13%">13%</div></div>
+        </div>
+        <div class="stack-row">
+          <div>当直手当の見直し <span style="color:var(--ink-soft);font-size:11px">(n=37)</span></div>
+          <div class="stack-track"><div class="seg self" style="width:81%">81%</div><div class="seg other" style="width:19%">19%</div></div>
+        </div>
+        <div class="stack-row">
+          <div>育児休業・時短勤務 <span style="color:var(--ink-soft);font-size:11px">(n=40)</span></div>
+          <div class="stack-track"><div class="seg self" style="width:55%">55%</div><div class="seg other" style="width:45%">45%</div></div>
+        </div>
+        <div class="stack-row">
+          <div>資格手当の拡充 <span style="color:var(--ink-soft);font-size:11px">(n=89)</span></div>
+          <div class="stack-track"><div class="seg self" style="width:52%">52%</div><div class="seg other" style="width:48%">48%</div></div>
+        </div>
+        <div class="stack-row">
+          <div>人間ドック費用補助 <span style="color:var(--ink-soft);font-size:11px">(n=109)</span></div>
+          <div class="stack-track"><div class="seg self" style="width:47%">47%</div><div class="seg other" style="width:53%">53%</div></div>
+        </div>
+        <div class="stack-row">
+          <div>介護休業制度 <span style="color:var(--ink-soft);font-size:11px">(n=32)</span></div>
+          <div class="stack-track"><div class="seg self" style="width:22%">22%</div><div class="seg other" style="width:78%">78%</div></div>
+        </div>
+
+        <div class="legend">
+          <span><i class="sw" style="background:var(--teal)"></i>自分自身が該当・経験している</span>
+          <span><i class="sw" style="background:#B7C3D4"></i>該当しないが必要だと思う</span>
+        </div>
+      </div>
+
+      <div class="note">
+        <b>読み方の例：</b>二重生活補助支給手当は選択率こそ8%と低いが、選んだ人の87%が当事者。対象者が限られる制度で当事者の声が集中している状態を示す。逆に介護休業制度は当事者22%で、多くは「将来に備えて必要」という予防的な支持と読める。どちらを優先するかは判断が分かれるが、<b>選択率だけを見て切り捨てると、切実な少数の声を落とす</b>ことになる。
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>項目別　求める改善内容</h2>
+      <p class="block-note">Q4-A・Q5-A・Q6-Aの結果。同じ項目でも「増額」なのか「対象拡大」なのかで、要求の中身が変わる。</p>
+      <div class="grid2">
+        <div class="card">
+          <h3>Q4　諸手当の改善内容</h3>
+          <p class="cap">項目別の内訳</p>
+          <div class="stack-row">
+            <div>資格手当</div>
+            <div class="stack-track"><div class="seg" style="width:71%;background:var(--navy)">増額 71%</div><div class="seg" style="width:29%;background:#8FA5C4;color:#28303B">対象 29%</div></div>
+          </div>
+          <div class="stack-row">
+            <div>家族手当</div>
+            <div class="stack-track"><div class="seg" style="width:58%;background:var(--navy)">増額 58%</div><div class="seg" style="width:42%;background:#8FA5C4;color:#28303B">対象 42%</div></div>
+          </div>
+          <div class="stack-row">
+            <div>通勤手当</div>
+            <div class="stack-track"><div class="seg" style="width:44%;background:var(--navy)">増額 44%</div><div class="seg" style="width:56%;background:#8FA5C4;color:#28303B">対象 56%</div></div>
+          </div>
+          <div class="legend">
+            <span><i class="sw" style="background:var(--navy)"></i>金額を増やしてほしい</span>
+            <span><i class="sw" style="background:#8FA5C4"></i>対象者・対象範囲を広げてほしい</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>改善内容の全体傾向</h3>
+          <p class="cap">3分野合計（n=287）</p>
+          <div class="bars">
+            <div class="bar-row"><div class="bar-label">金額・日数の増額</div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><div class="bar-val">42%</div></div>
+            <div class="bar-row"><div class="bar-label">対象者・範囲の拡大</div><div class="bar-track"><div class="bar-fill" style="width:64%"></div></div><div class="bar-val">27%</div></div>
+            <div class="bar-row"><div class="bar-label">手続きの簡素化</div><div class="bar-track"><div class="bar-fill" style="width:36%"></div></div><div class="bar-val">15%</div></div>
+            <div class="bar-row"><div class="bar-label">制度の新設</div><div class="bar-track"><div class="bar-fill" style="width:24%"></div></div><div class="bar-val">10%</div></div>
+            <div class="bar-row"><div class="bar-label">周知・情報提供の強化</div><div class="bar-track"><div class="bar-fill" style="width:14%"></div></div><div class="bar-val">6%</div></div>
+          </div>
+          <div class="note" style="margin-top:14px;">
+            初年度は選択肢が仮説ベースのため、<b>「その他」の比率</b>も必ず確認する。高ければ翌年度に選択肢を組み直す判断材料になる。
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= TAB 3 ================= -->
+  <div class="panel-tab" id="t3" hidden>
+
+    <section class="block">
+      <h2>属性別クロス集計</h2>
+      <p class="block-note">支部・本部・年齢層で重点項目の傾向がどう変わるかを見る。各支部への配布資料はこのタブをフィルタして出力する。</p>
+
+      <div class="filters">
+        <div class="chip">支部：<b>すべて</b></div>
+        <div class="chip">本部：<b>すべて</b></div>
+        <div class="chip">年齢層：<b>すべて</b></div>
+        <div class="chip">当事者性：<b>すべて</b></div>
+      </div>
+
+      <div class="card">
+        <h3>本部 × 重点項目</h3>
+        <p class="cap">各本部の回答者に占める選択率（%）。色が濃いほど選択率が高い。</p>
+        <table class="heat">
+          <thead>
+            <tr><th style="text-align:left">項目</th><th>管理本部<br>n=65</th><th>営業本部<br>n=98</th><th>導管本部<br>n=73</th><th>生産本部<br>n=51</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>資格手当の拡充</th><td class="h2">22</td><td class="h2">25</td><td class="h4">38</td><td class="h4">41</td></tr>
+            <tr><th>家族手当の拡充</th><td class="h3">29</td><td class="h2">24</td><td class="h1">18</td><td class="h2">21</td></tr>
+            <tr><th>通勤手当の見直し</th><td class="h1">12</td><td class="h4">34</td><td class="h1">14</td><td class="h1">11</td></tr>
+            <tr><th>当直手当の見直し</th><td class="h0">2</td><td class="h0">4</td><td class="h3">26</td><td class="h5">45</td></tr>
+            <tr><th>二重生活補助支給手当</th><td class="h1">9</td><td class="h1">13</td><td class="h0">5</td><td class="h0">4</td></tr>
+            <tr><th>有給休暇の取得促進</th><td class="h2">24</td><td class="h3">31</td><td class="h4">35</td><td class="h4">33</td></tr>
+            <tr><th>リフレッシュ休暇</th><td class="h2">21</td><td class="h2">23</td><td class="h2">20</td><td class="h3">26</td></tr>
+            <tr><th>人間ドック費用補助</th><td class="h4">36</td><td class="h3">31</td><td class="h4">39</td><td class="h5">48</td></tr>
+            <tr><th>簡易社食の検討</th><td class="h4">34</td><td class="h1">16</td><td class="h2">22</td><td class="h3">28</td></tr>
+          </tbody>
+        </table>
+        <div class="note" style="margin-top:14px;">
+          <b>読み方の例：</b>当直手当は生産本部45%・導管本部26%に対し管理2%・営業4%と、本部間の差が極端。全社集計では13%に埋もれるが、<b>特定本部にとっては最優先の課題</b>であることがこの表で初めて見える。要求書では「生産・導管本部の重点項目」として扱うべきと判断できる。
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="grid2">
+        <div class="card">
+          <h3>年齢層 × 主要項目</h3>
+          <p class="cap">選択率（%）</p>
+          <table class="heat">
+            <thead><tr><th style="text-align:left">項目</th><th>〜29</th><th>30-39</th><th>40-49</th><th>50〜</th></tr></thead>
+            <tbody>
+              <tr><th>資格手当</th><td class="h4">39</td><td class="h3">32</td><td class="h2">25</td><td class="h1">17</td></tr>
+              <tr><th>家族手当</th><td class="h1">14</td><td class="h4">35</td><td class="h3">28</td><td class="h1">15</td></tr>
+              <tr><th>育児休業・時短</th><td class="h1">11</td><td class="h5">42</td><td class="h1">13</td><td class="h0">3</td></tr>
+              <tr><th>介護休業</th><td class="h0">3</td><td class="h1">8</td><td class="h3">27</td><td class="h4">36</td></tr>
+              <tr><th>二重生活補助</th><td class="h2">19</td><td class="h2">21</td><td class="h1">10</td><td class="h0">5</td></tr>
+              <tr><th>人間ドック補助</th><td class="h1">17</td><td class="h2">26</td><td class="h4">38</td><td class="h5">52</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3>支部 × 分野別の関心</h3>
+          <p class="cap">「特になし／該当なし」を除いた回答率（%）</p>
+          <table class="heat">
+            <thead><tr><th style="text-align:left">支部</th><th>諸手当</th><th>休暇<br>福利厚生</th><th>健康<br>保持増進</th></tr></thead>
+            <tbody>
+              <tr><th>本店</th><td class="h3">91</td><td class="h4">96</td><td class="h2">85</td></tr>
+              <tr><th>今治</th><td class="h4">95</td><td class="h3">92</td><td class="h3">90</td></tr>
+              <tr><th>松山</th><td class="h3">93</td><td class="h4">97</td><td class="h2">88</td></tr>
+              <tr><th>宇和島</th><td class="h2">83</td><td class="h2">86</td><td class="h4">95</td></tr>
+              <tr><th>高知</th><td class="h4">96</td><td class="h3">90</td><td class="h3">91</td></tr>
+              <tr><th>徳島</th><td class="h3">89</td><td class="h3">93</td><td class="h2">87</td></tr>
+              <tr><th>高松</th><td class="h4">94</td><td class="h4">95</td><td class="h3">92</td></tr>
+              <tr><th>丸亀</th><td class="h2">85</td><td class="h2">88</td><td class="h4">94</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="note">
+        <b>少数セルの取り扱い：</b>記名式のため、支部×年齢層×項目のような3重クロスでは1〜2名のセルが個人特定につながる。<b>回答者数が4名未満のセルは率を表示せず「－」とする</b>ルールを設け、Looker Studio側でもフィルタ条件として設定しておく。
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= TAB 4 ================= -->
+  <div class="panel-tab" id="t4" hidden>
+
+    <section class="block">
+      <h2>自由記述一覧</h2>
+      <p class="block-note">Q4-C・Q5-C・Q6-C・Q9-Dの記述。当事者性でフィルタすれば、要求書に使える濃い意見だけを抽出できる。</p>
+
+      <div class="filters">
+        <div class="chip">分野：<b>すべて</b></div>
+        <div class="chip">項目：<b>すべて</b></div>
+        <div class="chip">当事者性：<b>自分自身が該当</b></div>
+        <div class="chip">支部：<b>すべて</b></div>
+      </div>
+
+      <div class="card" style="padding:18px 0 4px;">
+        <table class="txt">
+          <thead>
+            <tr>
+              <th style="width:88px;padding-left:20px">分野</th>
+              <th style="width:130px">項目</th>
+              <th style="width:96px">当事者性</th>
+              <th>根拠・詳細（Q4-C ほか）</th>
+              <th style="width:80px;padding-right:20px">属性</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td>
+              <td>当直手当</td>
+              <td><span class="tag tag-self">当事者</span></td>
+              <td>月4回の当直に対し現行支給額は据え置きが続いている。深夜対応の実態に見合う水準への引き上げを希望する。同規模の同業他社では1回あたり◯◯円程度と聞いている。</td>
+              <td style="padding-right:20px;color:var(--ink-soft);font-size:11.5px">生産本部<br>30代</td>
+            </tr>
+            <tr>
+              <td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td>
+              <td>資格手当</td>
+              <td><span class="tag tag-self">当事者</span></td>
+              <td>業務に必須の資格を取得したが対象一覧に入っておらず支給されない。取得費用は自己負担だったため、対象資格の範囲を実態に合わせて見直してほしい。</td>
+              <td style="padding-right:20px;color:var(--ink-soft);font-size:11.5px">導管本部<br>20代</td>
+            </tr>
+            <tr>
+              <td style="padding-left:20px"><span class="tag tag-field">休暇</span></td>
+              <td>育児休業・時短</td>
+              <td><span class="tag tag-self">当事者</span></td>
+              <td>時短勤務の対象が小学校就学前までだが、低学年のうちは学童の終了時間に間に合わない日がある。対象年齢を小学3年生まで延ばしてほしい。</td>
+              <td style="padding-right:20px;color:var(--ink-soft);font-size:11.5px">管理本部<br>30代</td>
+            </tr>
+            <tr>
+              <td style="padding-left:20px"><span class="tag tag-field">健康</span></td>
+              <td>人間ドック補助</td>
+              <td><span class="tag tag-self">当事者</span></td>
+              <td>オプション検査が全額自己負担で、追加すると数万円かかる。年齢に応じて必要性が高まる項目だけでも補助対象に含めてほしい。</td>
+              <td style="padding-right:20px;color:var(--ink-soft);font-size:11.5px">営業本部<br>50代</td>
+            </tr>
+            <tr>
+              <td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td>
+              <td>二重生活補助</td>
+              <td><span class="tag tag-self">当事者</span></td>
+              <td>単身赴任先の家賃と光熱費で現行支給額を上回っている。実費との差額が毎月発生しており、実態に合わせた水準の見直しを求める。</td>
+              <td style="padding-right:20px;color:var(--ink-soft);font-size:11.5px">営業本部<br>40代</td>
+            </tr>
+            <tr>
+              <td style="padding-left:20px"><span class="tag tag-field">健康</span></td>
+              <td>簡易社食</td>
+              <td><span class="tag tag-other">非当事者</span></td>
+              <td>周辺に飲食店が少なく昼食の選択肢が限られる事業所がある。全社一律でなくても、該当拠点だけでも検討してほしい。</td>
+              <td style="padding-right:20px;color:var(--ink-soft);font-size:11.5px">生産本部<br>40代</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <b>Looker Studio の限界：</b>自由記述はこの一覧表で「読む」ことはできるが、ワードクラウドや自動分類はできない。記述の傾向分析が必要な場合は、スプレッドシート側で手動タグ付けするか、別途処理する前提とする。
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= TAB 5 ================= -->
+  <div class="panel-tab" id="t5" hidden>
+
+    <section class="block">
+      <h2>支部別ビュー（各支部への配布用）</h2>
+      <p class="block-note">フロー⑤で各支部へ配る画面。支部フィルタを固定し、自支部のデータのみを表示する。⑥の支部内での意見まとめは、この画面を見ながら行う想定。</p>
+
+      <div class="branch-bar">
+        <div>
+          <div class="bl">表示中の支部</div>
+          <div class="bn">今治支部</div>
+        </div>
+        <div class="bstat">
+          <div><span>回答者数</span><b>35 名</b></div>
+          <div><span>回答率</span><b>89.7%</b></div>
+          <div><span>自由記述あり</span><b>19 件</b></div>
+        </div>
+        <div class="lockchip">🔒 支部フィルタ固定</div>
+      </div>
+
+      <div class="card">
+        <h3>自支部 と 全社 の比較　－　重点項目の選択率</h3>
+        <p class="cap">自支部だけを見ても傾向の良し悪しは判断できないため、全社平均と並べて表示する。差が大きい項目が支部で議論すべき論点になる。</p>
+
+        <div class="cmp-row">
+          <div class="cmp-head"><span class="nm">当直手当の見直し</span><span class="df up">全社比 +16pt</span></div>
+          <div class="cmp-pair">
+            <div class="cmp-line"><span class="tag2">今治</span><span class="trk"><span class="fil own" style="display:block;width:64%"></span></span><span class="vv">29%</span></div>
+            <div class="cmp-line"><span class="tag2">全社</span><span class="trk"><span class="fil all" style="display:block;width:29%"></span></span><span class="vv">13%</span></div>
+          </div>
+        </div>
+
+        <div class="cmp-row">
+          <div class="cmp-head"><span class="nm">人間ドック費用補助</span><span class="df up">全社比 +7pt</span></div>
+          <div class="cmp-pair">
+            <div class="cmp-line"><span class="tag2">今治</span><span class="trk"><span class="fil own" style="display:block;width:100%"></span></span><span class="vv">45%</span></div>
+            <div class="cmp-line"><span class="tag2">全社</span><span class="trk"><span class="fil all" style="display:block;width:84%"></span></span><span class="vv">38%</span></div>
+          </div>
+        </div>
+
+        <div class="cmp-row">
+          <div class="cmp-head"><span class="nm">資格手当の拡充</span><span class="df flat">全社比 ±0pt</span></div>
+          <div class="cmp-pair">
+            <div class="cmp-line"><span class="tag2">今治</span><span class="trk"><span class="fil own" style="display:block;width:69%"></span></span><span class="vv">31%</span></div>
+            <div class="cmp-line"><span class="tag2">全社</span><span class="trk"><span class="fil all" style="display:block;width:69%"></span></span><span class="vv">31%</span></div>
+          </div>
+        </div>
+
+        <div class="cmp-row">
+          <div class="cmp-head"><span class="nm">有給休暇の取得促進策</span><span class="df down">全社比 −6pt</span></div>
+          <div class="cmp-pair">
+            <div class="cmp-line"><span class="tag2">今治</span><span class="trk"><span class="fil own" style="display:block;width:49%"></span></span><span class="vv">22%</span></div>
+            <div class="cmp-line"><span class="tag2">全社</span><span class="trk"><span class="fil all" style="display:block;width:62%"></span></span><span class="vv">28%</span></div>
+          </div>
+        </div>
+
+        <div class="cmp-row">
+          <div class="cmp-head"><span class="nm">簡易社食の検討</span><span class="df down">全社比 −11pt</span></div>
+          <div class="cmp-pair">
+            <div class="cmp-line"><span class="tag2">今治</span><span class="trk"><span class="fil own" style="display:block;width:31%"></span></span><span class="vv">14%</span></div>
+            <div class="cmp-line"><span class="tag2">全社</span><span class="trk"><span class="fil all" style="display:block;width:56%"></span></span><span class="vv">25%</span></div>
+          </div>
+        </div>
+
+        <div class="legend">
+          <span><i class="sw" style="background:var(--navy)"></i>今治支部（n=35）</span>
+          <span><i class="sw" style="background:#B7C3D4"></i>全社（n=287）</span>
+        </div>
+      </div>
+
+      <div class="note">
+        <b>支部での議論の入口：</b>差が大きい項目から見る。今治支部では当直手当が全社比+16ptと突出しており、支部内に該当者が多いことが推測される。逆に簡易社食は−11ptで、支部の事業所立地によって関心が分かれている可能性がある。<b>「なぜ差が出たか」を支部内で確認し、⑥の意見まとめに反映する。</b>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="grid2">
+        <div class="card">
+          <h3>自支部の3分野別　重点項目</h3>
+          <p class="cap">今治支部の回答内訳（n=35）</p>
+          <div class="bars">
+            <div class="bar-row"><div class="bar-label">当直手当の見直し</div><div class="bar-track"><div class="bar-fill" style="width:64%"></div></div><div class="bar-val">29%</div></div>
+            <div class="bar-row"><div class="bar-label">資格手当の拡充</div><div class="bar-track"><div class="bar-fill" style="width:69%"></div></div><div class="bar-val">31%</div></div>
+            <div class="bar-row"><div class="bar-label">家族手当の拡充</div><div class="bar-track"><div class="bar-fill" style="width:51%"></div></div><div class="bar-val">23%</div></div>
+            <div class="bar-row"><div class="bar-label">リフレッシュ休暇</div><div class="bar-track"><div class="bar-fill teal" style="width:58%"></div></div><div class="bar-val">26%</div></div>
+            <div class="bar-row"><div class="bar-label">有給休暇の取得促進</div><div class="bar-track"><div class="bar-fill teal" style="width:49%"></div></div><div class="bar-val">22%</div></div>
+            <div class="bar-row"><div class="bar-label">人間ドック費用補助</div><div class="bar-track"><div class="bar-fill amber" style="width:100%"></div></div><div class="bar-val">45%</div></div>
+            <div class="bar-row"><div class="bar-label">簡易社食の検討</div><div class="bar-track"><div class="bar-fill amber" style="width:31%"></div></div><div class="bar-val">14%</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>自支部の当事者性</h3>
+          <p class="cap">上位項目を選んだ人のうち、自分自身が該当している人の割合</p>
+          <div class="stack-row">
+            <div>当直手当 <span style="color:var(--ink-soft);font-size:11px">(n=10)</span></div>
+            <div class="stack-track"><div class="seg self" style="width:90%">90%</div><div class="seg other" style="width:10%"></div></div>
+          </div>
+          <div class="stack-row">
+            <div>人間ドック補助 <span style="color:var(--ink-soft);font-size:11px">(n=16)</span></div>
+            <div class="stack-track"><div class="seg self" style="width:50%">50%</div><div class="seg other" style="width:50%">50%</div></div>
+          </div>
+          <div class="stack-row">
+            <div>資格手当 <span style="color:var(--ink-soft);font-size:11px">(n=11)</span></div>
+            <div class="stack-track"><div class="seg self" style="width:55%">55%</div><div class="seg other" style="width:45%">45%</div></div>
+          </div>
+          <div class="stack-row">
+            <div>リフレッシュ休暇 <span style="color:var(--ink-soft);font-size:11px">(n=9)</span></div>
+            <div class="stack-track"><div class="seg self" style="width:44%">44%</div><div class="seg other" style="width:56%">56%</div></div>
+          </div>
+          <div class="legend">
+            <span><i class="sw" style="background:var(--teal)"></i>自分自身が該当・経験している</span>
+            <span><i class="sw" style="background:#B7C3D4"></i>該当しないが必要だと思う</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>自支部の自由記述</h2>
+      <p class="block-note">今治支部の回答者による記述のみを表示。⑥の意見まとめでは、この記述を読みながら支部としての重点項目を決める。</p>
+      <div class="card" style="padding:18px 0 4px;">
+        <table class="txt">
+          <thead>
+            <tr>
+              <th style="width:88px;padding-left:20px">分野</th>
+              <th style="width:130px">項目</th>
+              <th style="width:96px">当事者性</th>
+              <th style="padding-right:20px">根拠・詳細</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td>
+              <td>当直手当</td>
+              <td><span class="tag tag-self">当事者</span></td>
+              <td style="padding-right:20px">月4回の当直に対し現行支給額は据え置きが続いている。深夜対応の実態に見合う水準への引き上げを希望する。</td>
+            </tr>
+            <tr>
+              <td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td>
+              <td>当直手当</td>
+              <td><span class="tag tag-self">当事者</span></td>
+              <td style="padding-right:20px">当直明けの勤務調整が取りづらく、手当と休息のどちらの面でも見直しが必要だと感じている。</td>
+            </tr>
+            <tr>
+              <td style="padding-left:20px"><span class="tag tag-field">健康</span></td>
+              <td>人間ドック補助</td>
+              <td><span class="tag tag-self">当事者</span></td>
+              <td style="padding-right:20px">オプション検査が全額自己負担で、追加すると数万円かかる。年齢に応じて必要性が高まる項目だけでも補助対象に含めてほしい。</td>
+            </tr>
+            <tr>
+              <td style="padding-left:20px"><span class="tag tag-field">休暇</span></td>
+              <td>リフレッシュ休暇</td>
+              <td><span class="tag tag-other">非当事者</span></td>
+              <td style="padding-right:20px">制度自体を知らない人が周囲に多い。まずは対象者や取得方法の周知を強化してほしい。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn">
+        <b>⚠ 支部単位での個人特定に注意。</b>本アンケートは記名式で、支部によっては回答者が10名程度になる。支部ビューで「年齢層 × 項目」のような細かいクロス集計を出すと、<b>ほぼ個人が特定できてしまう</b>。支部配布版では属性クロス集計（タブ3相当）は含めず、支部合計の集計と自由記述にとどめる。自由記述にも、書き手が推測できる属性情報（本部・年齢層）は付けない。
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Looker Studio での実現方法</h2>
+      <p class="block-note">支部ごとに8種類の画面を用意する方法は主に3つ。運用負荷と配布のしやすさで選ぶ。</p>
+      <div class="grid3">
+        <div class="card">
+          <h3>案A　レポートを支部別に複製</h3>
+          <p class="cap">8つのレポートを作る</p>
+          <p style="font-size:12.5px;margin:0 0 8px;">各レポートにレポートレベルフィルタで支部を固定する。支部長は自分のURLを開くだけでよく、他支部のデータは見えない。</p>
+          <p style="font-size:12px;color:var(--ink-soft);margin:0;">設問を修正した際は8つすべてを直す必要があり、更新の手間が最も大きい。</p>
+        </div>
+        <div class="card">
+          <h3>案B　1レポート＋フィルタ操作</h3>
+          <p class="cap">支部長が自分で切り替える</p>
+          <p style="font-size:12.5px;margin:0 0 8px;">支部フィルタのコントロールを置き、支部長に「自分の支部を選んでください」と案内する。作成・更新の手間は最小。</p>
+          <p style="font-size:12px;color:var(--ink-soft);margin:0;">他支部のデータも見えてしまう。支部間で比較されて構わないかの判断が必要。</p>
+        </div>
+        <div class="card">
+          <h3>案C　PDF出力して配布</h3>
+          <p class="cap">支部別にPDF化して送る</p>
+          <p style="font-size:12.5px;margin:0 0 8px;">案Bの画面で支部を切り替えながらPDF出力し、各支部へ配布する。閲覧側にLooker Studioの権限が不要。</p>
+          <p style="font-size:12px;color:var(--ink-soft);margin:0;">静的なので支部側でフィルタを触れない。出力作業は8回必要。</p>
+        </div>
+      </div>
+      <div class="note">
+        現行フローでは<b>⑤で調査企画部が作成・配布し、⑥で支部が中身を確認する</b>流れのため、支部側にLooker Studioの操作を求めない<b>案C</b>が最も運用に合う。ただし毎年繰り返すなら、初年度に案Aで作り込んでおけば翌年以降はデータソースの差し替えだけで済む。実際の権限設定やPDF出力の可否は、組合で利用しているGoogleアカウントの環境で一度試してから決めるのが確実。
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    四国ガス労働組合　調査企画部／秋の取組内容アンケート　分析ダッシュボード モックアップ（数値はダミー）
+  </footer>
+</div>
+
+<script>
+  function showTab(id, btn){
+    document.querySelectorAll('.panel-tab').forEach(function(p){ p.hidden = (p.id !== id); });
+    document.querySelectorAll('nav.tabs button').forEach(function(b){ b.setAttribute('aria-selected', b === btn ? 'true' : 'false'); });
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+</script>
+
+</body>
+</html>
