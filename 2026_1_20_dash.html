@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>秋の取組内容アンケート｜支部用ダッシュボード（松山支部）</title>
+<style>
+  :root{
+    --navy:#1F3864; --navy-deep:#132347; --slate:#4B6584;
+    --teal:#2E7D6B; --amber:#B8792E; --rose:#9A4A52;
+    --paper:#F4F6F9; --panel:#FFFFFF; --line:#DDE3EC;
+    --grid:#EDF1F6; --ink:#22282F; --ink-soft:#5B6472;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif;
+    font-size:14px;line-height:1.7;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px 90px;}
+
+  header{color:#fff;padding:38px 24px 30px;}
+  header .inner{max-width:1080px;margin:0 auto;}
+  .eyebrow{font-size:11.5px;letter-spacing:.14em;font-weight:700;margin-bottom:10px;}
+  h1{margin:0 0 6px;font-size:clamp(21px,3.2vw,29px);font-weight:800;}
+  .sub{font-size:14px;margin:0;}
+
+  .dummy-banner{
+    background:#FFF4E0;border-bottom:1px solid #E5C48D;color:#7A5210;
+    padding:11px 24px;font-size:13px;font-weight:700;text-align:center;
+  }
+
+  nav.tabs{background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;}
+  nav.tabs .inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;gap:2px;overflow-x:auto;}
+  nav.tabs button{
+    background:none;border:none;border-bottom:3px solid transparent;
+    padding:15px 18px;font-size:13.5px;font-weight:700;color:var(--ink-soft);
+    cursor:pointer;white-space:nowrap;font-family:inherit;
+  }
+  nav.tabs button:hover{background:#F7F9FC;color:var(--navy);}
+  nav.tabs button[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--navy);}
+  .panel-tab[hidden]{display:none;}
+
+  section.block{margin-top:26px;}
+  h2{font-size:16.5px;color:var(--navy);margin:0 0 4px;font-weight:800;}
+  .block-note{font-size:12.5px;color:var(--ink-soft);margin:0 0 14px;}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;}
+  .grid2{display:flex;flex-wrap:wrap;gap:16px;}
+  .grid2 > *{flex:1 1 380px;min-width:0;}
+  .grid3{display:flex;flex-wrap:wrap;gap:16px;}
+  .grid3 > *{flex:1 1 280px;min-width:0;}
+  .card h3{font-size:13.5px;color:var(--navy);margin:0 0 2px;font-weight:800;}
+  .card .cap{font-size:11.5px;color:var(--ink-soft);margin:0 0 14px;}
+
+  .kpis{display:flex;flex-wrap:wrap;gap:16px;}
+  .kpis > *{flex:1 1 200px;min-width:0;}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;border-left:4px solid var(--navy);}
+  .kpi .k{font-size:11.5px;color:var(--ink-soft);font-weight:700;}
+  .kpi .v{font-size:27px;font-weight:800;color:var(--navy);line-height:1.25;margin-top:2px;}
+  .kpi .d{font-size:11.5px;color:var(--ink-soft);}
+
+  .bars{display:flex;flex-direction:column;gap:9px;}
+  .bar-row{display:flex;gap:10px;align-items:center;font-size:12.5px;}
+  .bar-label{color:var(--ink);line-height:1.4;flex:0 0 42%;}
+  .bar-track{background:var(--grid);border-radius:3px;height:17px;overflow:hidden;flex:1 1 auto;min-width:0;}
+  .bar-fill{height:100%;border-radius:3px;background:var(--navy);}
+  .bar-fill.teal{background:var(--teal);}
+  .bar-fill.amber{background:var(--amber);}
+  .bar-fill.slate{background:var(--slate);}
+  .bar-fill.mute{background:#B7C3D4;}
+  .bar-val{text-align:right;font-weight:700;color:var(--ink-soft);font-size:12px;flex:0 0 42px;}
+
+  .stack-row{display:flex;gap:10px;align-items:center;margin-bottom:9px;font-size:12.5px;}
+  .stack-row > *:first-child{flex:0 0 36%;}
+  .stack-track{display:flex;height:22px;border-radius:3px;overflow:hidden;flex:1 1 auto;min-width:0;}
+  .seg{display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#fff;min-width:0;overflow:hidden;white-space:nowrap;}
+  .seg.self{background:var(--teal);}
+  .seg.other{background:#B7C3D4;color:#39424F;}
+
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-soft);margin-top:12px;}
+  .legend span{display:flex;align-items:center;gap:6px;}
+  .sw{width:12px;height:12px;border-radius:2px;display:inline-block;}
+
+  table.heat{width:100%;border-collapse:collapse;font-size:11.5px;}
+  table.heat th,table.heat td{border:1px solid var(--line);padding:7px 6px;text-align:center;}
+  table.heat thead th{background:#EFF3F8;color:var(--navy);font-weight:700;font-size:11px;line-height:1.35;}
+  table.heat tbody th{background:#F7F9FC;color:var(--navy);text-align:left;font-weight:700;white-space:nowrap;}
+  .h0{background:#fff;color:#B4BDC9;} .h1{background:#E6EDF6;} .h2{background:#C3D3E8;}
+  .h3{background:#93AED2;color:#fff;} .h4{background:#5C7FB0;color:#fff;} .h5{background:#2C4E80;color:#fff;}
+
+  table.txt{width:100%;border-collapse:collapse;font-size:12.5px;}
+  table.txt th,table.txt td{border-bottom:1px solid var(--line);padding:11px 10px;text-align:left;vertical-align:top;}
+  table.txt thead th{background:#EFF3F8;color:var(--navy);font-size:11.5px;font-weight:700;}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+  .tag-self{background:#E1F0EB;color:var(--teal);}
+  .tag-other{background:#EDF0F4;color:var(--slate);}
+  .tag-field{background:#E6ECF6;color:var(--navy);}
+
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:6px;
+    padding:7px 13px;font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:7px;}
+  .chip b{color:var(--ink);font-weight:700;}
+  .chip.lock{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .chip.lock b{color:#fff;}
+  .chip:not(.lock)::after{content:"\25BE";font-size:9px;color:#9AA5B4;}
+
+  .note{background:#EFF3F8;border:1px solid #B9C6DB;border-radius:8px;
+    padding:14px 16px;margin-top:16px;font-size:12.5px;color:var(--ink-soft);}
+  .note b{color:var(--navy);}
+  .warn{background:#FDF2F2;border:1px solid #E0B4B4;border-radius:8px;
+    padding:14px 16px;margin-top:16px;font-size:12.5px;color:#7A3B3B;}
+  .warn b{color:#8B2F2F;}
+
+  .steps-o{counter-reset:s;margin-top:16px;}
+  .step-o{display:flex;gap:14px;align-items:flex-start;background:var(--panel);
+    border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin-bottom:10px;}
+  .step-o .n{flex:0 0 26px;width:26px;height:26px;border-radius:50%;background:var(--teal);
+    color:#fff;font-weight:800;font-size:12.5px;text-align:center;line-height:26px;}
+  .step-o .t{font-weight:700;font-size:14px;}
+  .step-o .d{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+
+  footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:12px;}
+
+  .grid3 .bar-label{flex:0 0 52%;font-size:11.5px;}
+  .grid3 .bar-val{flex:0 0 38px;}
+
+  @media (max-width:700px){
+    .bar-label{flex:0 0 38%;}
+    .stack-row > *:first-child{flex:0 0 40%;}
+  }
+</style>
+</head>
+<body>
+
+<header style="background:linear-gradient(160deg,#132347,#1F3864 70%,#4B6584)">
+  <div class="inner">
+    <div class="eyebrow" style="color:#A8C0E0">四国ガス労働組合　調査企画部</div>
+    <h1>秋の取組内容アンケート　支部用ダッシュボード</h1>
+    <p class="sub" style="color:#C6D6EC">松山支部（支部固定）／支部内での検討用</p>
+  </div>
+</header>
+
+<div class="dummy-banner">回答期間中の中間集計です（2026/08/27 時点・回答 58名／配信 112名）。締切までに数値は変動します。</div>
+
+<nav class="tabs">
+  <div class="inner" role="tablist">
+    <button role="tab" aria-selected="true" aria-controls="b1" onclick="showTab('b1',this)">① 属性・3分野の重点項目</button>
+    <button role="tab" aria-selected="false" aria-controls="b2" onclick="showTab('b2',this)">② その他入力の分析</button>
+    <button role="tab" aria-selected="false" aria-controls="b3" onclick="showTab('b3',this)">③ 新規提案の分析</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<style>
+  .filterbar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:14px;}
+  .filterbar label{display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--ink-soft);font-weight:700;}
+  .filterbar label.grow{flex:1 1 220px;min-width:0;}
+  .filterbar select,.filterbar input{
+    font-family:inherit;font-size:12.5px;color:var(--ink);background:var(--panel);
+    border:1px solid var(--line);border-radius:6px;padding:7px 10px;font-weight:400;}
+  .filterbar input{width:100%;}
+  .filterbar select:focus,.filterbar input:focus{outline:2px solid var(--navy);outline-offset:-1px;}
+  .filterbar button{
+    font-family:inherit;font-size:12.5px;font-weight:700;color:var(--navy);cursor:pointer;
+    background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 14px;}
+  .filterbar button:hover{background:#F2F6FB;}
+  .fcount{font-size:12px;color:var(--ink-soft);font-weight:700;padding-bottom:8px;}
+</style>
+
+  <div class="panel-tab" id="b1">
+    <section class="block">
+      <div class="filters"><div class="chip lock">🔒 支部：<b>松山支部</b>（固定）</div></div>
+      <h2>自支部の回答状況</h2>
+      <p class="block-note">2026/08/27 時点の集計です。回答期間中のため、締切までに数値は変動します。</p>
+      <div class="kpis">
+        <div class="kpi"><div class="k">回答者数</div><div class="v">58</div><div class="d">配信対象 112 名</div></div>
+        <div class="kpi"><div class="k">回答率</div><div class="v">51.8<span style="font-size:16px">%</span></div><div class="d">未回答 54 名</div></div>
+        <div class="kpi"><div class="k">新規提案あり</div><div class="v">22</div><div class="d">回答者の 37.9%</div></div>
+        <div class="kpi"><div class="k">「その他」記述</div><div class="v">28</div><div class="d">3分野合計</div></div>
+      </div>
+      <div class="note"><b>回答率は 52% です（未回答 54 名）。</b>半数を超え、支部の傾向として見て差し支えない水準になってきました。締切まで引き続き回答促進をお願いします。</div>
+    </section>
+
+    <section class="block">
+      <h2>回答者の属性</h2>
+      <p class="block-note">回答者の内訳です。特定の層に偏っていないかを確認します。</p>
+      <div class="grid2">
+        <div class="card"><h3>本部別</h3><p class="cap">回答者数（名／n=58）</p>
+          <div class="bars">
+<div class="bar-row"><div class="bar-label">営業本部</div><div class="bar-track"><div class="bar-fill slate" style="width:100%"></div></div><div class="bar-val">28</div></div>
+<div class="bar-row"><div class="bar-label">管理本部</div><div class="bar-track"><div class="bar-fill slate" style="width:43%"></div></div><div class="bar-val">12</div></div>
+<div class="bar-row"><div class="bar-label">生産本部</div><div class="bar-track"><div class="bar-fill slate" style="width:36%"></div></div><div class="bar-val">10</div></div>
+<div class="bar-row"><div class="bar-label">導管本部</div><div class="bar-track"><div class="bar-fill slate" style="width:29%"></div></div><div class="bar-val">8</div></div>
+</div></div>
+        <div class="card"><h3>年齢層別</h3><p class="cap">回答者数（名／n=58）</p>
+          <div class="bars">
+<div class="bar-row"><div class="bar-label">40～49歳</div><div class="bar-track"><div class="bar-fill slate" style="width:100%"></div></div><div class="bar-val">21</div></div>
+<div class="bar-row"><div class="bar-label">30~39歳</div><div class="bar-track"><div class="bar-fill slate" style="width:71%"></div></div><div class="bar-val">15</div></div>
+<div class="bar-row"><div class="bar-label">29歳以下</div><div class="bar-track"><div class="bar-fill slate" style="width:67%"></div></div><div class="bar-val">14</div></div>
+<div class="bar-row"><div class="bar-label">50歳以上</div><div class="bar-track"><div class="bar-fill slate" style="width:38%"></div></div><div class="bar-val">8</div></div>
+</div></div>
+      </div>
+      <div class="note">
+        属性は<b>全体の偏りを確認するためだけ</b>に使用します。属性ごとに重点項目を分解すると
+        1セットあたり1〜2名となり個人が特定されるため、本資料では行っていません。
+        属性別のクロス集計は全社データで実施し、支部長会議で共有します。
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>3分野の重点項目</h2>
+      <p class="block-note">分野ごとに「最も注力してほしい項目」を1つ選んだ結果です（n=58）。</p>
+      <div class="grid3">
+        <div class="card"><h3>Q4　諸手当</h3><p class="cap">選択率</p><div class="bars">
+<div class="bar-row"><div class="bar-label">家族手当の拡充</div><div class="bar-track"><div class="bar-fill " style="width:100%"></div></div><div class="bar-val">28%</div></div>
+<div class="bar-row"><div class="bar-label">二重生活補助支給規定の拡充</div><div class="bar-track"><div class="bar-fill " style="width:100%"></div></div><div class="bar-val">28%</div></div>
+<div class="bar-row"><div class="bar-label">当直手当の見直し</div><div class="bar-track"><div class="bar-fill " style="width:68%"></div></div><div class="bar-val">19%</div></div>
+<div class="bar-row"><div class="bar-label">資格手当の拡充</div><div class="bar-track"><div class="bar-fill " style="width:18%"></div></div><div class="bar-val">5%</div></div>
+<div class="bar-row"><div class="bar-label">通勤手当の見直し</div><div class="bar-track"><div class="bar-fill " style="width:18%"></div></div><div class="bar-val">5%</div></div>
+<div class="bar-row"><div class="bar-label">特になし/該当なし</div><div class="bar-track"><div class="bar-fill mute" style="width:57%"></div></div><div class="bar-val">16%</div></div>
+</div></div>
+        <div class="card"><h3>Q5　休暇・福利厚生</h3><p class="cap">選択率</p><div class="bars">
+<div class="bar-row"><div class="bar-label">社宅・独身寮の整備</div><div class="bar-track"><div class="bar-fill teal" style="width:79%"></div></div><div class="bar-val">26%</div></div>
+<div class="bar-row"><div class="bar-label">有給休暇の取得促進策</div><div class="bar-track"><div class="bar-fill teal" style="width:48%"></div></div><div class="bar-val">16%</div></div>
+<div class="bar-row"><div class="bar-label">永年勤続表彰の拡充</div><div class="bar-track"><div class="bar-fill teal" style="width:27%"></div></div><div class="bar-val">9%</div></div>
+<div class="bar-row"><div class="bar-label">リフレッシュ休暇の新設・拡充</div><div class="bar-track"><div class="bar-fill teal" style="width:21%"></div></div><div class="bar-val">7%</div></div>
+<div class="bar-row"><div class="bar-label">育児休暇・時短勤務制度の拡充</div><div class="bar-track"><div class="bar-fill teal" style="width:21%"></div></div><div class="bar-val">7%</div></div>
+<div class="bar-row"><div class="bar-label">介護休業制度の拡充</div><div class="bar-track"><div class="bar-fill teal" style="width:9%"></div></div><div class="bar-val">3%</div></div>
+<div class="bar-row"><div class="bar-label">特になし/該当なし</div><div class="bar-track"><div class="bar-fill mute" style="width:100%"></div></div><div class="bar-val">33%</div></div>
+</div></div>
+        <div class="card"><h3>Q6　健康保持増進</h3><p class="cap">選択率</p><div class="bars">
+<div class="bar-row"><div class="bar-label">人間ドック・健康診断の費用補助拡充</div><div class="bar-track"><div class="bar-fill amber" style="width:100%"></div></div><div class="bar-val">38%</div></div>
+<div class="bar-row"><div class="bar-label">運動促進策</div><div class="bar-track"><div class="bar-fill amber" style="width:37%"></div></div><div class="bar-val">14%</div></div>
+<div class="bar-row"><div class="bar-label">食生活・栄養面の支援</div><div class="bar-track"><div class="bar-fill amber" style="width:26%"></div></div><div class="bar-val">10%</div></div>
+<div class="bar-row"><div class="bar-label">特になし/該当なし</div><div class="bar-track"><div class="bar-fill mute" style="width:100%"></div></div><div class="bar-val">38%</div></div>
+</div></div>
+      </div>
+      <div class="note">
+        <b>Q5・Q6は「特になし」が最多です。</b>関心が低いというより、
+        Q4（諸手当）に比べて<b>切実さが分散している</b>可能性があります。
+        自由記述（タブ②）とあわせてご確認ください。
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>当事者性の内訳</h2>
+      <p class="block-note">その項目を選んだ方のうち、ご自身が該当・経験していると回答した割合です。</p>
+      <div class="grid2">
+        <div class="card"><h3>分野別</h3><p class="cap">「特になし」を除いた回答が母数</p>
+          <div class="stack-row"><div>Q4　諸手当 <span style="color:var(--ink-soft);font-size:11px">(n=50)</span></div><div class="stack-track"><div class="seg self" style="width:70%;min-width:0;overflow:hidden">70%</div><div class="seg other" style="width:30%;min-width:0;overflow:hidden">30%</div></div></div>
+<div class="stack-row"><div>Q5　休暇・福利厚生 <span style="color:var(--ink-soft);font-size:11px">(n=41)</span></div><div class="stack-track"><div class="seg self" style="width:61%;min-width:0;overflow:hidden">61%</div><div class="seg other" style="width:39%;min-width:0;overflow:hidden">39%</div></div></div>
+<div class="stack-row"><div>Q6　健康保持増進 <span style="color:var(--ink-soft);font-size:11px">(n=35)</span></div><div class="stack-track"><div class="seg self" style="width:66%;min-width:0;overflow:hidden">66%</div><div class="seg other" style="width:34%;min-width:0;overflow:hidden">34%</div></div></div>
+<div class="legend"><span><i class="sw" style="background:var(--teal)"></i>自分自身が該当・経験している</span><span><i class="sw" style="background:#B7C3D4"></i>該当しないが必要だと思う</span></div></div>
+        <div class="card"><h3>重点項目別</h3><p class="cap">選択者3名以上の項目のみ表示</p>
+          <div class="stack-row"><div>Q4　二重生活補助支給規定の拡充 <span style="color:var(--ink-soft);font-size:11px">(n=16)</span></div><div class="stack-track"><div class="seg self" style="width:12%;min-width:0;overflow:hidden">12%</div><div class="seg other" style="width:88%;min-width:0;overflow:hidden">88%</div></div></div>
+<div class="stack-row"><div>Q4　家族手当の拡充 <span style="color:var(--ink-soft);font-size:11px">(n=16)</span></div><div class="stack-track"><div class="seg self" style="width:94%;min-width:0;overflow:hidden">94%</div><div class="seg other" style="width:6%;min-width:0;overflow:hidden"></div></div></div>
+<div class="stack-row"><div>Q4　当直手当の見直し <span style="color:var(--ink-soft);font-size:11px">(n=11)</span></div><div class="stack-track"><div class="seg self" style="width:100%;min-width:0;overflow:hidden">100%</div><div class="seg other" style="width:0%;min-width:0;overflow:hidden"></div></div></div>
+<div class="stack-row"><div>Q4　資格手当の拡充 <span style="color:var(--ink-soft);font-size:11px">(n=3)</span></div><div class="stack-track"><div class="seg self" style="width:100%;min-width:0;overflow:hidden">100%</div><div class="seg other" style="width:0%;min-width:0;overflow:hidden"></div></div></div>
+<div class="stack-row"><div>Q4　通勤手当の見直し <span style="color:var(--ink-soft);font-size:11px">(n=3)</span></div><div class="stack-track"><div class="seg self" style="width:100%;min-width:0;overflow:hidden">100%</div><div class="seg other" style="width:0%;min-width:0;overflow:hidden"></div></div></div>
+<div class="stack-row"><div>Q5　社宅・独身寮の整備 <span style="color:var(--ink-soft);font-size:11px">(n=15)</span></div><div class="stack-track"><div class="seg self" style="width:47%;min-width:0;overflow:hidden">47%</div><div class="seg other" style="width:53%;min-width:0;overflow:hidden">53%</div></div></div>
+<div class="stack-row"><div>Q5　有給休暇の取得促進策 <span style="color:var(--ink-soft);font-size:11px">(n=9)</span></div><div class="stack-track"><div class="seg self" style="width:100%;min-width:0;overflow:hidden">100%</div><div class="seg other" style="width:0%;min-width:0;overflow:hidden"></div></div></div>
+<div class="stack-row"><div>Q5　永年勤続表彰の拡充 <span style="color:var(--ink-soft);font-size:11px">(n=5)</span></div><div class="stack-track"><div class="seg self" style="width:40%;min-width:0;overflow:hidden">40%</div><div class="seg other" style="width:60%;min-width:0;overflow:hidden">60%</div></div></div>
+<div class="stack-row"><div>Q5　リフレッシュ休暇の新設・拡充 <span style="color:var(--ink-soft);font-size:11px">(n=4)</span></div><div class="stack-track"><div class="seg self" style="width:75%;min-width:0;overflow:hidden">75%</div><div class="seg other" style="width:25%;min-width:0;overflow:hidden">25%</div></div></div>
+<div class="stack-row"><div>Q5　育児休暇・時短勤務制度の拡充 <span style="color:var(--ink-soft);font-size:11px">(n=4)</span></div><div class="stack-track"><div class="seg self" style="width:50%;min-width:0;overflow:hidden">50%</div><div class="seg other" style="width:50%;min-width:0;overflow:hidden">50%</div></div></div>
+<div class="stack-row"><div>Q6　人間ドック・健康診断の費用補助… <span style="color:var(--ink-soft);font-size:11px">(n=22)</span></div><div class="stack-track"><div class="seg self" style="width:77%;min-width:0;overflow:hidden">77%</div><div class="seg other" style="width:23%;min-width:0;overflow:hidden">23%</div></div></div>
+<div class="stack-row"><div>Q6　運動促進策 <span style="color:var(--ink-soft);font-size:11px">(n=7)</span></div><div class="stack-track"><div class="seg self" style="width:29%;min-width:0;overflow:hidden">29%</div><div class="seg other" style="width:71%;min-width:0;overflow:hidden">71%</div></div></div>
+<div class="stack-row"><div>Q6　食生活・栄養面の支援 <span style="color:var(--ink-soft);font-size:11px">(n=6)</span></div><div class="stack-track"><div class="seg self" style="width:67%;min-width:0;overflow:hidden">67%</div><div class="seg other" style="width:33%;min-width:0;overflow:hidden">33%</div></div></div>
+<div class="legend"><span><i class="sw" style="background:var(--teal)"></i>自分自身が該当・経験している</span><span><i class="sw" style="background:#B7C3D4"></i>該当しないが必要だと思う</span></div></div>
+      </div>
+      <div class="note">
+        <b>諸手当は当事者比率が高い分野です。</b>実際に困っている方が選んでいる項目は、
+        要求の根拠として説得力を持ちます。支部として推す項目の判断材料にしてください。
+      </div>
+    </section>
+  </div>
+
+  <div class="panel-tab" id="b2" hidden>
+    <section class="block">
+      <h2>自由記述の記入状況</h2>
+      <p class="block-note">Q4〜Q6の根拠、および改善内容で「その他」を選ばれた方の記述の件数です。「特になし」は除外しています。</p>
+      <div class="kpis">
+        <div class="kpi"><div class="k">諸手当</div><div class="v">38</div><div class="d">記載あり／58名中 65.5%</div></div><div class="kpi"><div class="k">休暇・福利厚生</div><div class="v">35</div><div class="d">記載あり／58名中 60.3%</div></div><div class="kpi"><div class="k">健康保持増進</div><div class="v">29</div><div class="d">記載あり／58名中 50.0%</div></div>
+        <div class="kpi"><div class="k">B欄「その他」</div><div class="v">28</div><div class="d">3分野合計</div></div>
+      </div>
+      <div class="note"><b>Q5（休暇・福利厚生）の「その他」が 17 件と最多です。</b>3分野合計 28 件のうち約61%を占めており、用意した改善内容の選択肢がこの分野の実態に合っていない可能性があります。<b>翌年度の選択肢を見直す材料</b>として支部長会議でお伝えください。</div>
+    </section>
+
+    <section class="block">
+      <h2>根拠一覧</h2>
+      <p class="block-note">数字だけでは分からない事情が書かれています。会議前に一読ください。改善内容で「その他」を選ばれた方は、項目名の下に（その他）と表示し、その記述も同じ行に併記しています。</p>
+      
+      <div class="filterbar">
+        <label>分野
+          <select id="fField">
+            <option value="">すべて</option>
+            <option>諸手当</option><option>休暇・福利厚生</option><option>健康保持増進</option>
+          </select>
+        </label>
+        <label>当事者性
+          <select id="fStance">
+            <option value="">すべて</option>
+            <option>当事者</option><option>非当事者</option>
+          </select>
+        </label>
+        <label>その他
+          <select id="fOther">
+            <option value="">すべて</option>
+            <option value="1">「その他」を選んだ回答のみ</option>
+          </select>
+        </label>
+        <label class="grow">キーワード
+          <input id="fText" type="search" placeholder="例：社宅、単身赴任、金額 …">
+        </label>
+        <button type="button" id="fReset">条件をリセット</button>
+        <span id="fCount" class="fcount"></span>
+      </div>
+
+      <div class="card" style="padding:18px 0 4px;"><table class="txt"><thead><tr><th style="width:96px;padding-left:20px">分野</th><th style="width:150px">項目</th><th style="width:84px">当事者性</th><th style="padding-right:20px">根拠・詳細</th></tr></thead><tbody id="dbody"><tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="ベアにより賃金上昇はしているものの、一律全員上昇しているのみである。物価高騰の影響は家族数に比例して影響を受けている状態であり。第2子以降で減額される意図もわからない。子供の数で一律一人8000円を希望したい。過去のベア分10％+子供の扶養数に関係なく一人につき8000円支給へ増額希望。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">ベアにより賃金上昇はしているものの、一律全員上昇しているのみである。物価高騰の影響は家族数に比例して影響を受けている状態であり。第2子以降で減額される意図もわからない。子供の数で一律一人8000円を希望したい。過去のベア分10％+子供の扶養数に関係なく一人につき8000円支給へ増額希望。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="会社での寝泊まりに加え、常に緊急時に備えておかなければならないことから、宿直には心身ともに大きな負担があります。また、宿直を懸念して入社を避ける就活生や、宿直・日直のストレスを理由に退社する若手社員も増えていると感じます。 宿直そのものをなくすことは難しいと思いますが、その負担に見合った手当とし、職員が納得して宿直を担えるようにするべきだと考えます。 さらに、物価上昇も考慮する必要があります。宿直手当の金額は20年以上変わっていないと認識していますが、総務省統計局の消費者物価指数では、四国地方の物価水準（2020年＝100）は、2005年の指数95に対して現在は110となっており、約15％上昇しています。 この物価上昇率を踏まえ、宿直手当についても現行額の1.15倍程度への引き上げが妥当だと考えます。 【希望する宿直手当】 責任者：7,400円 → 計算値8,510円（7,400円×1.15）≒ 8,500円 処理者：6,800円 → 計算値7,820円（6,800円×1.15）≒ 7,800円"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>当直手当の見直し</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">会社での寝泊まりに加え、常に緊急時に備えておかなければならないことから、宿直には心身ともに大きな負担があります。また、宿直を懸念して入社を避ける就活生や、宿直・日直のストレスを理由に退社する若手社員も増えていると感じます。<br><br>宿直そのものをなくすことは難しいと思いますが、その負担に見合った手当とし、職員が納得して宿直を担えるようにするべきだと考えます。<br><br>さらに、物価上昇も考慮する必要があります。宿直手当の金額は20年以上変わっていないと認識していますが、総務省統計局の消費者物価指数では、四国地方の物価水準（2020年＝100）は、2005年の指数95に対して現在は110となっており、約15％上昇しています。<br><br>この物価上昇率を踏まえ、宿直手当についても現行額の1.15倍程度への引き上げが妥当だと考えます。<br><br>【希望する宿直手当】<br><br>責任者：7,400円 → 計算値8,510円（7,400円×1.15）≒ 8,500円<br>処理者：6,800円 → 計算値7,820円（6,800円×1.15）≒ 7,800円</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="ここ数年のベア昇給分程度は宿直手当も増やすべき"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>当直手当の見直し</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">ここ数年のベア昇給分程度は宿直手当も増やすべき</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="非当事者" data-other="0" data-text="二重生活になった際にお金が回らないと思う。総合2が減らない"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>二重生活補助支給規定の拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">二重生活になった際にお金が回らないと思う。総合2が減らない</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="・￥14,000円/回 算出根拠 松山市の最低賃金「￥1,033」 × 宿直拘束時間 約14h 宿直手当から宿直時の夕食・朝食代を差し引くと、あまり手当が残らず より負担がかかっているように思えます"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>当直手当の見直し</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">・￥14,000円/回<br> 　算出根拠　松山市の最低賃金「￥1,033」　×　宿直拘束時間　約14h<br>　 宿直手当から宿直時の夕食・朝食代を差し引くと、あまり手当が残らず<br>　より負担がかかっているように思えます</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="非当事者" data-other="0" data-text="様々な事情により二重生活を余儀なくされる方がいるなかで、二重生活による支出増大および帰省交通費等の負担が増大する。自分自身は該当していないが、家族と離れて暮らすうえに多くの負担を強いるなかでもう少し金銭的な補助があってもいいのではと常々思う。念願のマイホームを建てて、自宅に住めない社員を何人も見聞きしている。せめてもの金銭的な補助をお願いしたい。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>二重生活補助支給規定の拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">様々な事情により二重生活を余儀なくされる方がいるなかで、二重生活による支出増大および帰省交通費等の負担が増大する。自分自身は該当していないが、家族と離れて暮らすうえに多くの負担を強いるなかでもう少し金銭的な補助があってもいいのではと常々思う。念願のマイホームを建てて、自宅に住めない社員を何人も見聞きしている。せめてもの金銭的な補助をお願いしたい。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="金額を増やしてほしい。 理由としては、平均相場よりも水準が下回っている為。 弊社3,000円 平均相場6,000円弱"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">金額を増やしてほしい。<br>理由としては、平均相場よりも水準が下回っている為。<br><br>弊社3,000円　平均相場6,000円弱</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="物価の高騰により朝食代・夕食代にかかる費用が増えています。また、宿直の次の日の昼食代は、家からの弁当ではなくなるので、さらに出費が増えます。 人によって食費にかかる費用は違うので、一概には言えませんが、１０００円ぐらいは増えてもいいのではないかと思います。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>当直手当の見直し</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">物価の高騰により朝食代・夕食代にかかる費用が増えています。また、宿直の次の日の昼食代は、家からの弁当ではなくなるので、さらに出費が増えます。<br>人によって食費にかかる費用は違うので、一概には言えませんが、１０００円ぐらいは増えてもいいのではないかと思います。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="労働時間にはカウントされていないが会社に滞在しなければいけない。待機時間中も事務作業等を許可していただきたい。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>当直手当の見直し</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">労働時間にはカウントされていないが会社に滞在しなければいけない。待機時間中も事務作業等を許可していただきたい。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="「金額を増やしてほしい」→扶養家族一人当たり1～2万円程度。物価高騰のため上げて欲しい。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">「金額を増やしてほしい」→扶養家族一人当たり1～2万円程度。物価高騰のため上げて欲しい。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="物価高を給与だけでなく手当にも反映して欲しい。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">物価高を給与だけでなく手当にも反映して欲しい。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="非当事者" data-other="1" data-text="二重生活となっている全社員に対して実費を全額補助 異動を希望しない人が増えております。その為、一部の人へ金銭的な負担、家族との時間が取れない負担が集中しています。このままでは会社の運用へ影響が出かねないと思います。少なくとも、金銭的な負担に関しては実際にかかる費用を全額補助することによって、金銭的な不安、ストレスをなくすことにより、異動にチャレンジしやすい環境に近づくと思います。例えば、光熱費の基本使用料、家賃、週末帰省の交通費、通信費は自宅ではかからない費用の為、全額支給が望ましいと思います。また、希望者へは家電、家具、カーテン等の備品のレンタルもしっかりとあればいいと思います。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>二重生活補助支給規定の拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>二重生活となっている全社員に対して実費を全額補助<br><span style="color:var(--slate);font-weight:700">【根拠】</span>異動を希望しない人が増えております。その為、一部の人へ金銭的な負担、家族との時間が取れない負担が集中しています。このままでは会社の運用へ影響が出かねないと思います。少なくとも、金銭的な負担に関しては実際にかかる費用を全額補助することによって、金銭的な不安、ストレスをなくすことにより、異動にチャレンジしやすい環境に近づくと思います。例えば、光熱費の基本使用料、家賃、週末帰省の交通費、通信費は自宅ではかからない費用の為、全額支給が望ましいと思います。また、希望者へは家電、家具、カーテン等の備品のレンタルもしっかりとあればいいと思います。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="資格を取得しないと、勤務に支障がでたり上司との面談等で取得を何回も促される割に、資格取得への補助がない。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>資格手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">資格を取得しないと、勤務に支障がでたり上司との面談等で取得を何回も促される割に、資格取得への補助がない。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="1" data-text="1回の祝い金ではなく、給与に手当として継続的に反映する。 現状の手当ではやる気には直結しない。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>資格手当の拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>1回の祝い金ではなく、給与に手当として継続的に反映する。<br><span style="color:var(--slate);font-weight:700">【根拠】</span>現状の手当ではやる気には直結しない。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="希望する具体的な金額：現在支給額+1万円 根拠：他に受けられる手当も特になく、保育園代も月々1万円程度必要となるため（他に手当を増やすなどしてくれたら不要）"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">希望する具体的な金額：現在支給額+1万円<br>根拠：他に受けられる手当も特になく、保育園代も月々1万円程度必要となるため（他に手当を増やすなどしてくれたら不要）</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="自家用車等での通勤の場合、ガソリン価格などの高騰で従来の通勤費で賄え切れないため"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>通勤手当の見直し</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">自家用車等での通勤の場合、ガソリン価格などの高騰で従来の通勤費で賄え切れないため</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="具体的な金額希望はないが、物価高に収入が追い付いていないと感じる。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">具体的な金額希望はないが、物価高に収入が追い付いていないと感じる。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="非当事者" data-other="0" data-text="現状かつかつなので、二重生活によって、出費が増えることは死活問題である。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>二重生活補助支給規定の拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">現状かつかつなので、二重生活によって、出費が増えることは死活問題である。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="インフレ対応"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">インフレ対応</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="非当事者" data-other="0" data-text="異動を伴うのは総合１を選択している社員のみで、生涯収入としては多いかもしれないが、現状総合1と総合2でそこまでの収入に差がなく、また単身赴任にかかる「家賃、光熱費、食費、交通費」などを考えると総合１の方が毎月の生活が厳しくなるのは明らかです。せめて家賃と光熱費は会社負担でいいのではないでしょうか。 会社は総合１と２の給与面で差をつけることのみを検討しているようですが、総合１を選択することで給与面だけではなく広く見て他でも総合2より劣ることがないような制度設計が必要だと感じます。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>二重生活補助支給規定の拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">異動を伴うのは総合１を選択している社員のみで、生涯収入としては多いかもしれないが、現状総合1と総合2でそこまでの収入に差がなく、また単身赴任にかかる「家賃、光熱費、食費、交通費」などを考えると総合１の方が毎月の生活が厳しくなるのは明らかです。せめて家賃と光熱費は会社負担でいいのではないでしょうか。<br>会社は総合１と２の給与面で差をつけることのみを検討しているようですが、総合１を選択することで給与面だけではなく広く見て他でも総合2より劣ることがないような制度設計が必要だと感じます。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="本来、組合としては「二重生活補助支給規定の拡充」を最も優先して取り組むべき課題であると考えていますが、経営層が現行制度の考えに固執している状況も踏まえ、まずは実現可能性のある項目として、宿直手当の拡充を求めるべきかと思います。当直勤務については、通常の勤務時間外に会社の保安体制を維持するため、従業員が自身の家庭生活を一時的に後回しにし、会社の保安確保を優先して勤務するものです。 実際には、軽微なガス漏れやお客さまからの問い合わせ等についても、時間帯にかかわらず、深夜・早朝であっても必要に応じて出動し、対応することが求められます。 また、宿直中に出動がなかった場合であっても、「いつ電話が鳴るか分からない」「いつ出動要請が入るか分からない」という緊張感を常に抱えながら宿直時間を過ごしており、通常の勤務とは異なる精神的な負担があります。出動がなかったから負担がなかったのではなく、緊急時にいつでも対応できる状態を維持していること自体が、宿直勤務に伴う負担の一つであると考えます。 さらに、宿直勤務では夕食・朝食等についても、通常の勤務とは異なる経済的負担が発生します。会社の保安体制を維持するために宿直勤務を命じられることにより、本来であれば自宅で取る食事を会社で取らざるを得ないものだと考えています。良い感じの食事代のエビデンスは無かったですが夕食・朝食を合わせて1回1,000～1,500円程度を当直に伴う食費の目安として考えても、過大な水準ではないと考えます。必要とあれば宿直時の食事代は根拠はアンケートを利用してもいいかもしれません。会社の都合により通常とは異なる時間帯に会社で食事をすることを求めている以上、少なくともその食事に要する実費相当額については、会社が負担することが妥当だと考えます。 仮に会社側が、現在の宿直手当が十分な対価であるしている（根拠に基づいて設定している）のであれば、現行金額がどのような考え方・算定根拠によって設定されているのか、また、食費相当額の考え方について、会社から明確に説明していただきたいと考えます。 単に「従来からこの金額である」「他社がこうである」という理由は参考程度でしかなく、現在の勤務実態、食費等の実費負担、夜間・休日の拘束、保安業務に伴う責任、物価上昇等を踏まえ、現行の当直手当が現在の勤務実態に見合った水準であるのかを改めて検証し、実態に応じた水準への拡充への取り組みをお願いします。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>当直手当の見直し</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">本来、組合としては「二重生活補助支給規定の拡充」を最も優先して取り組むべき課題であると考えていますが、経営層が現行制度の考えに固執している状況も踏まえ、まずは実現可能性のある項目として、宿直手当の拡充を求めるべきかと思います。当直勤務については、通常の勤務時間外に会社の保安体制を維持するため、従業員が自身の家庭生活を一時的に後回しにし、会社の保安確保を優先して勤務するものです。<br>実際には、軽微なガス漏れやお客さまからの問い合わせ等についても、時間帯にかかわらず、深夜・早朝であっても必要に応じて出動し、対応することが求められます。<br>また、宿直中に出動がなかった場合であっても、「いつ電話が鳴るか分からない」「いつ出動要請が入るか分からない」という緊張感を常に抱えながら宿直時間を過ごしており、通常の勤務とは異なる精神的な負担があります。出動がなかったから負担がなかったのではなく、緊急時にいつでも対応できる状態を維持していること自体が、宿直勤務に伴う負担の一つであると考えます。<br><br>さらに、宿直勤務では夕食・朝食等についても、通常の勤務とは異なる経済的負担が発生します。会社の保安体制を維持するために宿直勤務を命じられることにより、本来であれば自宅で取る食事を会社で取らざるを得ないものだと考えています。良い感じの食事代のエビデンスは無かったですが夕食・朝食を合わせて1回1,000～1,500円程度を当直に伴う食費の目安として考えても、過大な水準ではないと考えます。必要とあれば宿直時の食事代は根拠はアンケートを利用してもいいかもしれません。会社の都合により通常とは異なる時間帯に会社で食事をすることを求めている以上、少なくともその食事に要する実費相当額については、会社が負担することが妥当だと考えます。<br><br>仮に会社側が、現在の宿直手当が十分な対価であるしている（根拠に基づいて設定している）のであれば、現行金額がどのような考え方・算定根拠によって設定されているのか、また、食費相当額の考え方について、会社から明確に説明していただきたいと考えます。<br>単に「従来からこの金額である」「他社がこうである」という理由は参考程度でしかなく、現在の勤務実態、食費等の実費負担、夜間・休日の拘束、保安業務に伴う責任、物価上昇等を踏まえ、現行の当直手当が現在の勤務実態に見合った水準であるのかを改めて検証し、実態に応じた水準への拡充への取り組みをお願いします。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="宿直においては、宇和島支店分の電話応答等は含まれ負荷だけが増え、他支店と同じといったところは疑問を感じる。明確な増額幅としては、1名減となっている為（約6,500円程度）を人数（4人）で割った約1,500円程度が妥当ではないか考えている。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>当直手当の見直し</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">宿直においては、宇和島支店分の電話応答等は含まれ負荷だけが増え、他支店と同じといったところは疑問を感じる。明確な増額幅としては、1名減となっている為（約6,500円程度）を人数（4人）で割った約1,500円程度が妥当ではないか考えている。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="先般の物価上昇による、経済状況の圧迫はご承知の通りかと思っております。 現在でもかなり手厚い手当をいただいている認識ですが、採用状況が厳しい観点・離職率の多いこの時代で、 さらに手当額を上昇改定することで、離職防止・積極的な採用活動が見込めると感じています。 家族手当額の改定は、ずっと変わっていないと思いますので、簡単なことではないですが、検討いただきたいです。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">先般の物価上昇による、経済状況の圧迫はご承知の通りかと思っております。<br>現在でもかなり手厚い手当をいただいている認識ですが、採用状況が厳しい観点・離職率の多いこの時代で、<br>さらに手当額を上昇改定することで、離職防止・積極的な採用活動が見込めると感じています。<br>家族手当額の改定は、ずっと変わっていないと思いますので、簡単なことではないですが、検討いただきたいです。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="最低2,000円UP （内訳） ・宿直時の夕食・朝食費用として、1,000円UP ・宿直の労務費として、1,000円UP 食費に関しては、昔はコンビニおにぎりも100円で買えた物が今では2倍ほどに値上がり。お弁当も単価が上がっている。宿直の労務費としても、ベアは物価高騰等で上がっているのに、何年も変わっていない状況。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>当直手当の見直し</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">最低2,000円UP<br>（内訳）<br>・宿直時の夕食・朝食費用として、1,000円UP<br>・宿直の労務費として、1,000円UP<br>食費に関しては、昔はコンビニおにぎりも100円で買えた物が今では2倍ほどに値上がり。お弁当も単価が上がっている。宿直の労務費としても、ベアは物価高騰等で上がっているのに、何年も変わっていない状況。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="1" data-text="金額支給対象の拡充と手当以外の家賃補助の拡大等二重生活者の負担軽減をお願いします。 実際に色々な物価が高騰しており、もともと二重生活補助頂いても単身赴任なると給与がマイナスになります。そもそも転勤して単身赴任で給与が下がるのはあり得ないと考えています。あくまで会社命令の移動であり、事情があり家族では移動できないが、会社の為に単身赴任を我慢している。むしろ単身赴任者は負荷を考慮し給与が上がるのが通常だと思います。ただすべて見直しをしてくれると思っていないので、せめて金額や対象者の拡充は提言してほしい。二重生活補助手当だけでなく、家賃補助の増額や帰省旅費の拡充、また会社命令で指定の社宅に入っても交通の便が悪く駐車場を会社近くに借りている人もいる。それなら近くに住まわせるか、駐車場代を出してほしい。今の制度は単身赴任する人が損する制度であり、これが足かせで貴重な人材を失っており残念である。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>二重生活補助支給規定の拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>金額支給対象の拡充と手当以外の家賃補助の拡大等二重生活者の負担軽減をお願いします。<br><span style="color:var(--slate);font-weight:700">【根拠】</span>実際に色々な物価が高騰しており、もともと二重生活補助頂いても単身赴任なると給与がマイナスになります。そもそも転勤して単身赴任で給与が下がるのはあり得ないと考えています。あくまで会社命令の移動であり、事情があり家族では移動できないが、会社の為に単身赴任を我慢している。むしろ単身赴任者は負荷を考慮し給与が上がるのが通常だと思います。ただすべて見直しをしてくれると思っていないので、せめて金額や対象者の拡充は提言してほしい。二重生活補助手当だけでなく、家賃補助の増額や帰省旅費の拡充、また会社命令で指定の社宅に入っても交通の便が悪く駐車場を会社近くに借りている人もいる。それなら近くに住まわせるか、駐車場代を出してほしい。今の制度は単身赴任する人が損する制度であり、これが足かせで貴重な人材を失っており残念である。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="非当事者" data-other="0" data-text="家族で一緒に生活することが一番望ましいと感じています。一方で、転勤を理由に家族の仕事や子どもの学校・友人関係など、現在の生活環境を大きく変えることには難しさも感じています。家族手当を拡充することで、家族の状況に応じた選択がしやすくなり、転勤に伴う負担の軽減につながるのではないかと考えます。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>二重生活補助支給規定の拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">家族で一緒に生活することが一番望ましいと感じています。一方で、転勤を理由に家族の仕事や子どもの学校・友人関係など、現在の生活環境を大きく変えることには難しさも感じています。家族手当を拡充することで、家族の状況に応じた選択がしやすくなり、転勤に伴う負担の軽減につながるのではないかと考えます。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="家族手当や共済会の祝金等を拡充していただきたいです。 出産後、仕事に復帰するためには保育園（幼稚園、託児所）に預ける必要があり 月齢が小さいほど利用料金は高いです。 しかし、希望通りの園に通えないこともあり、時短勤務でしか働けないことも少なくはありません。 ワークライフバランスを保つためにも拡充のご検討をお願いいたします。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">家族手当や共済会の祝金等を拡充していただきたいです。<br>出産後、仕事に復帰するためには保育園（幼稚園、託児所）に預ける必要があり<br>月齢が小さいほど利用料金は高いです。<br>しかし、希望通りの園に通えないこともあり、時短勤務でしか働けないことも少なくはありません。<br>ワークライフバランスを保つためにも拡充のご検討をお願いいたします。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="物価上昇分を賃金ですべて補填は難しいと思うので、家族構成に応じ金額を増額してほしい。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">物価上昇分を賃金ですべて補填は難しいと思うので、家族構成に応じ金額を増額してほしい。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="非当事者" data-other="0" data-text="二重生活の負担が大きいから。 通勤とは別に帰省の費用や時間がかかっているため、家族との時間の代わりに増額が必要だと感じる。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>二重生活補助支給規定の拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">二重生活の負担が大きいから。<br>通勤とは別に帰省の費用や時間がかかっているため、家族との時間の代わりに増額が必要だと感じる。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="ガソリン代も高騰しており、車通勤だと実際にかかっている費用は不足しているため、増額してほしい"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>通勤手当の見直し</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">ガソリン代も高騰しており、車通勤だと実際にかかっている費用は不足しているため、増額してほしい</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="非当事者" data-other="0" data-text="二重生活をしている方が費用面で最低でもマイナスを被らないようにしてほしい。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>二重生活補助支給規定の拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">二重生活をしている方が費用面で最低でもマイナスを被らないようにしてほしい。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="処理者区分による金額差額設定"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>当直手当の見直し</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">処理者区分による金額差額設定</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="非当事者" data-other="0" data-text="現行の28000円だと、社宅の住居費程度にしか充当することができない。 単身赴任は社宅の住居費をゼロにするか、借り上げなら1割負担にするなどが必要かと。 あと、金額も60000円ぐらい（住居費を上記のようにするなら30000円ぐらいでも良いかと） 私は該当しないが色々話を聞くと単身赴任者の生活面のサポートを充実させる必要があると感じる。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>二重生活補助支給規定の拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">現行の28000円だと、社宅の住居費程度にしか充当することができない。<br>単身赴任は社宅の住居費をゼロにするか、借り上げなら1割負担にするなどが必要かと。<br>あと、金額も60000円ぐらい（住居費を上記のようにするなら30000円ぐらいでも良いかと）<br>私は該当しないが色々話を聞くと単身赴任者の生活面のサポートを充実させる必要があると感じる。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="1" data-text="第1扶養（配偶者）手当をなくすか減額し、その分を第2扶養者手当以降に加算する 配偶者は正規非正規かかわらず共働きが増えているため、現形式は現代にそぐわない。 世間的には子供への手当増額にシフトしているため、四国ガスもその流れに沿ってはどうか。 例えば、第1扶養16000円→10000円かさらに減額、その分の原資を第2扶養以降7000円、6000円→10000円などに。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>第1扶養（配偶者）手当をなくすか減額し、その分を第2扶養者手当以降に加算する<br><span style="color:var(--slate);font-weight:700">【根拠】</span>配偶者は正規非正規かかわらず共働きが増えているため、現形式は現代にそぐわない。<br>世間的には子供への手当増額にシフトしているため、四国ガスもその流れに沿ってはどうか。<br>例えば、第1扶養16000円→10000円かさらに減額、その分の原資を第2扶養以降7000円、6000円→10000円などに。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="物価高による子供の食事代やその他金額もあがっているため。家族手当も上げて欲しい。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">物価高による子供の食事代やその他金額もあがっているため。家族手当も上げて欲しい。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="非当事者" data-other="1" data-text="金額を増やしてほしい ＆ 対象者・対象範囲を広げてほしい 家族帯同で転勤できるケースは限られており、転勤の多い会社であることを考えると、補助や条件面が十分でなく、時代に逆行している。こうした待遇面の乏しさが、人材の流出にもつながっているのではないかと懸念している。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>二重生活補助支給規定の拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>金額を増やしてほしい ＆ 対象者・対象範囲を広げてほしい<br><span style="color:var(--slate);font-weight:700">【根拠】</span>家族帯同で転勤できるケースは限られており、転勤の多い会社であることを考えると、補助や条件面が十分でなく、時代に逆行している。こうした待遇面の乏しさが、人材の流出にもつながっているのではないかと懸念している。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="家族手当の規定の件を改善していただきたいです。家族手当は、世帯主が条件とだいたい奥さんの収入をみて家族手当がでるとおもうのですが、奥さんの方が収入が多いのに家族手当をいただいてる方もいらっしゃるときいて、それはどうなのかな？と思ってます。ほかの企業や公務員のように、奥さんの収入を確認して、家族手当を付与した方がいいのではないでしょうか。また、条件として世帯主とありますが、女性側がそれでは家族手当の対象にはならない方の方が多いと感じます。だいたいは、男性が世帯主になるので、それだったら、そもそも男性も奥さんの収入がしっかりあるかたは家族手当なしで、女性も世帯主じゃなくてもなにか家族手当の付与などをしてほしいです。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>家族手当の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">家族手当の規定の件を改善していただきたいです。家族手当は、世帯主が条件とだいたい奥さんの収入をみて家族手当がでるとおもうのですが、奥さんの方が収入が多いのに家族手当をいただいてる方もいらっしゃるときいて、それはどうなのかな？と思ってます。ほかの企業や公務員のように、奥さんの収入を確認して、家族手当を付与した方がいいのではないでしょうか。また、条件として世帯主とありますが、女性側がそれでは家族手当の対象にはならない方の方が多いと感じます。だいたいは、男性が世帯主になるので、それだったら、そもそも男性も奥さんの収入がしっかりあるかたは家族手当なしで、女性も世帯主じゃなくてもなにか家族手当の付与などをしてほしいです。</td></tr>
+<tr class="drow" data-field="諸手当" data-stance="当事者" data-other="0" data-text="勤務地が地元で独身の場合手当がないため、借り上げ社宅への入居可能もしくは家賃補助手当の検討（家賃上限額の設定もしくは家賃7負担、入社年数毎での手当額設定など）をしていただきたいです。 家賃・光熱費関係の手当が無く、食料品や日用品・交通費など生活費の高騰も相まって、毎月の収入が赤字、もしくは将来の貯蓄に充てられる金額が限られています。 残業をしない場合の毎月の手取りは182千円程なので貯蓄に充てられる金額は15,000円～20,000円となります。（家賃管理、光熱費：60000円、食費・日用品：35000円、医療（定期）、衣服、交際費など：40000円 仕送り：30000円）※不動産サイトやネット情報での平均） 実家への仕送りが必要である為、家庭状況や生活状況を鑑みて、対応を検討いただければ幸いです。"><td style="padding-left:20px"><span class="tag tag-field">諸手当</span></td><td>二重生活補助支給規定の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">勤務地が地元で独身の場合手当がないため、借り上げ社宅への入居可能もしくは家賃補助手当の検討（家賃上限額の設定もしくは家賃7負担、入社年数毎での手当額設定など）をしていただきたいです。<br>家賃・光熱費関係の手当が無く、食料品や日用品・交通費など生活費の高騰も相まって、毎月の収入が赤字、もしくは将来の貯蓄に充てられる金額が限られています。<br>残業をしない場合の毎月の手取りは182千円程なので貯蓄に充てられる金額は15,000円～20,000円となります。（家賃管理、光熱費：60000円、食費・日用品：35000円、医療（定期）、衣服、交際費など：40000円<br>仕送り：30000円）※不動産サイトやネット情報での平均）<br>実家への仕送りが必要である為、家庭状況や生活状況を鑑みて、対応を検討いただければ幸いです。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="0" data-text="社宅について、建物や設備が古く、現在の生活環境として十分とは言い難い状況だと感じています。 一方で、社宅に入居しない場合は住宅手当等の補助がなく、社宅の環境を考えると、自分で住居を選びたい職員にとって負担が大きくなっています。 社宅の改修・環境改善を進めるとともに、社宅に入居しない職員に対しても、住宅手当など一定の補助を受けられる制度を検討してほしいです。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">社宅について、建物や設備が古く、現在の生活環境として十分とは言い難い状況だと感じています。<br><br>一方で、社宅に入居しない場合は住宅手当等の補助がなく、社宅の環境を考えると、自分で住居を選びたい職員にとって負担が大きくなっています。<br><br>社宅の改修・環境改善を進めるとともに、社宅に入居しない職員に対しても、住宅手当など一定の補助を受けられる制度を検討してほしいです。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="0" data-text="地元制度の撤廃。全員への社宅既定の適用。全員借上げ社宅、独身寮への移行。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">地元制度の撤廃。全員への社宅既定の適用。全員借上げ社宅、独身寮への移行。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="0" data-text="給料が増やせないなら家賃の手当てを増やしたほうがいい。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">給料が増やせないなら家賃の手当てを増やしたほうがいい。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="1" data-text="日数を増やしてほしい 介護は長期にわたることがあるものなので、状況に応じて日数を延長できれば良いかと思う また、通院や付き添い等介護理由で休みを取る場合でも、有休や振休で対応している方が多いと思うので、もっと取得しやすい制度であればと思う。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>介護休業制度の拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>日数を増やしてほしい<br><span style="color:var(--slate);font-weight:700">【根拠】</span>介護は長期にわたることがあるものなので、状況に応じて日数を延長できれば良いかと思う<br>また、通院や付き添い等介護理由で休みを取る場合でも、有休や振休で対応している方が多いと思うので、もっと取得しやすい制度であればと思う。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="1" data-text="取得しやすい仕組みを構築して欲しい。会社からの取得率向上の発信。取得率が悪いグループは管理職から指導。 部署によって取得しやすさが大きく異なる。年度初めに希望する日を予めリストアップして旅行等の予定をたてれるように配慮できれば、取得しやすくなる。ワークライフバランスをさらに推進していく。十分な休息やプライベートの充実が、病気を防ぎ人生の満足度を高めるうえ、有給取得日数を公言することで柔軟な働き方ができる会社をＰＲでき採用活動もプラスに転じる。例：会社として有給付与日数の７０％以上取得目標とする。２０日付与の場合、14日以上取得。１５日付与の場合１１日以上取得。 取得率が100％を超える企業もあり、今年度に付与された日数だけでなく、前年度からの繰り越し分も含めて消化している。公務員（国家・地方）：約85?90％ 大手電力・ガス・通信：約85％ 超大手化学・素材メーカー：約80％ 大手鉄道・自動車メーカー：約75?80％"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>有給休暇の取得促進策<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>取得しやすい仕組みを構築して欲しい。会社からの取得率向上の発信。取得率が悪いグループは管理職から指導。<br><span style="color:var(--slate);font-weight:700">【根拠】</span>部署によって取得しやすさが大きく異なる。年度初めに希望する日を予めリストアップして旅行等の予定をたてれるように配慮できれば、取得しやすくなる。ワークライフバランスをさらに推進していく。十分な休息やプライベートの充実が、病気を防ぎ人生の満足度を高めるうえ、有給取得日数を公言することで柔軟な働き方ができる会社をＰＲでき採用活動もプラスに転じる。例：会社として有給付与日数の７０％以上取得目標とする。２０日付与の場合、14日以上取得。１５日付与の場合１１日以上取得。　取得率が100％を超える企業もあり、今年度に付与された日数だけでなく、前年度からの繰り越し分も含めて消化している。公務員（国家・地方）：約85?90％　大手電力・ガス・通信：約85％　超大手化学・素材メーカー：約80％　大手鉄道・自動車メーカー：約75?80％</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="0" data-text="将来的に高齢者が増える中で、社内の従業員に関しても対象者が増える可能性が大きくある。働きやすさを拡充する為にも、金額・日数を増やしてほしい。取得率も非常に少ない制度の為、より使いやすくする必要性があると感じる。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>介護休業制度の拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">将来的に高齢者が増える中で、社内の従業員に関しても対象者が増える可能性が大きくある。働きやすさを拡充する為にも、金額・日数を増やしてほしい。取得率も非常に少ない制度の為、より使いやすくする必要性があると感じる。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="0" data-text="お盆・年末年始の休暇を拡大してもいいのではないかと思います。 メールで関係会社の休み予定とか送られてきていると思いますが、けっこう休みのところが多いイメージです。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>リフレッシュ休暇の新設・拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">お盆・年末年始の休暇を拡大してもいいのではないかと思います。<br>メールで関係会社の休み予定とか送られてきていると思いますが、けっこう休みのところが多いイメージです。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="1" data-text="部署間によって取得難易度に差があるように感じる 部署間によって取得難易度に差があるように感じる。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>有給休暇の取得促進策<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>部署間によって取得難易度に差があるように感じる<br><span style="color:var(--slate);font-weight:700">【根拠】</span>部署間によって取得難易度に差があるように感じる。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="0" data-text="計画付与により年に4日ほど減るため、一般的な会社と比べて有給日数が少ないと感じるため。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>有給休暇の取得促進策</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">計画付与により年に4日ほど減るため、一般的な会社と比べて有給日数が少ないと感じるため。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="1" data-text="建物老朽設備の更新 衛生的に不十分であると感じる"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>建物老朽設備の更新<br><span style="color:var(--slate);font-weight:700">【根拠】</span>衛生的に不十分であると感じる</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="0" data-text="「新しく制度を設けて欲しい」→他社でも設けている会社が多く、交代でも良いので長期の休暇が欲しい。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>リフレッシュ休暇の新設・拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">「新しく制度を設けて欲しい」→他社でも設けている会社が多く、交代でも良いので長期の休暇が欲しい。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="1" data-text="交代勤務者の休暇を、勤務交代ではなく時間外支給による代務にして欲しい。 交代勤務者が甲番の休暇を希望する場合、他者との勤務交代(別日の甲番と交代)を基本とするため、休暇取得とならない。交代ではなく代務者に時間外支給すれば、休暇が取得できる。坂出LNGではこれを採用しているとのこと。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>有給休暇の取得促進策<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>交代勤務者の休暇を、勤務交代ではなく時間外支給による代務にして欲しい。<br><span style="color:var(--slate);font-weight:700">【根拠】</span>交代勤務者が甲番の休暇を希望する場合、他者との勤務交代(別日の甲番と交代)を基本とするため、休暇取得とならない。交代ではなく代務者に時間外支給すれば、休暇が取得できる。坂出LNGではこれを採用しているとのこと。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="1" data-text="希望者が取得できる環境を望みます。今は無理してあきらめている人が多いのではないでしょうか。 昨今の社会認識はもちろんのこと、異動がある会社である以上、育休等が自由に取得できる環境は必須です。地元を離れている人も多く、頼る人が近くにいない人もいます。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>育児休暇・時短勤務制度の拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>希望者が取得できる環境を望みます。今は無理してあきらめている人が多いのではないでしょうか。<br><span style="color:var(--slate);font-weight:700">【根拠】</span>昨今の社会認識はもちろんのこと、異動がある会社である以上、育休等が自由に取得できる環境は必須です。地元を離れている人も多く、頼る人が近くにいない人もいます。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="0" data-text="保安上の最少人数の関係で、有給取得がしにくい。交代勤務者以外が代務することで、取得することも可能ではあるが、代務者の有給取得率が低いため環境的に取りにくい。そこを補える制度があると嬉しい。また、業務量で有給取得できずに、保存有休休暇があふれた場合、買取する制度もあると有給取得がしにくくても、まだ納得できる。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>有給休暇の取得促進策</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">保安上の最少人数の関係で、有給取得がしにくい。交代勤務者以外が代務することで、取得することも可能ではあるが、代務者の有給取得率が低いため環境的に取りにくい。そこを補える制度があると嬉しい。また、業務量で有給取得できずに、保存有休休暇があふれた場合、買取する制度もあると有給取得がしにくくても、まだ納得できる。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="1" data-text="借り上げ社宅・寮の拡充。 ・独身寮が古い。共用部が多い。時代に合っていない。若手が辞める・入社しない要因の一つになっていると感じる。 ・社宅を無理やり埋める必要性について。転勤で社宅に空きがでて、借上げ社宅入居者を移動させるのはどうなのか。子供の転校が発生する、借上げ社宅入居後数カ月で社宅へ移動など、社員やその家族へストレスがかかるような場合は移動を免除しても良いのでは。 ・借上げ社宅入居時は、候補を2.３個挙げた中から選べるルール作りをして欲しい。いきなり1つに決められるのは家族の通勤・通学に支障がでる。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>借り上げ社宅・寮の拡充。<br><span style="color:var(--slate);font-weight:700">【根拠】</span>・独身寮が古い。共用部が多い。時代に合っていない。若手が辞める・入社しない要因の一つになっていると感じる。<br>・社宅を無理やり埋める必要性について。転勤で社宅に空きがでて、借上げ社宅入居者を移動させるのはどうなのか。子供の転校が発生する、借上げ社宅入居後数カ月で社宅へ移動など、社員やその家族へストレスがかかるような場合は移動を免除しても良いのでは。<br>・借上げ社宅入居時は、候補を2.３個挙げた中から選べるルール作りをして欲しい。いきなり1つに決められるのは家族の通勤・通学に支障がでる。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="0" data-text="金額：手当を除いた全額 根拠：育休期間でも税の支払いは必要で負担も大きいため また、育児休暇制度の充実もお願いしたい。 今治工場でOP一名が育休を取得しただけで、松山工場まで影響が及んできている。とても制度が充実しているとは思えない。今治工場のOPが1時間残業する、今治支店のメンバーが補助、本店からの援助など対応できることは他にあったはずである。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>育児休暇・時短勤務制度の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">金額：手当を除いた全額<br>根拠：育休期間でも税の支払いは必要で負担も大きいため<br><br>また、育児休暇制度の充実もお願いしたい。<br>今治工場でOP一名が育休を取得しただけで、松山工場まで影響が及んできている。とても制度が充実しているとは思えない。今治工場のOPが1時間残業する、今治支店のメンバーが補助、本店からの援助など対応できることは他にあったはずである。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="1" data-text="時短（年間総労働時間の削減）"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>特になし/該当なし<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>時短（年間総労働時間の削減）</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="0" data-text="若い世代の生活が少しでも楽になれば。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">若い世代の生活が少しでも楽になれば。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="1" data-text="やみくもに増やすというよりは、生まれてきての２か月くらいは、会社のグループでその人の仕事を分担するよう配慮する。 仕事の引継ぎを終わらせることが可能ならとってもいいという感じだと、休暇取得するハードルが高いと感じた。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>育児休暇・時短勤務制度の拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>やみくもに増やすというよりは、生まれてきての２か月くらいは、会社のグループでその人の仕事を分担するよう配慮する。<br><span style="color:var(--slate);font-weight:700">【根拠】</span>仕事の引継ぎを終わらせることが可能ならとってもいいという感じだと、休暇取得するハードルが高いと感じた。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="0" data-text="独身寮への光回線の引き込みを許可していただきたい。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">独身寮への光回線の引き込みを許可していただきたい。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="1" data-text="営業の観点からも自社の社宅として維持するのではなく、借り上げ社宅でいいのではないでしょうか。 営業の観点からも自社の社宅として維持するのではなく、借り上げ社宅でいいのではないでしょうか。 社宅が空くたびに誰が入居するかが問題となっています。 すでに借り上げで生活している社員にも声がかかり、入居を断れば社宅補助が出ない制度は問題があるように感じます。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>営業の観点からも自社の社宅として維持するのではなく、借り上げ社宅でいいのではないでしょうか。<br><span style="color:var(--slate);font-weight:700">【根拠】</span>営業の観点からも自社の社宅として維持するのではなく、借り上げ社宅でいいのではないでしょうか。<br>社宅が空くたびに誰が入居するかが問題となっています。<br>すでに借り上げで生活している社員にも声がかかり、入居を断れば社宅補助が出ない制度は問題があるように感じます。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="0" data-text="近年の物価・旅行費の上昇を踏まえ、表彰価格を改めて見直していただきたいです。旅費も踏まえた物価指数は5年間で約11.9％上昇しています。従来と同じ支給額では、実質的な福利厚生としての価値が低下しています。 また、対象範囲についても、早期離職者防止の勤続10年、早期退職者引き留めの35年、定年延長後の40年など、長期勤続の節目を新たな表彰対象とすることを検討していただきたいです。人材確保が重要となる中、採用だけでなく、現在いる従業員に長く働いてもらうことも重要です。長年会社に貢献した従業員に対して、節目ごとに会社として感謝や功績を「形」で示すことは、会社への信頼や帰属意識を高め、長期勤続・人材定着につながる一助になると考えます。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>永年勤続表彰の拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">近年の物価・旅行費の上昇を踏まえ、表彰価格を改めて見直していただきたいです。旅費も踏まえた物価指数は5年間で約11.9％上昇しています。従来と同じ支給額では、実質的な福利厚生としての価値が低下しています。<br>また、対象範囲についても、早期離職者防止の勤続10年、早期退職者引き留めの35年、定年延長後の40年など、長期勤続の節目を新たな表彰対象とすることを検討していただきたいです。人材確保が重要となる中、採用だけでなく、現在いる従業員に長く働いてもらうことも重要です。長年会社に貢献した従業員に対して、節目ごとに会社として感謝や功績を「形」で示すことは、会社への信頼や帰属意識を高め、長期勤続・人材定着につながる一助になると考えます。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="0" data-text="永年勤続の対象が20.30年といったところだけでなく、5年.10年といった枠を設けることにより、従業員の働く意欲および満足度の向上に繋がる。また、多少なりとも若手社員の離職への抑止力にも繋がるかと考えられる。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>永年勤続表彰の拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">永年勤続の対象が20.30年といったところだけでなく、5年.10年といった枠を設けることにより、従業員の働く意欲および満足度の向上に繋がる。また、多少なりとも若手社員の離職への抑止力にも繋がるかと考えられる。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="1" data-text="地元制度の考え方の変更 現在、地元ではない勤務地での勤務になるとかなり手厚い社宅・独身寮の家賃補助等があります。 ただ、地元である限り、手当はない状態です。 四国外勤務者は四国外を選択できるようになり、改善されていると思います。 しかしながら、他社を見ると地元制度というのはなく、住宅手当として補填されている企業が多く感じます。 持ち家・賃貸に関わらず手当を拡充いただきたいと考えます。手当額は月30,000-円/人等。 また、転勤となり3/1に発表され、4/1～新店所（地元）で働く際の新店所での住居の決定は会社側にも協力いただきたいです。自分の住みたいところに住めるとも取れますが、引継ぎ・引っ越し準備等かなりバタバタとしているため、なかなか納得のいく住居に住むことができないことも考えられます。 社宅や独身寮であれば会社が基本的に動いてくれますが、地元での居住地を探すのはなかなか苦労しました。 こちらも簡単なことではないですがご検討いただきたいです。 長くなり申し訳ございませんが、よろしくお願いいたします。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>地元制度の考え方の変更<br><span style="color:var(--slate);font-weight:700">【根拠】</span>現在、地元ではない勤務地での勤務になるとかなり手厚い社宅・独身寮の家賃補助等があります。<br>ただ、地元である限り、手当はない状態です。<br>四国外勤務者は四国外を選択できるようになり、改善されていると思います。<br>しかしながら、他社を見ると地元制度というのはなく、住宅手当として補填されている企業が多く感じます。<br>持ち家・賃貸に関わらず手当を拡充いただきたいと考えます。手当額は月30,000-円/人等。<br>また、転勤となり3/1に発表され、4/1～新店所（地元）で働く際の新店所での住居の決定は会社側にも協力いただきたいです。自分の住みたいところに住めるとも取れますが、引継ぎ・引っ越し準備等かなりバタバタとしているため、なかなか納得のいく住居に住むことができないことも考えられます。<br>社宅や独身寮であれば会社が基本的に動いてくれますが、地元での居住地を探すのはなかなか苦労しました。<br>こちらも簡単なことではないですがご検討いただきたいです。<br>長くなり申し訳ございませんが、よろしくお願いいたします。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="1" data-text="育児休暇をとりやすく、又フォローする周りの人も負担がかからないように、派遣社員の手配や周りの社員への評価など制度として用意して欲しい。 現状は、育児休暇をとることを推進すると建前では言っているが、実際は同じ部署の人の負担が増大したりと、育児休暇をとった後のことを会社側が体制整備できていない現状がある。 育児休暇をとる人も、周りの人に迷惑がかかるのであれば取得しづらい。周りの人も、代替の要因補充や評価への反映などの会社側からの配慮があれば、負担ばかりに目がいかず、取得に対して気持ちよく後押しできると思う。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>育児休暇・時短勤務制度の拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>育児休暇をとりやすく、又フォローする周りの人も負担がかからないように、派遣社員の手配や周りの社員への評価など制度として用意して欲しい。<br><span style="color:var(--slate);font-weight:700">【根拠】</span>現状は、育児休暇をとることを推進すると建前では言っているが、実際は同じ部署の人の負担が増大したりと、育児休暇をとった後のことを会社側が体制整備できていない現状がある。<br>育児休暇をとる人も、周りの人に迷惑がかかるのであれば取得しづらい。周りの人も、代替の要因補充や評価への反映などの会社側からの配慮があれば、負担ばかりに目がいかず、取得に対して気持ちよく後押しできると思う。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="0" data-text="今の時代に20年30年勤続している社員がいるのは素晴らしい会社だと思いますが、最近は若いかたの離職も増えており、まず３年５年と頑張って頂きたいと思うので、５年１０年等節目に表彰と少しのお金を出してほしい。例えば消防団でも５年ごとの表彰があり、１５年たつと家族の協力があって続けられているというのもあり家族表彰もあります。長く勤続される方に感謝とインセンティブは欲しいです。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>永年勤続表彰の拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">今の時代に20年30年勤続している社員がいるのは素晴らしい会社だと思いますが、最近は若いかたの離職も増えており、まず３年５年と頑張って頂きたいと思うので、５年１０年等節目に表彰と少しのお金を出してほしい。例えば消防団でも５年ごとの表彰があり、１５年たつと家族の協力があって続けられているというのもあり家族表彰もあります。長く勤続される方に感謝とインセンティブは欲しいです。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="0" data-text="仕事とプライベートのメリハリをつけ、心身ともにリフレッシュする時間は、長く働き続けるうえでも重要だと感じています。まとまった休暇を取得できる機会を設けることで、リフレッシュによる仕事への意欲やパフォーマンスの向上にもつながると考えます。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>リフレッシュ休暇の新設・拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">仕事とプライベートのメリハリをつけ、心身ともにリフレッシュする時間は、長く働き続けるうえでも重要だと感じています。まとまった休暇を取得できる機会を設けることで、リフレッシュによる仕事への意欲やパフォーマンスの向上にもつながると考えます。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="1" data-text="故障している設備や経年劣化している部分・外観を整備してほしい 故障している設備や経年劣化している部分・外観がある"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>故障している設備や経年劣化している部分・外観を整備してほしい<br><span style="color:var(--slate);font-weight:700">【根拠】</span>故障している設備や経年劣化している部分・外観がある</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="1" data-text="時間単位有給など、制度が分かりづらく使いづらいかもです。 時間単位有給を使った際の使用有給数などの表記も分かりづらかったり、コアタイム内外など、適用できる場面が分かりづらいです。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>有給休暇の取得促進策<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>時間単位有給など、制度が分かりづらく使いづらいかもです。<br><span style="color:var(--slate);font-weight:700">【根拠】</span>時間単位有給を使った際の使用有給数などの表記も分かりづらかったり、コアタイム内外など、適用できる場面が分かりづらいです。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="0" data-text="地元でも社宅や独身寮利用も可能へ。 また、地元ではない場所での仕事でもあり、金銭面だけでも対応してもらえると不安が少しでも解消できるのでないかと思う。 さらに、社宅や独身寮での横のつながりというものは今後の会社生活に大きくと思う。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">地元でも社宅や独身寮利用も可能へ。<br>また、地元ではない場所での仕事でもあり、金銭面だけでも対応してもらえると不安が少しでも解消できるのでないかと思う。<br>さらに、社宅や独身寮での横のつながりというものは今後の会社生活に大きくと思う。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="1" data-text="旅行クーポンではなく、普通の商品券にしてほしい 旅行クーポンでは使用できる場所が旅行会社だけに限定されるため。 JCBなどの商品券に変更していただきたい。 若しくは、図書券や商品券、旅行クーポンなどから選べるようにしていただきたい。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>永年勤続表彰の拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>旅行クーポンではなく、普通の商品券にしてほしい<br><span style="color:var(--slate);font-weight:700">【根拠】</span>旅行クーポンでは使用できる場所が旅行会社だけに限定されるため。<br>JCBなどの商品券に変更していただきたい。<br>若しくは、図書券や商品券、旅行クーポンなどから選べるようにしていただきたい。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="0" data-text="旅行券？クーポン？が勤続年数に応じてもらえているが、物価高に伴い従来のような選択肢はなくなっていると思う。せめて1.2倍～1.5倍程度に増額しても良いのではないだろうか。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>永年勤続表彰の拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">旅行券？クーポン？が勤続年数に応じてもらえているが、物価高に伴い従来のような選択肢はなくなっていると思う。せめて1.2倍～1.5倍程度に増額しても良いのではないだろうか。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="当事者" data-other="1" data-text="周りに引きずられて取りやすさが部署ごとに違う気がする。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>有給休暇の取得促進策<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>周りに引きずられて取りやすさが部署ごとに違う気がする。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="1" data-text="社所有の社宅は不要と考えます。借り上げ社宅を基本とし、社員が希望する地域や住居を自由に選択できる制度にしてほしい。 社員が希望する地域や住居を自由に選択できない現在の社宅制度は、働き方やライフスタイルが多様化する今の時代に合っていない。 あと、社所有の社宅に空きが出た場合、現在入居している借り上げ社宅から引越しを求められるなど、社員の負担を十分に考慮していない従来の慣例については、見直し・廃止を検討してほしい。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>社所有の社宅は不要と考えます。借り上げ社宅を基本とし、社員が希望する地域や住居を自由に選択できる制度にしてほしい。<br><span style="color:var(--slate);font-weight:700">【根拠】</span>社員が希望する地域や住居を自由に選択できない現在の社宅制度は、働き方やライフスタイルが多様化する今の時代に合っていない。<br>あと、社所有の社宅に空きが出た場合、現在入居している借り上げ社宅から引越しを求められるなど、社員の負担を十分に考慮していない従来の慣例については、見直し・廃止を検討してほしい。</td></tr>
+<tr class="drow" data-field="休暇・福利厚生" data-stance="非当事者" data-other="0" data-text="独身寮については築年数の問題や衛生面での話を伺うことがあるので、今後の災害対策や・新入社員の減少傾向を鑑みて入居する人数が限られてくるのではと考えます。従来のやり方にとらわれず、直近の人員の動き（人事異動の視点も含む）を見て柔軟な対応が選択できる状態を整えるために、独身寮の廃止も検討できると思います。"><td style="padding-left:20px"><span class="tag tag-field">休暇・福利厚生</span></td><td>社宅・独身寮の整備</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">独身寮については築年数の問題や衛生面での話を伺うことがあるので、今後の災害対策や・新入社員の減少傾向を鑑みて入居する人数が限られてくるのではと考えます。従来のやり方にとらわれず、直近の人員の動き（人事異動の視点も含む）を見て柔軟な対応が選択できる状態を整えるために、独身寮の廃止も検討できると思います。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="1" data-text="簡易社食の設置、食堂の整備 宿直等でも出前を取ったりはしているが、現在は健康に配慮したメニューを設置型（冷凍）で事務所食堂内におけるサービスもある。また、昼食代の非課税限度枠も改正されたので対応したサービス（コンビニで使えるカード式）も増えてきているので導入してほしい。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>食生活・栄養面の支援<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>簡易社食の設置、食堂の整備<br><span style="color:var(--slate);font-weight:700">【根拠】</span>宿直等でも出前を取ったりはしているが、現在は健康に配慮したメニューを設置型（冷凍）で事務所食堂内におけるサービスもある。また、昼食代の非課税限度枠も改正されたので対応したサービス（コンビニで使えるカード式）も増えてきているので導入してほしい。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="非当事者" data-other="0" data-text="野球とバドミントンに関しては補助が手厚いと思う。部活動までとは言わないが、他のスポーツに置いても正式に同好会を設立して、一定の補助を受けられるようにすればもっと社員間のコミュニケーションも測れるようになるのではないか。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>運動促進策</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">野球とバドミントンに関しては補助が手厚いと思う。部活動までとは言わないが、他のスポーツに置いても正式に同好会を設立して、一定の補助を受けられるようにすればもっと社員間のコミュニケーションも測れるようになるのではないか。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="非当事者" data-other="0" data-text="スポーツ施設法人契約"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>運動促進策</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">スポーツ施設法人契約</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="1" data-text="金額を増やしてほしい 健康診断のオプション費用について、全額補助をしてほしい"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>金額を増やしてほしい<br><span style="color:var(--slate);font-weight:700">【根拠】</span>健康診断のオプション費用について、全額補助をしてほしい</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="現状注文をしているお弁当配達を利用したいが、量が少なく働き盛りの男性では物足りない。栄養面もボリュームもあるお弁当を注文できるようにして欲しい。費用は高くなっても良い。６００～８００円程度でも可。外食やお弁当屋でもその程度の金額がかかるため。現金で毎朝集金は現実的に手持ちもなく難しい。キャッシュレスのＰａｙＰａｙや給料天引きでもしてもらえると助かります。転換弁当に比べると、かなり見劣りしているのが現状です。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>食生活・栄養面の支援</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">現状注文をしているお弁当配達を利用したいが、量が少なく働き盛りの男性では物足りない。栄養面もボリュームもあるお弁当を注文できるようにして欲しい。費用は高くなっても良い。６００～８００円程度でも可。外食やお弁当屋でもその程度の金額がかかるため。現金で毎朝集金は現実的に手持ちもなく難しい。キャッシュレスのＰａｙＰａｙや給料天引きでもしてもらえると助かります。転換弁当に比べると、かなり見劣りしているのが現状です。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="毎年でなくても、3年に一度等で人間ドックの費用負担を求めます。対象年齢があっても構いません。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">毎年でなくても、3年に一度等で人間ドックの費用負担を求めます。対象年齢があっても構いません。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="胃カメラの金額補助をしてほしい。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">胃カメラの金額補助をしてほしい。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="非当事者" data-other="0" data-text="「新しく制度を設けて欲しい」→人間ドック等の精密検査について、全額でなくても良いので補助金を出すようにして欲しい。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">「新しく制度を設けて欲しい」→人間ドック等の精密検査について、全額でなくても良いので補助金を出すようにして欲しい。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="高ストレス社会の為、胃カメラなどの補助も出ると助かります。社員の健康、安心は仕事のパフォーマンスへ直結します。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">高ストレス社会の為、胃カメラなどの補助も出ると助かります。社員の健康、安心は仕事のパフォーマンスへ直結します。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="人間ドックの基本金額全額補助（約11,000円程度）、胃カメラの全額補助（約5,000円程度）を要望します。今後、従業員の大幅な増加が見込めない中、従業員の健康確認は必須です。休むことになると何倍もの経費が会社には負担となります。早期発見及び予防治療が現代医学の基本です。 また、パートナーの健康診断受診費用補助を検討ください。あえてパートナーという括りにしておりますが、従業員の家族が健康でなくなった場合は、従業員の業務に必ず支障を及ぼします。まずは、健康であること（家族）が業務遂行の基本と考えます。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">人間ドックの基本金額全額補助（約11,000円程度）、胃カメラの全額補助（約5,000円程度）を要望します。今後、従業員の大幅な増加が見込めない中、従業員の健康確認は必須です。休むことになると何倍もの経費が会社には負担となります。早期発見及び予防治療が現代医学の基本です。<br>また、パートナーの健康診断受診費用補助を検討ください。あえてパートナーという括りにしておりますが、従業員の家族が健康でなくなった場合は、従業員の業務に必ず支障を及ぼします。まずは、健康であること（家族）が業務遂行の基本と考えます。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="社食があれば一番良いが、事業所規模によっては難しいので、簡易なものがあればよい。（置くだけの社食など）"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>食生活・栄養面の支援</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">社食があれば一番良いが、事業所規模によっては難しいので、簡易なものがあればよい。（置くだけの社食など）</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="余裕があればオプション健診を受診したい者も多いのでは。（ガン検診等）"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">余裕があればオプション健診を受診したい者も多いのでは。（ガン検診等）</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="非当事者" data-other="0" data-text="体の健康を維持することに注力することは、社員のパフォーマンスを上げることに直結するため、会社として応援してほしい。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>運動促進策</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">体の健康を維持することに注力することは、社員のパフォーマンスを上げることに直結するため、会社として応援してほしい。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="より精密な人間ドックの費用負担や配偶者への拡充を行ってほしい。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">より精密な人間ドックの費用負担や配偶者への拡充を行ってほしい。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="胃カメラを選択した場合も費用負担して欲しい。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">胃カメラを選択した場合も費用負担して欲しい。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="－" data-other="1" data-text="お任せします。 お任せします。特に無し。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>特になし/該当なし<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-other">－</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>お任せします。<br><span style="color:var(--slate);font-weight:700">【根拠】</span>お任せします。特に無し。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="健康診断で要検査となった場合でも、追加での検査は費用負担がなく、専用の休暇が渡されていると思います。 しじかし過去から、要検査になっても受診することなく、そのまま放っておく方がかなり多いと感じます。 働くうえでのからだ・こころの健康を大事にする考えであれば、二次検査以降の費用負担も検討いただけると幸いです。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">健康診断で要検査となった場合でも、追加での検査は費用負担がなく、専用の休暇が渡されていると思います。<br>しじかし過去から、要検査になっても受診することなく、そのまま放っておく方がかなり多いと感じます。<br>働くうえでのからだ・こころの健康を大事にする考えであれば、二次検査以降の費用負担も検討いただけると幸いです。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="スポーツ施設の企業会員など、補助による社員の健康増進をサポート。スポーツ施設は、ガス需要家との提携にすれば、営業的にも利になる。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>運動促進策</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">スポーツ施設の企業会員など、補助による社員の健康増進をサポート。スポーツ施設は、ガス需要家との提携にすれば、営業的にも利になる。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="独身者や単身赴任者は外食が多く栄養が偏りがちである。会社で用意してほしいとは言わないが、せめて２割とか３割引きで弁当が買える店や提携店を使える制度があればうれしい。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>食生活・栄養面の支援</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">独身者や単身赴任者は外食が多く栄養が偏りがちである。会社で用意してほしいとは言わないが、せめて２割とか３割引きで弁当が買える店や提携店を使える制度があればうれしい。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="胃カメラ検査について、松山では麻酔（睡眠導入？）を使用した検査に対応しているようですが、他エリアでは同様の対応が難しいケースもあると聞いています。受診するエリアによって選択肢に差が生じないよう、麻酔（睡眠導入？）を使用した胃カメラ検査についても、各エリアで受診できる環境の拡充を検討していただきたいです。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">胃カメラ検査について、松山では麻酔（睡眠導入？）を使用した検査に対応しているようですが、他エリアでは同様の対応が難しいケースもあると聞いています。受診するエリアによって選択肢に差が生じないよう、麻酔（睡眠導入？）を使用した胃カメラ検査についても、各エリアで受診できる環境の拡充を検討していただきたいです。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="非当事者" data-other="0" data-text="オプション縁覚負担とまでいかなくても、一部負担することで受ける方が増える可能性があり、病気早期発見につながり、長期離脱など未然に防ぐことができる。大切な人材の確保、一緒に働く者の負担軽減につながる。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">オプション縁覚負担とまでいかなくても、一部負担することで受ける方が増える可能性があり、病気早期発見につながり、長期離脱など未然に防ぐことができる。大切な人材の確保、一緒に働く者の負担軽減につながる。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="自分自身で健康診断にオプションを付けて実施していない。 せっかくの毎年の機会なので費用補助があれば取り組んでいく人が増えて、なんかあった場合の早期発見になると思う。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">自分自身で健康診断にオプションを付けて実施していない。<br>せっかくの毎年の機会なので費用補助があれば取り組んでいく人が増えて、なんかあった場合の早期発見になると思う。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="人間ドックを、本人+1名（夫婦）まで利用できるようにしてほしい"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">人間ドックを、本人+1名（夫婦）まで利用できるようにしてほしい</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="1" data-text="再検査項目があった場合に費用を負担してほしい 社員の健康がまず第一なので再検査を受診される方が少しでも多くなることを目的とし、一部補助でも良いのかなと感じます。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>再検査項目があった場合に費用を負担してほしい<br><span style="color:var(--slate);font-weight:700">【根拠】</span>社員の健康がまず第一なので再検査を受診される方が少しでも多くなることを目的とし、一部補助でも良いのかなと感じます。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="非当事者" data-other="0" data-text="オプション検査費用も負担してもらえるとありがたい。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">オプション検査費用も負担してもらえるとありがたい。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="当事者" data-other="0" data-text="昨年度、35歳以上の健診に関しての費用補助制度ができたが、やはり最終は全支店全額補助を目標にしたい。 店所により費用負担が異なるが、どの店所でも基本項目が全額補助となれば十分に福利厚生と謳えると思う。 ただ、取組むなら次年度以降の方がよいかも。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充</td><td><span class="tag tag-self">当事者</span></td><td style="padding-right:20px">昨年度、35歳以上の健診に関しての費用補助制度ができたが、やはり最終は全支店全額補助を目標にしたい。<br>店所により費用負担が異なるが、どの店所でも基本項目が全額補助となれば十分に福利厚生と謳えると思う。<br>ただ、取組むなら次年度以降の方がよいかも。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="非当事者" data-other="1" data-text="配偶者の人間ドック、健康診断（がん検診等）を望む"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>人間ドック・健康診断の費用補助拡充<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>配偶者の人間ドック、健康診断（がん検診等）を望む</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="－" data-other="1" data-text="Q6_Aで特になし/該当なしを選択 本当に必要な施策の改善に注力し、形式的な取り組みや効果の薄い施策で「取り組んだつもり」にならないようにしてほしい。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>特になし/該当なし<br><span style='color:var(--slate);font-size:11px;font-weight:700'>（その他）</span></td><td><span class="tag tag-other">－</span></td><td style="padding-right:20px"><span style="color:var(--slate);font-weight:700">【その他の記述】</span>Q6_Aで特になし/該当なしを選択<br><span style="color:var(--slate);font-weight:700">【根拠】</span>本当に必要な施策の改善に注力し、形式的な取り組みや効果の薄い施策で「取り組んだつもり」にならないようにしてほしい。</td></tr>
+<tr class="drow" data-field="健康保持増進" data-stance="非当事者" data-other="0" data-text="簡易社食の導入については、期間を設けて試験的に実施を行い、効果を数値的に図ることができると考えます。昼食代については、コンビニ・外食だと毎日の昼食費が高くなりやすく、また、弁当を日々用意することは負担になるため、「職場で手軽に食事を確保できる」環境があると便利だからです。 （例：外食：1日800?1,000円・コンビニ：1日600?800円・簡易社食：1食300?500円 → 外食800円から社食400円にすることで400円 × 20日 = 8,000円/月 削減）また、従業員満足度の向上、定着にもつながると思います。"><td style="padding-left:20px"><span class="tag tag-field">健康保持増進</span></td><td>食生活・栄養面の支援</td><td><span class="tag tag-other">非当事者</span></td><td style="padding-right:20px">簡易社食の導入については、期間を設けて試験的に実施を行い、効果を数値的に図ることができると考えます。昼食代については、コンビニ・外食だと毎日の昼食費が高くなりやすく、また、弁当を日々用意することは負担になるため、「職場で手軽に食事を確保できる」環境があると便利だからです。<br> （例：外食：1日800?1,000円・コンビニ：1日600?800円・簡易社食：1食300?500円　→　外食800円から社食400円にすることで400円 × 20日 = 8,000円/月　削減）また、従業員満足度の向上、定着にもつながると思います。</td></tr></tbody></table><div id="noHit" style="display:none;padding:26px 20px;color:var(--ink-soft);font-size:13px;">条件に一致する記述はありません。</div></div>
+      <div class="warn">
+        <b>⚠ 個人が特定されないようご配慮ください。</b>記名式のため、記述内容から書き手が推測できる場合があります。
+        本資料では<b>氏名・所属グループ・属性（本部・年齢層）を併記していません</b>。
+        支部内で共有される際も、書き手の推測につながる扱いはお控えください。
+      </div>
+    </section>
+  </div>
+
+  <div class="panel-tab" id="b3" hidden>
+    <section class="block">
+      <h2>自支部の新規提案（Q7）</h2>
+      <p class="block-note">Q4〜Q6の選択肢になかった提案です。「なし」「特になし」の回答は除外しています。</p>
+      <div class="kpis">
+        <div class="kpi"><div class="k">提案あり</div><div class="v">22</div><div class="d">回答者58名の 37.9%</div></div>
+        <div class="kpi"><div class="k">早急に対応</div><div class="v">10</div><div class="d">提案 22 件中</div></div><div class="kpi"><div class="k">できれば対応</div><div class="v">6</div><div class="d">提案 22 件中</div></div><div class="kpi"><div class="k">時間をかけてでも検討</div><div class="v">6</div><div class="d">提案 22 件中</div></div>
+      </div>
+      <div class="note">
+        <b>件数ではなく記述内容をご確認ください。</b>支部単位では件数が少なく、割合を出しても意味を持ちません。
+        Q4〜Q6の上位項目と同じ論点が書かれている場合は、支部としての要望を補強する材料になります。
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>提案一覧</h2>
+      <p class="block-note">分野の分類は調査企画部で行う想定です（現時点では未分類）。</p>
+      <div class="card" style="padding:18px 0 4px;"><table class="txt"><thead><tr><th style="width:84px;padding-left:20px">必要度</th><th style="width:70px">該当</th><th style="width:">要望内容（Q7_A）</th><th style="width:">根拠（Q7_E）</th></tr></thead><tbody><tr><td style="padding-left:20px"><span class="tag tag-self">早急</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">カフェテリアプランの導入</td><td style="padding-right:20px">福利厚生の充実策として、カフェテリアプランの導入を提言します。<br><br>組合の中でも福利厚生についての意見は度々ありますが、全て子育て世代向け(家族手当や二重生活手当)の議論が多いという印象を抱いています。(若手社員があまり意見をしないという実情もあるかとは思いますが)<br>若手社員にとってもいずれ必要になるものですが、現状必要の無い若手社員が多いかと思われます。<br><br>職員それぞれで必要とする福利厚生は異なるため、一律の福利厚生だけでなく、住宅費や自己啓発、健康増進、余暇など、個人のライフスタイルに合わせて利用できる制度があるとよいと考えます。<br><br>具体的には従業員毎にポイントを支給し、ポイントの範囲内で福利厚生を選択するといったイメージをしています。<br><br>職員が自分に必要な福利厚生を選択できるカフェテリアプランを導入することで、福利厚生の満足度向上や、職員の確保・若手社員の定着に寄与すると考えます。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-self">早急</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">実際の転勤した人に向けて、距離別に転勤手当の支給してほしい。（公務員の新設された転勤手当のような感じ）</td><td style="padding-right:20px">現状、総合１と２で給与差があるが、実際には総合１でもずっと転勤しない人と転勤する人に格差・不公平感があるため。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-other">できれば</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">定年退職の年齢引上げの動向について、情報を提供してほしい</td><td style="padding-right:20px">退職後のライフプランに関わることなので、変更等を検討しているのなら早めに知りたいから。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-self">早急</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">二重生活手当の拡充です。<br>中学生以上が対象という部分が非常に時代錯誤と感じる。</td><td style="padding-right:20px">平均相場と比べても著しく低く、お金を稼ぐために働いているのにも関わらず、支給対象外の社員が単身赴任をすることで収支がマイナス（50,000～70,000円程度）になること自体がおかしい。なんのために働いているのかわからない。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-other">できれば</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">自宅が都市ガスの場合や器具購入の補助がほしい</td><td style="padding-right:20px">都市ガスを進めるうえで、自宅は都市ガスにし、よりいい器具をつけて、自分で使って進めていくのがよいと思います。そういった場合に会社からの補助をしてほしい。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-self">早急</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">最近、特に若い職員の離職率が高くなったと感じています。四国ガスをもっと魅力的な職場にし、若い職員のみならず全職員が働きやすい環境を整えて欲しい。</td><td style="padding-right:20px">初任給と給料（昇給・ベースアップ）を増やす。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-other">時間をかけてでも検討</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">年末年始だけでなく、長期休暇となる場合の手当を付けて欲しい。</td><td style="padding-right:20px">年末年始手当は一般的な休暇期間に勤務する従業員の負担を考慮して設立されたものだと捉えています。<br>お盆やGW等の長期休暇もこれに該当するのではないかと考え、手当の対象範囲を広げる検討をして欲しい。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-self">早急</span></td><td style=""><span class="tag tag-other">－</span></td><td style="">【器具ポイント制度の廃止】<br>【役割業績評価の項目を1つに】</td><td style="padding-right:20px">【器具ポイント制度の廃止】<br>・部署により達成のしやすさに違いがり、生産Gではただの自爆営業となっている。<br>　需要家の商品を購入できるようになり達成しやすくなったという人もいるがそもそも自腹を切っているのはおかしな話である。<br><br>【役割業績評価の項目を1つに】<br>・3つも項目を達成するのは困難である。増設工事により自分の自由時間が奪われている中で項目が多すぎて負担になっている。評価についてもただの形式的な形になっているのでやる気にはつながらない。課長の面談も自分が頑張ったことがあれば教えてと受け身の面談で、こうすればいいというアドバイスも一切ない。相談しても自分が忙しくなることがあれば何もしてくれない。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-other">時間をかけてでも検討</span></td><td style=""><span class="tag tag-other">対象外</span></td><td style="">今後、導入されるであろう定年延長における早期退職者への退職金算定。</td><td style="padding-right:20px">定年まで仕事をすることでの10％UPであるが、現状規定の60歳到達地点でのカウントとする。現状では、60歳を超えての業務は考えていないため制度が改悪されれば受取額が低下するため。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-other">できれば</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">役職定年の見直し</td><td style="padding-right:20px">定年が伸びるのであれば、役職定年の時期も見直すべき</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-self">早急</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">賃上げ</td><td style="padding-right:20px">同業他社と比べても、賃上げ水準が低い。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-self">早急</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">総合１と総合２の給与改定</td><td style="padding-right:20px">上記でも記載のとおり会社は総合１と２の給与面で差をつけることのみを検討しているようですが、総合１を選択することで給与面だけではなく広く見て他でも総合2より劣ることがないような制度設計が必要だと感じます。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-self">早急</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">人事処遇制度について、大幅な改善を要望いたします。<br>直ちに制度改定が難しい場合であっても、まずは現状の課題や今後の方向性について、経営・人事Gと組合と本部間で協議を実施していただきたいです。<br><br>① コース間の給与格差の見直し<br>総合コースⅠ・Ⅱおよび一般コースについて、現在の役割や将来的なキャリアの可能性を踏まえ、給与水準の差を改めて検討していただきたいです。特に、総合コースⅠはマネージャー以上の役割を担う可能性がある一方、現在の給与体系では、その責任やキャリア上のメリットが十分に感じられず、総合コースⅠを選択するインセンティブが弱いのではないかと感じています。組合員へのアンケート等を実施し、実際の意識や制度選択への影響を確認していただくこともご検討いただければ幸いです。<br><br>② GMの処遇改善<br>GMは役割・責任が大きく増えるだけでなく、転勤や単身赴任等の負担を伴うケースも多い中、現在の給与水準がその役割・責任に見合っているのか改めて検証していただきたいです。管理職は自身の処遇について経営側に声を上げにくい立場でもあるため、会社として客観的に検証していただきたいと考えます。<br>将来的に優秀な人材を管理職へ登用し会社の発展につなげていくためにも、管理職になることが「責任だけが増える」制度にならないよう、役割に見合った処遇を検討していただきたいです。また、直接的なGMの処遇改善が難しいのであれば、課長代理等との業務量・責任・処遇のバランスが本当に適正なのか、次長を含めた管理職層全体の役割・ポスト・給与体系について、併せて検証していただきたいです。<br><br>③ 役割業績評価に応じた給与水準の見直し<br>役割業績評価3.3以上の従業員については、この7月から役割業績給が引き上げられましたが、3.5以上の高評価者については給与水準に変化がありません（４月のベアを除く）。高い成果を上げ、継続的に高い評価を得ている従業員と、それより評価の低い従業員との間で、処遇上の差が十分に反映されているのか疑問があります。<br>限られた人件費原資を配分するのであれば、高い成果を上げている従業員をより適切に評価することが、モチベーション向上や生産性向上につながるのではないかと考えます。そのため、評価3.5以上の従業員については給与水準の底上げを行う一方、評価2.5未満については処遇を見直すなど、成果・評価と処遇がより明確に連動する制度を検討していただきたいです。<br><br>④ 所属部署・職種の特性を踏まえた評価制度の構築<br>現在の評価制度について、所属部署や職種による業務特性の違いを、より適切に評価できる仕組みが必要だと考えます。営業本部と生産本部では、当然ながら業務内容や求められる能力が異なります。もちろん、それぞれの業務に対する相互のリスペクトは必要ですが、同一の基準だけで評価することが、本当に公平・適正な評価につながっているのかについては検証が必要です。特に営業部門では、社内での全部署との調整はもちろん、お客さまとの関係構築だけでなく、サブユーザー・デベロッパー・ショップ・本管・装置工事業者等、社外のさまざまな関係者との信頼関係を構築し、それを継続的な取引や新たな収益につなげることが求められます。<br>こうした「人と人との関係構築」や「営業活動によって生み出される将来的な収益・生産性」については、単純な数値だけでは評価しにくい一方、会社の成長に大きく寄与する重要な能力だと考えます。<br>部署間の業務内容や役割の違いを十分に把握した上で、それぞれの職種・部署で求められる能力や成果を適切に評価できる制度の構築を要望します。</td><td style="padding-right:20px">Q7_Aに記載の通り</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-other">できれば</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">住宅手当として、持ち家の人も含めて、全社員が貰える手当を新設。<br>（現在の社宅などの規定とは、別軸。少し改定する必要は出てくるとは思われる）</td><td style="padding-right:20px">他社・他業種と比べて見劣りする。地元登録以外のエリアでは、社宅規定があり補助も出るが、それは転勤面でのサポートとしての位置づけとし、そもそもの住宅手当として一律の手当があればありがたい。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-self">早急</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">出張の時の宿泊費の上限を上げてほしいのと、大都市へ出張（３割増し）の大都市の規定を見直してほしい</td><td style="padding-right:20px">四国内でも時期によつては宿泊費が上限を超えています。また四国外に行くと観光客が多いところは普段から宿泊費が高く規定ないで泊まれない場合もあり、四国内外かかわらず朝食をなしにして宿泊費を泊まれる範囲内にしているのが現状です。また、市町村の合併等により政令指定都市も追加になっていたり会社の大都市の規定が今の現状に合っていないと感じている。見直しをお願いします。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-other">時間をかけてでも検討</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">宿直について、出動があった場合、翌日の勤務に支障をきたす場面もあります。安全面でも宿直後の体制など、検討いただきたいです。※出動がなかった場合は翌日の勤務も問題ないので、難しいと思いますが...<br>回ってくる輪番を減らすなど、過去当社に在籍していた経験のある方をどのような形かは検討が必要ですが、宿直のアルバイトのような形で対応してもらうなど検討いただけないでしょうか。</td><td style="padding-right:20px">宿直について、出動があった場合、翌日の勤務に支障をきたす場面もあります。安全面でも宿直後の体制など、検討いただきたいです。※出動がなかった場合は翌日の勤務も問題ないので、難しいと思いますが...<br>回ってくる輪番を減らすなど、過去当社に在籍していた経験のある方をどのような形かは検討が必要ですが、宿直のアルバイトのような形で対応してもらうなど検討いただけないでしょうか。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-other">時間をかけてでも検討</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">出身地制度</td><td style="padding-right:20px">人材確保のネックになってるのではないかと思いますし、既存社員についても社会情勢に合わせた内容や制度に変更する必要がある</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-other">時間をかけてでも検討</span></td><td style=""><span class="tag tag-other">対象外</span></td><td style="">地元制度の撤廃</td><td style="padding-right:20px">地元で働いている人の負担が大きくなっているため。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-other">できれば</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">休憩場所の増設</td><td style="padding-right:20px">誰もが休憩したい時に休憩できる場所を提供してほしい</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-self">早急</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">女性職員の日直、宿直について改めて考えて欲しい。</td><td style="padding-right:20px">日直、宿直について各支店人数(輪番が早い等)について毎年議論されている。その話し合いの中で男性しか対象にされていない。同じ総合コースであれば平等に対象とするべきではないかと思う。大型連休も含め、日直、宿直を考えながら過ごしたり、日程調整をしたり大きな負担になっている人が限定されているのは少し平等性に欠けると感じるし、保安面の慣れ・意識についても、やる・やらないで差が出てくると思う。なかなか大変だとは思うがまずは日直だけでも全支店展開しても良いのではと思います。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-other">時間をかけてでも検討</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">資格ポイント制度の再検討</td><td style="padding-right:20px">何年か前の人事処遇制度改訂の際に話があった気がするので、また検討できるのであれば。</td></tr>
+<tr><td style="padding-left:20px"><span class="tag tag-other">できれば</span></td><td style=""><span class="tag tag-self">対象</span></td><td style="">新築戸建の開栓、使用説明について<br>現在、松山の営業担当が土日対応も含めて今治に出向き対応しています。ショップさんが対応してくれるケースもありますが、全てではありません。<br>所要時価が30分に満たないケースも多いので現地人材での対応を希望します。</td><td style="padding-right:20px">効率が悪いです。</td></tr></tbody></table></div>
+      <div class="note">
+        新規提案のうち<b>Q4〜Q6の選択肢に追加すべきもの</b>があれば、支部長会議でお伝えください。
+        複数の支部から同じ提案が出ている場合、翌年度の選択肢に反映します。
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>支部内での進め方（目安）</h2>
+      <p class="block-note">この資料をもとに支部内で議論し、支部としての意見・方向性を決めてください。</p>
+      <div class="steps-o">
+        <div class="step-o"><div class="n">1</div><div>
+          <div class="t">結果の共有</div>
+          <div class="d">タブ①で3分野の上位項目と当事者性を、タブ②③で自由記述・新規提案に目を通していただきます。</div></div></div>
+        <div class="step-o"><div class="n">2</div><div>
+          <div class="t">支部として重視する項目の絞り込み</div>
+          <div class="d">選択率だけでなく当事者性・記述内容も踏まえ、支部として推す項目を検討します。</div></div></div>
+        <div class="step-o"><div class="n">3</div><div>
+          <div class="t">意見・方向性のとりまとめ</div>
+          <div class="d">支部としての要望を、根拠とあわせて整理します。支部長会議にはこの内容をお持ちください。</div></div></div>
+      </div>
+      <div class="note">
+        <b>他支部・全社の集計値は本資料に含めていません。</b>他支部の傾向に引っ張られることなく、
+        まず支部内の実態にもとづいて方向性を決めていただくためです。
+        全社データおよび属性別クロス集計の結果は支部長会議の場で共有します。
+      </div>
+    </section>
+  </div>
+
+<script>
+(function(){
+  var rows = Array.prototype.slice.call(document.querySelectorAll('#dbody .drow'));
+  var fField = document.getElementById('fField'),
+      fStance = document.getElementById('fStance'),
+      fOther = document.getElementById('fOther'),
+      fText = document.getElementById('fText'),
+      fCount = document.getElementById('fCount'),
+      noHit = document.getElementById('noHit');
+  function apply(){
+    var v1 = fField.value, v2 = fStance.value, v3 = fOther.value,
+        q = (fText.value || '').trim().toLowerCase();
+    var shown = 0;
+    rows.forEach(function(tr){
+      var ok = (!v1 || tr.dataset.field === v1)
+            && (!v2 || tr.dataset.stance === v2)
+            && (!v3 || tr.dataset.other === v3)
+            && (!q  || (tr.dataset.text || '').toLowerCase().indexOf(q) >= 0);
+      tr.style.display = ok ? '' : 'none';
+      if (ok) shown++;
+    });
+    fCount.textContent = '表示中 ' + shown + ' / ' + rows.length + ' 件';
+    noHit.style.display = shown ? 'none' : 'block';
+  }
+  [fField, fStance, fOther].forEach(function(el){ el.addEventListener('change', apply); });
+  fText.addEventListener('input', apply);
+  document.getElementById('fReset').addEventListener('click', function(){
+    fField.value = ''; fStance.value = ''; fOther.value = ''; fText.value = ''; apply();
+  });
+  apply();
+})();
+</script>
+
+  <footer>四国ガス労働組合　調査企画部／秋の取組内容アンケート　支部用ダッシュボード（松山支部・中間集計）</footer>
+</div>
+
+<script>
+  function showTab(id, btn){
+    document.querySelectorAll('.panel-tab').forEach(function(p){ p.hidden = (p.id !== id); });
+    document.querySelectorAll('nav.tabs button').forEach(function(b){
+      b.setAttribute('aria-selected', b === btn ? 'true' : 'false'); });
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
